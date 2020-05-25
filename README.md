@@ -1,6 +1,6 @@
 # dotfiles
 ## Install
-Clone this repository using the following command: `git clone https://github.com/jholowczak/dotfiles-new $HOME/.dotfiles`
+Clone this repository using the following command: `git clone https://github.com/jholowczak/dotfiles $HOME/.dotfiles`
 ## Usage
 Change into the newly created `$HOME/.dotfiles` directory and run `make installdeps && make install`.
 Note: Stow will fail if the target directories exist, so they must be removed before stow will work properly.
