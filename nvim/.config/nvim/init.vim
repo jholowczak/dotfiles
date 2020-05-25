@@ -130,7 +130,7 @@ Plug 'plasticboy/vim-markdown', { 'for': 'md'}
 Plug 'elzr/vim-json', { 'for': 'json' }
 Plug 'rhysd/vim-clang-format'
 "Plug 'Valloric/YouCompleteMe'
-Plug 'suan/vim-instant-markdown', {'rtp': 'after'}
+Plug 'suan/vim-instant-markdown', {'rtp': 'after', 'for': 'md' }
 call plug#end()
 
 filetype plugin indent on
@@ -151,6 +151,10 @@ nnoremap <leader>. <Ctrl-F>
 nnoremap <silent> <Space> :silent noh<Bar>echo<CR>
 nmap <leader>hw    :call AutoHighlightToggle()<CR>
 nmap <leader>hh    :noh<CR>
+
+"tab changes on the fly
+nnoremap <Leader>te :set expandtab<CR>
+nnoremap <Leader>tn :set noexpandtab<CR>
 
 " Tabs navigation
 nnoremap bh  :tabfirst<CR>
@@ -267,7 +271,6 @@ nnoremap <leader>gs :Gstatus<CR>
 " p add/reset --patch
 nnoremap <leader>gC :Gcommit<CR>
 nnoremap <leader>gc :Gcommit %<CR>
-nnoremap <leader>gb :Gblame<CR>
 nnoremap <leader>gb :Gblame<CR>
 nnoremap <leader>gp :Gpull<CR>
 nnoremap <leader>gP :Gpush<CR>
