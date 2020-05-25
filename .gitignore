@@ -1,0 +1,11 @@
+tmux/.tmux/resurrect
+nvim/.config/nvim/plugged
+nvim/.config/nvim/swap
+nvim/.config/nvim/.netrwhist
+vim/.vim/session
+vim/.vim/bundle
+plug.vim.old
+*.patch
+*.diff
+fish/.config/fish/fishd*
+fish/.config/fish/fish_history
