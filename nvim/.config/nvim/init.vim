@@ -281,6 +281,8 @@ let g:ale_completion_enabled=0
 
 " indentLine
 let g:indentLine_char = '▏'
+let g:indentLine_color_term = 241
+let g:indentLine_enabled = 1
 
 " airline
 " nnoremap <leader>ss :AirlineTheme <TAB>
@@ -391,6 +393,9 @@ nnoremap <Leader>ss :CtrlPObsession<CR>
 
 " Minimap
 nmap <silent> <F9> :MinimapToggle<cr>
+
+"easymotion
+map <Leader> <Plug>(easymotion-prefix)
 
 " vim-markdown
 let g:vim_markdown_conceal = 0
