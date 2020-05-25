@@ -20,9 +20,9 @@ install:
 	stow polybar
 	stow redshift
 	stow rofi
-	stow xinit
+	#stow xinit
 	stow termite
-	stow git
+	#stow git
 
 reinstall:
 
@@ -34,9 +34,9 @@ reinstall:
 	stow -R polybar
 	stow -R redshift
 	stow -R rofi
-	stow -R xinit
+	#stow -R xinit
 	stow -R termite
-	stow -R git
+	#stow -R git
 
 delete:
 
@@ -48,9 +48,9 @@ delete:
 	stow -D polybar
 	stow -D redshift
 	stow -D rofi
-	stow -D xinit
+	#stow -D xinit
 	stow -D termite
-	stow -D git
+	#stow -D git
 
 update:
 
