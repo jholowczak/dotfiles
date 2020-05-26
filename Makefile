@@ -23,6 +23,7 @@ install:
 	#stow xinit
 	stow termite
 	#stow git
+	stow compton
 
 reinstall:
 
@@ -37,6 +38,7 @@ reinstall:
 	#stow -R xinit
 	stow -R termite
 	#stow -R git
+	stow -R compton
 
 delete:
 
@@ -51,6 +53,7 @@ delete:
 	#stow -D xinit
 	stow -D termite
 	#stow -D git
+	stow -D compton
 
 update:
 
