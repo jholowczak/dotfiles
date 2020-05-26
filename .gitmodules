@@ -4,3 +4,9 @@
 [submodule "tmux/.tmux/plugins/tpm"]
 	path = tmux/.tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
+[submodule "tmux/.tmux/plugins/tmux-gruvbox"]
+	path = tmux/.tmux/plugins/tmux-gruvbox
+	url = https://github.com/egel/tmux-gruvbox
+[submodule "tmux/.tmux/plugins/tmux-sensible"]
+	path = tmux/.tmux/plugins/tmux-sensible
+	url = https://github.com/tmux-plugins/tmux-sensible
