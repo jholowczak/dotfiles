@@ -10,6 +10,7 @@ package hash
 package https://github.com/danhper/fish-ssh-agent
 package https://github.com/FabioAntunes/fish-nvm
 package license
+package nvm
 package peco
 package rustup
 package spark
