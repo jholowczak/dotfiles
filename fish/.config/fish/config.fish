@@ -1,5 +1,5 @@
 # Path to Oh My Fish install.
-set -gx OMF_PATH "/home/john/.local/share/omf"
+set -gx OMF_PATH "$HOME/.local/share/omf"
 set -gx BROWSER "/usr/bin/firefox"  
 set -gx TERM "xterm"
 set -gx PATH ~/.cargo/bin ~/go/bin ~/.local/bin /home/john/.gem/ruby/2.7.0/bin $PATH
