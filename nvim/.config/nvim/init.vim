@@ -79,6 +79,10 @@ function! AutoHighlightToggle()
  endif
 endfunction
 
+function! NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
+
 """""""""""""""""""""""""""""
 "        Plugins            "
 """""""""""""""""""""""""""""
@@ -88,11 +92,15 @@ Plug 'severin-lemaignan/vim-minimap'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-fugitive'
-Plug 'junegunn/fzf.vim', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'mdempsky/gocode', { 'rtp': 'vim/', 'for': 'go', 'do': 'go get -u github.com/nsf/gocode' }
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'liuchengxu/vista.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'flazz/vim-colorschemes'
@@ -102,7 +110,7 @@ Plug 'dhruvasagar/vim-prosession'
 Plug 'gikmx/ctrlp-obsession'
 Plug 'Raimondi/delimitMate'
 Plug 'mattn/emmet-vim'
-Plug 'majutsushi/tagbar'
+"Plug 'majutsushi/tagbar'
 Plug 'Yggdroot/indentLine'
 Plug 'gregsexton/MatchTag'
 Plug 'nanotech/jellybeans.vim'
@@ -114,14 +122,15 @@ Plug 'mtth/scratch.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'airblade/vim-gitgutter'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
-Plug 'racer-rust/vim-racer', { 'for': 'rs' }
+"Plug 'racer-rust/vim-racer', { 'for': 'rs' }
+Plug 'rust-lang/rust.vim', { 'for': 'rs'}
 Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-surround'
 Plug 'Shougo/vinarise.vim'
 Plug 'ervandew/supertab'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'benmills/vimux'
-Plug 'benmills/vimux-golang'
+Plug 'benmills/vimux-golang', { 'for': 'go' }
 Plug 'w0rp/ale'
 Plug 'lervag/vimtex', { 'for': 'tex' }
 Plug 'pangloss/vim-javascript', { 'for': 'js' }
@@ -244,6 +253,17 @@ endif
 " Syntastic
 let g:syntastic_mode_map = { 'mode': 'passive' }
 nmap <silent> <leader>st    :SyntasticToggleMode<CR><CR>
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%{NearestMethodOrFunction()}
+set statusline+=%*
+
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 " YCM and Language Bindings
 " python
@@ -280,7 +300,8 @@ nnoremap <leader>ea :EasyAlign<CR>
 
 "ALE
 nnoremap <silent> <leader>ale :ALEToggle<CR> 
-let g:ale_completion_enabled=0
+"let g:ale_completion_enabled=1
+"let g:ale_linters = {'rust': ['analyzer']}
 
 " indentLine
 let g:indentLine_char = '▏'
@@ -299,6 +320,7 @@ let g:airline#extensions#tabline#enabled = 1    " Enable nice tabline
 let g:airline#extensions#tabline#show_buffers=1
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'hybrid'
+"let g:airline#extensions#coc#enabled = 1
 
 " NERDTree
 nnoremap <silent> <F2> :NERDTreeToggle<CR>
@@ -314,9 +336,12 @@ let delimitMate_expand_cr = 1
 let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 
 " UltiSnips
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
 " TagBar
 let g:tagbar_left = 1
