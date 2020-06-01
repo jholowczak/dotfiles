@@ -1,5 +1,5 @@
 # Path to Oh My Fish install.
-set -gx OMF_PATH "/home/john/.local/share/omf"
+set -gx OMF_PATH "$HOME/.local/share/omf"
 set -gx BROWSER "/usr/bin/firefox"  
 set -gx TERM "xterm"
 set -gx PATH ~/.cargo/bin ~/go/bin ~/.local/bin /home/john/.gem/ruby/2.7.0/bin $PATH
@@ -10,7 +10,8 @@ set -gx _JAVA_AWT_WM_NONREPARENTING 1
 
 # Load oh-my-fish configuration.
 source $OMF_PATH/init.fish
-eval (python -m virtualfish compat_aliases auto_activation global_requirements projects)
+#eval (python -m virtualfish compat_aliases auto_activation global_requirements projects)
+#deprecated: now do "vf install compat_aliases auto_activation global_requirements projects environment"
 alias vim="nvim"
 alias anacondatime="source (/opt/anaconda/bin/conda info --root)/etc/fish/conf.d/conda.fish"
 alias ghostscript="gs"
