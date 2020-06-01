@@ -2,7 +2,7 @@
 set -gx OMF_PATH "$HOME/.local/share/omf"
 set -gx BROWSER "/usr/bin/firefox"  
 set -gx TERM "xterm"
-set -gx PATH ~/.cargo/bin ~/go/bin ~/.local/bin /home/john/.gem/ruby/2.7.0/bin $PATH
+set -gx PATH ~/.cargo/bin ~/go/bin ~/.local/bin $HOME/.gem/ruby/2.7.0/bin $PATH
 set -gx _JAVA_AWT_WM_NONREPARENTING 1
 # set -gx PATH "/opt/anaconda/bin" $PATH
 # Customize Oh My Fish configuration path.
