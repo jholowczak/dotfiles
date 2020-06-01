@@ -24,7 +24,7 @@ alias tmux="tmux -2"
 #    echo -n -s (set_color -b blue white) "(" (basename "$VIRTUAL_ENV") ")" (set_color normal) " "
 #end
 
-#SSH tmux login
+# SSH tmux login
 if test -n "$SSH_CONNECTION"
     if test -z "$TMUX"
         tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
