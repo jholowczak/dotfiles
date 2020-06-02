@@ -218,6 +218,7 @@ autocmd FileType python nnoremap <buffer><leader>rb :!/usr/bin/black %<cr>
 autocmd FileType rust nnoremap <buffer><leader>rr :!cargo run<cr>
 autocmd FileType rust nnoremap <buffer><leader>rt :!cargo test<cr>
 autocmd FileType rust nnoremap <buffer><leader>rb :!cargo build<cr>
+autocmd FileType rust let g:rustfmt_autosave = 1
 
 autocmd FileType go nnoremap <buffer><leader>rb :!go build<cr>
 "autocmd FileType go nnoremap <buffer><leader>rt :!go test<cr>
