@@ -9,3 +9,4 @@ plug.vim.old
 *.diff
 fish/.config/fish/fishd*
 fish/.config/fish/fish_history
+nvim/.local/share/nvim/swap/
