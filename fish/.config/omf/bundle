@@ -19,6 +19,7 @@ package tab
 package technicolor
 package thefuck
 package title
+package vcs
 package virtualfish
 theme agnoster
 theme bobthefish

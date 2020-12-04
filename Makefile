@@ -61,7 +61,7 @@ update:
 	git submodule update --init --recursive
 
 installdeps:
-	yay -Sy stow fzf neovim redshift tmux sxhkd bspwm rofi fish polybar termite compton python-pynvim xclip
+	paru -Sy stow fzf neovim redshift tmux sxhkd bspwm rofi fish polybar termite compton python-pynvim xclip
 
 all:
 	usage

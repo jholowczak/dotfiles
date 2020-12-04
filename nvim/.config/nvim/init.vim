@@ -133,6 +133,7 @@ Plug 'benmills/vimux'
 Plug 'benmills/vimux-golang', { 'for': 'go' }
 Plug 'w0rp/ale'
 Plug 'lervag/vimtex', { 'for': 'tex' }
+Plug 'jceb/vim-orgmode', { 'for': 'org' }
 Plug 'pangloss/vim-javascript', { 'for': 'js' }
 Plug 'mxw/vim-jsx', { 'for': 'js' }
 Plug 'plasticboy/vim-markdown', { 'for': 'md'}

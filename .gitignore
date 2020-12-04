@@ -1,7 +1,12 @@
 tmux/.tmux/resurrect
+nvim/.local/share/nvim/shada/main.shada
 nvim/.config/nvim/plugged
 nvim/.config/nvim/swap
 nvim/.config/nvim/.netrwhist
+nvim/.config/coc/mru
+nvim/.config/coc/snippets-mru
+nvim/.config/coc/history.json
+nvim/.config/coc/lists
 vim/.vim/session
 vim/.vim/bundle
 plug.vim.old
