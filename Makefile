@@ -24,6 +24,7 @@ install:
 	stow termite
 	#stow git
 	stow compton
+	stow emacs
 
 reinstall:
 
@@ -39,6 +40,7 @@ reinstall:
 	stow -R termite
 	#stow -R git
 	stow -R compton
+	stow -R emacs
 
 delete:
 
@@ -54,6 +56,7 @@ delete:
 	stow -D termite
 	#stow -D git
 	stow -D compton
+	stow -D emacs
 
 update:
 
@@ -61,7 +64,7 @@ update:
 	git submodule update --init --recursive
 
 installdeps:
-	paru -Sy stow fzf neovim redshift tmux sxhkd bspwm rofi fish polybar termite compton python-pynvim xclip
+	paru -Sy stow fzf neovim redshift tmux sxhkd bspwm rofi fish polybar termite compton python-pynvim xclip emacs
 
 all:
 	usage
