@@ -2,6 +2,9 @@
   "lists": {
     "%2Fhome%2Fskip%2Fprojects%2Fbfbc2%2Fbc2proxy": [
       "sources"
+    ],
+    "%2Frpool%2Fprojects%2Fbfbc2%2Fbc2proxy": [
+      "extensions"
     ]
   }
 }
