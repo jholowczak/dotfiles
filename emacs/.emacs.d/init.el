@@ -178,6 +178,13 @@ frame"
   :init
   (evil-mode 1))
 
+(use-package undo-tree
+  :ensure t
+  :after evil
+  :init
+  (global-undo-tree-mode)
+  (evil-set-undo-system 'undo-tree))
+
 (use-package evil-collection
   :after evil
   :ensure t
@@ -411,6 +418,9 @@ frame"
                "k" 'evil-scroll-up
                ;; magit
                "m s" 'magit
+               ;; easymotion
+               "e" 'evilem-motion-forward-WORD-begin
+               "E" 'evilem--jump
                ;; view
                "d t" (lambda () (interactive) (progn (disable-theme 'gruvbox-dark-medium) (disable-theme 'acme) (load-theme 'tsdh-light) (set-face-background 'mode-line "gold")))
                "d g" (lambda () (interactive) (load-theme 'gruvbox-dark-medium))
@@ -436,6 +446,14 @@ frame"
   :config
   (evilem-default-keybindings "e"))
 
+(use-package vimish-fold
+  :ensure
+  :after evil)
+
+(use-package evil-vimish-fold
+  :ensure
+  :after vimish-fold
+  :hook ((prog-mode conf-mode text-mode) . evil-vimish-fold-mode))
 
 (if (display-graphic-p)
     (progn
