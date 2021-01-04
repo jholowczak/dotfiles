@@ -156,9 +156,7 @@ frame"
 
 (use-package magit
   :ensure t
-  :init
-  (use-package evil-magit
-    :ensure t))
+  :init)
 
 (defun my-cust ()
   (interactive))
