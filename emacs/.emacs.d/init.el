@@ -181,7 +181,7 @@ frame"
 (use-package undo-tree
   :ensure t
   :after evil
-  :init
+  :config
   (global-undo-tree-mode)
   (evil-set-undo-system 'undo-tree))
 
@@ -405,6 +405,8 @@ frame"
                "v p" 'my-send-to-shell-input
                "v l" 'my-send-to-shell-again
                "s s" 'ispell
+               "u v" 'undo-tree-visualize
+               ;; "u d" (lambda () (interactive) (setq undo-tree-visualizer-diff (if (= undo-tree-visualizer-diff 1) 0 1)))
                ;; buffer keybindings
                "n n" 'next-buffer
                "n s" 'next-multiframe-window 
@@ -418,9 +420,6 @@ frame"
                "k" 'evil-scroll-up
                ;; magit
                "m s" 'magit
-               ;; easymotion
-               "e" 'evilem-motion-forward-WORD-begin
-               "E" 'evilem--jump
                ;; view
                "d t" (lambda () (interactive) (progn (disable-theme 'gruvbox-dark-medium) (disable-theme 'acme) (load-theme 'tsdh-light) (set-face-background 'mode-line "gold")))
                "d g" (lambda () (interactive) (load-theme 'gruvbox-dark-medium))
