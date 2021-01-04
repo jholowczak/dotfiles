@@ -18,15 +18,22 @@
               initial-scratch-message nil
               inhibit-startup-screen t
               auto-save-default nil
+              make-backup-files nil
               backup-directory-alist '(("" . "~/.emacs.d/backup"))
               default-directory "~/workspace/"
               custom-file "~/.emacs.d/custom.el")
 
 (shell-command "touch ~/.emacs.d/custom.el")
-(add-to-list 'exec-path "/usr/local/bin")
 (setenv "PATH" (concat "/usr/local/go/bin:" (getenv "PATH")))
 (setenv "PATH" (concat "~/go/bin:" (getenv "PATH")))
+(setenv "PATH" (concat "~/bin:" (getenv "PATH")))
+(setenv "PATH" (concat "~/.cargo/bin:" (getenv "PATH")))
+(setenv "GTAGSLIBPATH" "~/.gtags")
 (add-to-list 'exec-path "/usr/local/go/bin")
+(add-to-list 'exec-path "/usr/local/bin")
+(add-to-list 'exec-path "~/go/bin")
+(add-to-list 'exec-path "~/bin")
+(add-to-list 'exec-path "~/.cargo/bin")
 (load custom-file)
 
 ;; Bootstrap `use-package`
@@ -118,11 +125,24 @@ frame"
                       :height (+ size my-font-size))
   (setq my-font-size (+ size my-font-size)))
 
+(use-package web-mode
+  :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
+
+(use-package rust-mode
+  :ensure t
+  :hook (rust-mode . lsp)
+  :init
+  (setq rust-format-on-save t))
+
+
 (use-package helm
   :ensure t
   :init
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  :config
   (setq helm-boring-buffer-regexp-list
       (quote
        (  "\\Minibuf.+\\*"
@@ -131,7 +151,17 @@ frame"
           "\\*.+\\*"))))
 
 (use-package helm-gtags
-  :ensure t)
+  :ensure t
+  :init
+  (add-hook 'c-mode-hook 'helm-gtags-mode)
+  (add-hook 'c++-mode-hook 'helm-gtags-mode)
+  (add-hook 'asm-mode-hook 'helm-gtags-mode)
+  (add-hook 'helm-gtags-mode-hook
+            (lambda ()
+              (define-key evil-normal-state-local-map (kbd "SPC g g") 'helm-gtags-find-tag-from-here)
+              (define-key evil-normal-state-local-map (kbd "SPC g p") 'helm-gtags-pop-stack)
+              (define-key evil-normal-state-local-map (kbd "SPC g f") 'helm-gtags-select)
+              (define-key evil-normal-state-local-map (kbd "SPC g u") 'helm-gtags-update-tags))))
 
 (use-package yaml-mode
   :ensure t)
@@ -158,9 +188,7 @@ frame"
   :ensure t
   :init)
 
-(defun my-cust ()
-  (interactive))
-
+(require 'ox-latex)
 (use-package org
   :ensure t
   :init
@@ -193,6 +221,8 @@ frame"
   (add-hook 'org-mode-hook
             (lambda ()
               (org-indent-mode)
+              ;(add-hook 'after-save-hook 'org-preview-latex-fragment)
+              (define-key evil-normal-state-local-map (kbd "SPC r r") 'org-preview-latex-fragment)
               (define-key evil-normal-state-local-map (kbd "SPC E") 'org-gfm-export-to-markdown)
               (define-key evil-normal-state-local-map (kbd "SPC F") 'org-table-toggle-coordinate-overlays)
               (define-key evil-normal-state-local-map (kbd "SPC P") 'org-present)
@@ -223,6 +253,10 @@ frame"
   :config
   (projectile-mode +1))
 
+(use-package lsp-ui
+  :ensure t
+  :after lsp-mode)
+
 (use-package lsp-mode
   :ensure t
   :hook (go-mode . lsp-deferred)
@@ -235,8 +269,6 @@ frame"
   (setq lsp-enable-file-watchers nil)
   (setq lsp-ui-doc-enable nil)
   (setq lsp-log-io nil))
-
-
 
 ;(use-package company-lsp
 ;  :ensure t
@@ -253,7 +285,6 @@ frame"
   :config
   (add-hook 'go-mode-hook
 			(lambda ()
-			  (setq exec-path (append exec-path '("~/go/bin/")))
 			  (setq gofmt-command "goimports")
               (define-key evil-normal-state-local-map (kbd "SPC g g") 'godef-jump)
               (define-key evil-normal-state-local-map (kbd "SPC g p") 'pop-tag-mark)
@@ -317,8 +348,8 @@ frame"
   (setq company-minimum-prefix-length 1)
   (setq company-lsp-cache-candidates t)
   (setq company-lsp-async t)
+  (add-to-list 'company-backends 'company-gtags)
   (add-hook 'after-init-hook 'global-company-mode))
-
 
 ;;
 ;; neotree
@@ -342,6 +373,7 @@ frame"
   (display-line-numbers-mode -1)
   (add-hook 'neotree-mode-hook
 			(lambda ()
+              (display-line-numbers-mode -1)
 			  (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter-hide)
 			  (define-key evil-normal-state-local-map (kbd "SPC n t") 'neotree-hide)
 			  (define-key evil-normal-state-local-map (kbd "SPC n h") 'neotree-hidden-file-toggle)
@@ -380,13 +412,30 @@ frame"
                ;; magit
                "m s" 'magit
                ;; view
-               "m m" 'my-cust
-               "d t" (lambda () (interactive) (progn (disable-theme 'gruvbox-dark-medium) (disable-theme 'acme) (set-face-background 'mode-line "gold")))
+               "d t" (lambda () (interactive) (progn (disable-theme 'gruvbox-dark-medium) (disable-theme 'acme) (load-theme 'tsdh-light) (set-face-background 'mode-line "gold")))
                "d g" (lambda () (interactive) (load-theme 'gruvbox-dark-medium))
                "d a" (lambda () (interactive) (load-theme 'acme))
                "d f" (lambda () (interactive) (toggle-frame-fullscreen))
                "=" (lambda () (interactive) (my-global-font-size 10))
                "-" (lambda () (interactive) (my-global-font-size -10)))))
+
+;;(use-package evil-org
+;;  :ensure t
+;;  :after org
+;;  :hook (org-mode . (lambda () evil-org-mode))
+;;  :config
+;;  (require 'evil-org-agenda)
+;;  (evil-org-agenda-set-keys))
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-easymotion
+  :ensure t
+  :config
+  (evilem-default-keybindings "e"))
+
 
 (if (display-graphic-p)
     (progn
@@ -396,8 +445,9 @@ frame"
 (menu-bar-mode -1)
 (xterm-mouse-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
-(load-theme 'tsdh-light)
-(set-face-background 'mode-line "gold")
+;(load-theme 'tsdh-light)
+;(set-face-background 'mode-line "gold")
+(load-theme 'gruvbox-dark-medium)
 
 (set-face-attribute 'default nil
                     :family "mononoki"
