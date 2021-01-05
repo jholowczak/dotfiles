@@ -130,8 +130,6 @@ frame"
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
 
-(use-package rustic
-  :ensure t)
 ;;(use-package rust-mode
 ;;  :ensure t
 ;;  :hook (rust-mode . lsp)
@@ -448,6 +446,9 @@ frame"
   :config
   (evilem-default-keybindings "e"))
 
+(use-package evil-org
+  :ensure t)
+
 (use-package vimish-fold
   :ensure
   :after evil)
@@ -458,13 +459,19 @@ frame"
   :hook ((prog-mode conf-mode text-mode) . evil-vimish-fold-mode))
 
 (use-package flycheck
-  :ensure t)
+  :ensure t
+  :init (global-flycheck-mode))
+
+(use-package rustic
+  :ensure t
+  :after flycheck)
 
 (use-package page-break-lines
   :ensure t)
 
 (use-package dashboard
   :ensure t
+  :after page-break-lines
   :config
   (dashboard-setup-startup-hook))
 
@@ -490,4 +497,3 @@ frame"
 
 (global-display-line-numbers-mode)
 (global-hl-line-mode)
-
