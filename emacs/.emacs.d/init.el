@@ -130,11 +130,14 @@ frame"
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
 
-(use-package rust-mode
-  :ensure t
-  :hook (rust-mode . lsp)
-  :init
-  (setq rust-format-on-save t))
+(use-package rustic
+  :ensure t)
+;;(use-package rust-mode
+;;  :ensure t
+;;  :hook (rust-mode . lsp)
+;;  :init
+;;  (setq rust-format-on-save t)
+;;  (setq indent-tabs-mode nil))
 
 
 (use-package helm
@@ -454,6 +457,17 @@ frame"
   :after vimish-fold
   :hook ((prog-mode conf-mode text-mode) . evil-vimish-fold-mode))
 
+(use-package flycheck
+  :ensure t)
+
+(use-package page-break-lines
+  :ensure t)
+
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
+
 (if (display-graphic-p)
     (progn
       (scroll-bar-mode -1)))
@@ -461,9 +475,12 @@ frame"
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (xterm-mouse-mode 1)
+
 (fset 'yes-or-no-p 'y-or-n-p)
 ;(load-theme 'tsdh-light)
 ;(set-face-background 'mode-line "gold")
+(use-package gruvbox-theme
+  :ensure t)
 (load-theme 'gruvbox-dark-medium)
 
 (set-face-attribute 'default nil
