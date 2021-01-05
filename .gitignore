@@ -15,3 +15,5 @@ plug.vim.old
 fish/.config/fish/fishd*
 fish/.config/fish/fish_history
 nvim/.local/share/nvim/swap/
+emacs/*
+!emacs/.emacs.d/init.el
