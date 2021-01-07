@@ -446,8 +446,16 @@ frame"
   :config
   (evilem-default-keybindings "e"))
 
-(use-package evil-org
+(use-package dash
   :ensure t)
+
+(use-package monitor
+  :ensure t)
+
+(use-package org-evil
+  :ensure t
+  :after (evil dash))
+
 
 (use-package vimish-fold
   :ensure
