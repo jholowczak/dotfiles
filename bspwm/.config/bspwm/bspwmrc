@@ -17,6 +17,8 @@ bspc config borderless_monocle   true
 bspc config gapless_monocle      true
 bspc config remove_unplugged_monitors true
 
+bspc rule -a emacs state=tiled
+
 feh --bg-fill ~/Pictures/ocean_cliffs-wallpaper-1920x1080.jpg &
 ~/.config/polybar/launch.sh &
 dunst -conf ~/.dunstrc &

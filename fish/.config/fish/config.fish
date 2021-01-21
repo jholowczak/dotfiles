@@ -40,4 +40,5 @@ end
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/home/skip/google-cloud-sdk/path.fish.inc' ]; . '/home/skip/google-cloud-sdk/path.fish.inc'; end
-thefuck --alias | source
+#python issues with latest version, removing as not used for now
+#thefuck --alias | source

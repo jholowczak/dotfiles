@@ -163,6 +163,8 @@ frame"
               (define-key evil-normal-state-local-map (kbd "SPC g p") 'helm-gtags-pop-stack)
               (define-key evil-normal-state-local-map (kbd "SPC g f") 'helm-gtags-select)
               (define-key evil-normal-state-local-map (kbd "SPC g u") 'helm-gtags-update-tags))))
+(use-package helm-projectile
+  :ensure t)
 
 (use-package yaml-mode
   :ensure t)
@@ -386,10 +388,12 @@ frame"
               (display-line-numbers-mode -1)
 			  (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter-hide)
 			  (define-key evil-normal-state-local-map (kbd "SPC n t") 'neotree-hide)
-			  (define-key evil-normal-state-local-map (kbd "SPC n h") 'neotree-hidden-file-toggle)
-			  (define-key evil-normal-state-local-map (kbd "SPC n r") 'neotree-refresh)
 			  (define-key evil-normal-state-local-map (kbd "SPC n s") 'next-multiframe-window)
-			  (define-key evil-normal-state-local-map (kbd "SPC n p") 'neotree-change-root))))
+			  (define-key evil-normal-state-local-map (kbd "n") 'neotree-create-node)
+			  (define-key evil-normal-state-local-map (kbd "m") 'neotree-rename-node)
+			  (define-key evil-normal-state-local-map (kbd "h") 'neotree-hidden-file-toggle)
+			  (define-key evil-normal-state-local-map (kbd "r") 'neotree-refresh)
+			  (define-key evil-normal-state-local-map (kbd "p") 'neotree-change-root))))
 
 (use-package bind-map
   :ensure t
