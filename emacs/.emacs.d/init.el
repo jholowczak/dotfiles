@@ -143,6 +143,8 @@ frame"
   :init
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "M-j") 'helm-next-line)
+  (global-set-key (kbd "M-k") 'helm-previous-line)
   :config
   (setq helm-boring-buffer-regexp-list
       (quote
@@ -267,7 +269,20 @@ frame"
 
 (use-package lsp-ui
   :ensure t
-  :after lsp-mode)
+  :after lsp-mode
+  :init
+  (add-hook 'lsp-ui-mode-hook
+            (lambda ()
+              (define-key evil-normal-state-local-map (kbd "SPC l i") 'lsp-ui-imenu)
+              (define-key evil-normal-state-local-map (kbd "SPC l s") 'lsp-ui-sideline-toggle-symbols-info)
+              (define-key evil-normal-state-local-map (kbd "SPC l r") 'lsp-ui-peek-find-references)
+              (define-key evil-normal-state-local-map (kbd "SPC l d") 'lsp-ui-peek-find-definitions)))
+(add-hook 'lsp-ui-peek-mode-hook
+          (lambda ()
+            (define-key lsp-ui-peek-mode-map (kbd "l") 'lsp-ui-peek--select-next-file)
+            (define-key lsp-ui-peek-mode-map (kbd "h") 'lsp-ui-peek--select-prev-file)
+            (define-key lsp-ui-peek-mode-map (kbd "j") 'lsp-ui-peek--select-next)
+            (define-key lsp-ui-peek-mode-map (kbd "k") 'lsp-ui-peek--select-prev))))
 
 (use-package lsp-mode
   :ensure t
@@ -302,6 +317,15 @@ frame"
               (define-key evil-normal-state-local-map (kbd "SPC g p") 'pop-tag-mark)
               (define-key evil-normal-state-local-map (kbd "SPC g d") 'godoc-at-point)
 			  (add-hook 'before-save-hook 'gofmt-before-save))))
+;;(use-package go-eldoc
+;;  :ensure t
+;;  :after go-mode
+;;  :init
+;;  (add-hook 'go-mode-hook 'go-eldoc-setup))
+(use-package rg
+  :ensure t
+  :init
+  (rg-enable-menu))
 
 (use-package poly-markdown
   :ensure t)
@@ -390,6 +414,7 @@ frame"
 			  (define-key evil-normal-state-local-map (kbd "SPC n t") 'neotree-hide)
 			  (define-key evil-normal-state-local-map (kbd "SPC n s") 'next-multiframe-window)
 			  (define-key evil-normal-state-local-map (kbd "n") 'neotree-create-node)
+			  (define-key evil-normal-state-local-map (kbd "C") 'neotree-copy-node)
 			  (define-key evil-normal-state-local-map (kbd "m") 'neotree-rename-node)
 			  (define-key evil-normal-state-local-map (kbd "h") 'neotree-hidden-file-toggle)
 			  (define-key evil-normal-state-local-map (kbd "r") 'neotree-refresh)
@@ -413,6 +438,14 @@ frame"
                "v l" 'my-send-to-shell-again
                "s s" 'ispell
                "u v" 'undo-tree-visualize
+
+               ;; rg.el bindings
+               "s r" 'rg
+               "s t" 'rg-literal
+               "s p" 'rg-project
+               "s m" 'rg-menu
+               "s d" 'rg-dwim
+
                ;; "u d" (lambda () (interactive) (setq undo-tree-visualizer-diff (if (= undo-tree-visualizer-diff 1) 0 1)))
                ;; buffer keybindings
                "n n" 'next-buffer
@@ -421,12 +454,22 @@ frame"
                "n o" 'delete-other-windows
                "n d" 'kill-buffer-and-window
                "n b" 'helm-mini
+               "n m" 'helm-projectile
+               "n i" 'helm-imenu
+               "i" 'helm-imenu
+               ":" 'helm-M-x
                "n r" '(lambda () (interactive) (switch-to-buffer "*scratch*"))
                "n a" '(lambda () (interactive) (find-file "~/workspace/notes.org"))
                "j" 'evil-scroll-down
                "k" 'evil-scroll-up
                ;; magit
                "m s" 'magit
+               "m b" 'magit-blame
+
+               ;;code-jump
+               "f j" 'xref-find-definitions
+               "f k" 'xref-pop-marker-stack
+
                ;; view
                "d t" (lambda () (interactive) (progn (disable-theme 'gruvbox-dark-medium) (disable-theme 'acme) (load-theme 'tsdh-light) (set-face-background 'mode-line "gold")))
                "d g" (lambda () (interactive) (load-theme 'gruvbox-dark-medium))
@@ -496,6 +539,7 @@ frame"
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (xterm-mouse-mode 1)
+(electric-pair-mode 1) ;; close braces
 
 (fset 'yes-or-no-p 'y-or-n-p)
 ;(load-theme 'tsdh-light)
