@@ -470,6 +470,11 @@ frame"
                "f j" 'xref-find-definitions
                "f k" 'xref-pop-marker-stack
 
+               ;;window splits
+               "w h" 'split-window-horizontally
+               "w v" 'split-window-vertically
+               "w x" 'delete-window
+
                ;; view
                "d t" (lambda () (interactive) (progn (disable-theme 'gruvbox-dark-medium) (disable-theme 'acme) (load-theme 'tsdh-light) (set-face-background 'mode-line "gold")))
                "d g" (lambda () (interactive) (load-theme 'gruvbox-dark-medium))
