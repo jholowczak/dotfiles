@@ -465,10 +465,13 @@ frame"
                ;; magit
                "m s" 'magit
                "m b" 'magit-blame
+               "m d" 'magit-diff-buffer-file
 
                ;;code-jump
                "f j" 'xref-find-definitions
                "f k" 'xref-pop-marker-stack
+               "f h" 'beginning-of-defun
+               "f l" 'end-of-defun
 
                ;;window splits
                "w h" 'split-window-horizontally
