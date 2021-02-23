@@ -25,6 +25,7 @@ install:
 	#stow git
 	stow compton
 	stow emacs
+	stow paru
 
 reinstall:
 
@@ -41,6 +42,7 @@ reinstall:
 	#stow -R git
 	stow -R compton
 	stow -R emacs
+	stow -R paru
 
 delete:
 
@@ -57,6 +59,7 @@ delete:
 	#stow -D git
 	stow -D compton
 	stow -D emacs
+	stow -D paru
 
 update:
 
