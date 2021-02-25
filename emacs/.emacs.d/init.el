@@ -183,6 +183,11 @@ frame"
   :init
   (evil-mode 1))
 
+(evil-set-initial-state 'pdf-view-mode 'emacs)
+(add-hook 'pdf-view-mode-hook
+  (lambda ()
+    (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
+
 (use-package undo-tree
   :ensure t
   :after evil
@@ -200,7 +205,41 @@ frame"
   :ensure t
   :init)
 
+(use-package pdf-tools
+  :ensure t
+  :init
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-page)
+  
+  )
+
+; https://github.com/munen/emacs.d/blob/master/configuration.org
+(defun update-other-buffer ()
+  (interactive)
+  (other-window 1)
+  (revert-buffer nil t)
+  (other-window -1))
+
+(defun latex-compile-and-update-other-buffer ()
+  "Has as a premise that it's run from a latex-mode buffer and the
+   other buffer already has the PDF open"
+  (interactive)
+  (save-buffer)
+  (shell-command (concat "pdflatex " (buffer-file-name)))
+  (switch-to-buffer (other-buffer))
+  (kill-buffer)
+  (update-other-buffer))
+
 (require 'ox-latex)
+(add-hook 'latex-mode-hook
+          (lambda ()
+            (pdf-loader-install)
+            (define-key latex-mode-map (kbd "SPC r r") 'latex-compile-and-update-other-buffer)
+            )
+)
+
+
 (use-package org
   :ensure t
   :init
