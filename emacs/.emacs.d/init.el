@@ -231,13 +231,11 @@ frame"
   (kill-buffer)
   (update-other-buffer))
 
+(use-package latex-preview-pane
+  :ensure t)
+
 (require 'ox-latex)
-(add-hook 'latex-mode-hook
-          (lambda ()
-            (pdf-loader-install)
-            (define-key latex-mode-map (kbd "SPC r r") 'latex-compile-and-update-other-buffer)
-            )
-)
+(add-hook 'latex-mode-hook 'latex-preview-pane-mode)
 
 
 (use-package org
