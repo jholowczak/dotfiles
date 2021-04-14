@@ -171,6 +171,11 @@ frame"
 (use-package yaml-mode
   :ensure t)
 
+(use-package powershell
+  :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-mode)))
+
 (use-package helm-themes
   :ensure t)
 
@@ -266,6 +271,18 @@ frame"
   :ensure t
   :config
   (projectile-mode +1))
+
+(use-package org-projectile
+  :after projectile
+  :bind (("C-c n p" . org-projectile-project-todo-completing-read)
+         ("C-c c" . org-capture))
+  :config
+  (progn
+    (org-projectile-per-project)
+    (setq org-projectile-per-project-filepath "TODO.org")
+    (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+    (push (org-projectile-project-todo-entry) org-capture-templates))
+  :ensure t)
 
 (use-package lsp-ui
   :ensure t
@@ -515,11 +532,11 @@ frame"
 
 
 (use-package vimish-fold
-  :ensure
+  :ensure t
   :after evil)
 
 (use-package evil-vimish-fold
-  :ensure
+  :ensure t
   :after vimish-fold
   :hook ((prog-mode conf-mode text-mode) . evil-vimish-fold-mode))
 
@@ -557,7 +574,7 @@ frame"
 (load-theme 'gruvbox-dark-medium)
 
 (set-face-attribute 'default nil
-                    :family "mononoki"
+                    :family "Iosevka Term"
                     :height my-font-size
                     :weight 'medium)
 
