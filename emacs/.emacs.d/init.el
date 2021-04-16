@@ -5,6 +5,12 @@
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 
+;;(require 'exwm)
+;;(require 'exwm-config)
+;;(exwm-config-default)
+;;(require 'exwm-systemtray)
+;;(exwm-systemtray-enable)
+
 (setq-default ring-bell-function 'ignore
               mac-allow-anti-aliasing nil
               scroll-step 1
@@ -47,43 +53,44 @@
 ;; custom functions
 ;;
 
-(defun my-toggle-shell ()
-  "toggles the shell window, this function also keeps the cursor in
-the editor buffer when bringing the terminal back into the visible
-frame"
+(defun my-toggle-shell (the-shell)
+  "toggles the shells visibility to the right split window,
+'the-shell' parameter should be the symbol name as a string for the
+shell, e.g. 'shell' or 'eshell'"
   (interactive)
-  (if (not (member "*shell*" (mapcar (function buffer-name) (buffer-list))))
-      (progn
-        (setq w1 (selected-window))
-        (setq w2 (split-window-horizontally))
-        (shell)
+  (let ((shell-string (concat "*" the-shell "*")))
+    ;; if shell exists toggle view on/off
+    (if (get-buffer shell-string)
+        (if (and (get-buffer-window shell-string))
+            (delete-other-windows)
+          (let ((w2 (split-window-horizontally)))
+            (set-window-buffer w2 shell-string)))
+      ;; else split the screen and create eshell
+      (let ((w1 (selected-window))
+            (w2 (split-window-horizontally)))
+        (select-window w2)
+        (funcall (intern the-shell))
         (display-line-numbers-mode -1)
-        (set-window-buffer w2 "*shell*")
-        (select-window w1))
-    (if (and (get-buffer-window "*shell*"))
-        (delete-other-windows)
-      (progn (let ((w1 (selected-window))
-                   (w2 (split-window-horizontally)))
-               (set-window-buffer w2 "*shell*")
-               (selecte-window w1))))))
+        (select-window w1)
+        (set-window-buffer w2 shell-string)))))
 
 (defun my-clear-shell ()
-  "clears the shell buffer"
+  "clears the eshell buffer, does not set my-last-eshell-cmd"
   (interactive)
-  (if (get-buffer-window "*shell*")
-      (comint-clear-buffer)))
+  (my-send-to-shell "clear 1"))
 
-(defun my-send-to-shell (cmd)
-  "sends a command to the buffer containing an active shell"
+(defun my-send-to-shell (cmd &optional set-last-cmd-p)
   (interactive)
-  (let ((proc (get-process "shell"))
-        (curbuf (current-buffer)))
-    (setq command (concat cmd "\n"))
-    (process-send-string proc command)
-    (setq last-shell-cmd cmd)
-    (switch-to-buffer "shell")
-    (goto-char (point-max))
-    (switch-to-buffer curbuf)))
+  (with-current-buffer "*eshell*"
+    (evil-insert-state)
+    (eshell-kill-input)
+    (end-of-buffer)
+    (insert cmd)
+    (eshell-send-input)
+    (end-of-buffer)
+    (eshell-bol)
+    (if set-last-cmd-p
+        (setq my-last-eshell-cmd cmd))))
 
 (eval-after-load "comint"
   '(progn
@@ -125,6 +132,26 @@ frame"
                       :height (+ size my-font-size))
   (setq my-font-size (+ size my-font-size)))
 
+;; start package and keybind usage
+
+;; Use delight for hiding modelines of certain modes.
+(use-package delight
+  :ensure t
+  :config
+  (delight '((eldoc-mode nil "eldoc")
+             (auto-revert-mode nil "arev"))))
+
+(use-package general
+  :ensure t
+  :config
+  (general-evil-setup t)
+  (general-define-key
+    :states '(normal insert emacs)
+    :prefix "SPC"
+    :non-normal-prefix "C-SPC"
+   )
+  )
+
 (use-package web-mode
   :ensure t
   :init
@@ -154,27 +181,23 @@ frame"
           "\\*.+\\*"))))
 
 (use-package helm-gtags
+  :after helm
   :ensure t
-  :init
-  (add-hook 'c-mode-hook 'helm-gtags-mode)
-  (add-hook 'c++-mode-hook 'helm-gtags-mode)
-  (add-hook 'asm-mode-hook 'helm-gtags-mode)
-  (add-hook 'helm-gtags-mode-hook
-            (lambda ()
+  :hook ((c-mode . helm-gtags-mode)
+         (c++-mode . helm-gtags-mode)
+         (asm-mode . helm-gtags-mode)
+         (helm-gtags-mode . (lambda ()
               (define-key evil-normal-state-local-map (kbd "SPC g g") 'helm-gtags-find-tag-from-here)
               (define-key evil-normal-state-local-map (kbd "SPC g p") 'helm-gtags-pop-stack)
               (define-key evil-normal-state-local-map (kbd "SPC g f") 'helm-gtags-select)
-              (define-key evil-normal-state-local-map (kbd "SPC g u") 'helm-gtags-update-tags))))
-(use-package helm-projectile
-  :ensure t)
+              (define-key evil-normal-state-local-map (kbd "SPC g u") 'helm-gtags-update-tags)))))
 
 (use-package yaml-mode
   :ensure t)
 
 (use-package powershell
   :ensure t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-mode)))
+  :mode ("\\.ps1\\'" . powershell-mode))
 
 (use-package helm-themes
   :ensure t)
@@ -182,98 +205,34 @@ frame"
 (use-package acme-theme
   :ensure t)
 
-(setq evil-want-keybinding nil)
 (use-package evil
   :ensure t
   :init
-  (evil-mode 1))
-
-(evil-set-initial-state 'pdf-view-mode 'emacs)
-(add-hook 'pdf-view-mode-hook
-  (lambda ()
-    (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1)
+  (use-package evil-collection
+    :ensure t
+    :config
+    (evil-collection-init)))
 
 (use-package undo-tree
   :ensure t
+  :delight
   :after evil
   :config
   (global-undo-tree-mode)
   (evil-set-undo-system 'undo-tree))
 
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
 
 (use-package magit
   :ensure t
   :init)
 
-(use-package pdf-tools
-  :ensure t
-  :init
-  :config
-  (pdf-tools-install)
-  (setq-default pdf-view-display-size 'fit-page)
-  
-  )
-
-; https://github.com/munen/emacs.d/blob/master/configuration.org
-(defun update-other-buffer ()
-  (interactive)
-  (other-window 1)
-  (revert-buffer nil t)
-  (other-window -1))
-
-(defun latex-compile-and-update-other-buffer ()
-  "Has as a premise that it's run from a latex-mode buffer and the
-   other buffer already has the PDF open"
-  (interactive)
-  (save-buffer)
-  (shell-command (concat "pdflatex " (buffer-file-name)))
-  (switch-to-buffer (other-buffer))
-  (kill-buffer)
-  (update-other-buffer))
-
-(use-package latex-preview-pane
-  :ensure t)
-
 (require 'ox-latex)
-(add-hook 'latex-mode-hook 'latex-preview-pane-mode)
-
-
 (use-package org
   :ensure t
-  :init
-  (use-package ox-gfm
-    :ensure t)
-  (use-package org-present
-    :ensure t)
-  (setq org-todo-keywords
-        '((sequence "PROJECT" "TODO" "IN-PROGRESS" "BACKLOG" "|" "DONE")))
-  (eval-after-load "org-present"
-    '(progn
-       (add-hook 'org-present-mode-hook
-                 (lambda ()
-                   (local-set-key (kbd "C-c +") '(lambda () (interactive) (my-global-font-size 10)))
-                   (local-set-key (kbd "C-c -") '(lambda () (interactive) (my-global-font-size -10)))
-                   (turn-off-evil-mode)
-                   (org-present-big)
-                   (display-line-numbers-mode -1)
-                   (org-display-inline-images)
-                   (org-present-hide-cursor)
-                   (org-present-read-only)))
-       (add-hook 'org-present-mode-quit-hook
-                 (lambda ()
-                   (turn-on-evil-mode)
-                   (display-line-numbers-mode t)
-                   (org-present-small)
-                   (org-remove-inline-images)
-                   (org-present-show-cursor)
-                   (org-present-read-write)))))
-  (add-hook 'org-mode-hook
-            (lambda ()
+  :hook (org-mode . (lambda ()
               (org-indent-mode)
               ;(add-hook 'after-save-hook 'org-preview-latex-fragment)
               (define-key evil-normal-state-local-map (kbd "SPC r r") 'org-preview-latex-fragment)
@@ -289,7 +248,32 @@ frame"
               (define-key evil-normal-state-local-map (kbd "SPC s n") 'my-start-code-block)
               (define-key evil-normal-state-local-map (kbd "SPC s o") 'org-edit-src-code)
               (define-key evil-normal-state-local-map (kbd "SPC u") 'org-todo)
-              (define-key evil-normal-state-local-map (kbd "SPC o") 'org-toggle-checkbox))))
+              (define-key evil-normal-state-local-map (kbd "SPC o") 'org-toggle-checkbox)))
+  :config
+  (use-package ox-gfm
+    :ensure t)
+  (use-package org-present
+    :ensure t
+    :hook ((org-present-mode . (lambda ()
+                   (local-set-key (kbd "C-c +") '(lambda () (interactive) (my-global-font-size 10)))
+                   (local-set-key (kbd "C-c -") '(lambda () (interactive) (my-global-font-size -10)))
+                   (turn-off-evil-mode)
+                   (org-present-big)
+                   (display-line-numbers-mode -1)
+                   (org-display-inline-images)
+                   (org-present-hide-cursor)
+                   (org-present-read-only)))
+       (org-present-mode-quit-hook . (lambda ()
+                   (turn-on-evil-mode)
+                   (display-line-numbers-mode t)
+                   (org-present-small)
+                   (org-remove-inline-images)
+                   (org-present-show-cursor)
+                   (org-present-read-write))))
+  )
+  (setq org-todo-keywords
+        '((sequence "PROJECT" "TODO" "IN-PROGRESS" "BACKLOG" "|" "DONE")))
+)
 
 (use-package markdown-mode
   :ensure t
@@ -297,46 +281,38 @@ frame"
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init
-  (setq markdown-command "multimarkdown")
-  (add-hook 'markdown-mode-hook
-            (lambda ()
+  :hook (markdown-mode . (lambda ()
               (turn-on-orgtbl)
-              (turn-on-orgstruct++))))
+              (turn-on-orgstruct++)))
+  :init
+  (setq markdown-command "multimarkdown"))
 
 (use-package projectile
+  :after helm
   :ensure t
   :config
-  (projectile-mode +1))
-
-(use-package org-projectile
-  :after projectile
+  (projectile-mode +1)
+  (use-package helm-projectile
+    :ensure t
+    :init
+    (setq projectile-completion-system 'helm-mini)
+    (setq projectile-switch-project-action 'helm-projectile)
+    )
+  (use-package org-projectile
   :bind (("C-c n p" . org-projectile-project-todo-completing-read)
-         ("C-c c" . org-capture))
+          ("C-c c" . org-capture))
   :config
   (progn
-    (org-projectile-per-project)
-    (setq org-projectile-per-project-filepath "TODO.org")
-    (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
-    (push (org-projectile-project-todo-entry) org-capture-templates))
+      (org-projectile-per-project)
+      (setq org-projectile-per-project-filepath "TODO.org")
+      (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+      (push (org-projectile-project-todo-entry) org-capture-templates))
   :ensure t)
+)
 
-(use-package lsp-ui
-  :ensure t
-  :after lsp-mode
-  :init
-  (add-hook 'lsp-ui-mode-hook
-            (lambda ()
-              (define-key evil-normal-state-local-map (kbd "SPC l i") 'lsp-ui-imenu)
-              (define-key evil-normal-state-local-map (kbd "SPC l s") 'lsp-ui-sideline-toggle-symbols-info)
-              (define-key evil-normal-state-local-map (kbd "SPC l r") 'lsp-ui-peek-find-references)
-              (define-key evil-normal-state-local-map (kbd "SPC l d") 'lsp-ui-peek-find-definitions)))
-(add-hook 'lsp-ui-peek-mode-hook
-          (lambda ()
-            (define-key lsp-ui-peek-mode-map (kbd "l") 'lsp-ui-peek--select-next-file)
-            (define-key lsp-ui-peek-mode-map (kbd "h") 'lsp-ui-peek--select-prev-file)
-            (define-key lsp-ui-peek-mode-map (kbd "j") 'lsp-ui-peek--select-next)
-            (define-key lsp-ui-peek-mode-map (kbd "k") 'lsp-ui-peek--select-prev))))
+(use-package helm-rg
+  :after helm
+  :ensure t)
 
 (use-package lsp-mode
   :ensure t
@@ -350,6 +326,19 @@ frame"
   (setq lsp-enable-file-watchers nil)
   (setq lsp-ui-doc-enable nil)
   (setq lsp-log-io nil))
+  (use-package lsp-ui
+    :ensure t
+    :hook (
+    (lsp-ui-mode . (lambda ()
+        (define-key evil-normal-state-local-map (kbd "SPC l i") 'lsp-ui-imenu)
+        (define-key evil-normal-state-local-map (kbd "SPC l s") 'lsp-ui-sideline-toggle-symbols-info)
+        (define-key evil-normal-state-local-map (kbd "SPC l r") 'lsp-ui-peek-find-references)
+        (define-key evil-normal-state-local-map (kbd "SPC l d") 'lsp-ui-peek-find-definitions)))
+    (lsp-ui-peek-mode . (lambda ()
+        (define-key lsp-ui-peek-mode-map (kbd "l") 'lsp-ui-peek--select-next-file)
+        (define-key lsp-ui-peek-mode-map (kbd "h") 'lsp-ui-peek--select-prev-file)
+        (define-key lsp-ui-peek-mode-map (kbd "j") 'lsp-ui-peek--select-next)
+        (define-key lsp-ui-peek-mode-map (kbd "k") 'lsp-ui-peek--select-prev)))))
 
 ;(use-package company-lsp
 ;  :ensure t
@@ -363,19 +352,20 @@ frame"
 (use-package go-mode
   :ensure t
   :mode "\\*\\.go"
-  :config
-  (add-hook 'go-mode-hook
-			(lambda ()
+  :hook
+  ((go-mode . (lambda ()
 			  (setq gofmt-command "goimports")
               (define-key evil-normal-state-local-map (kbd "SPC g g") 'godef-jump)
               (define-key evil-normal-state-local-map (kbd "SPC g p") 'pop-tag-mark)
               (define-key evil-normal-state-local-map (kbd "SPC g d") 'godoc-at-point)
 			  (add-hook 'before-save-hook 'gofmt-before-save))))
-;;(use-package go-eldoc
-;;  :ensure t
-;;  :after go-mode
-;;  :init
-;;  (add-hook 'go-mode-hook 'go-eldoc-setup))
+  :config
+  (use-package go-eldoc
+    :ensure t
+    :hook (go-mode . go-eldoc-setup)
+    )
+)
+
 (use-package rg
   :ensure t
   :init
@@ -389,8 +379,7 @@ frame"
 
 (use-package rjsx-mode
   :ensure t
-  :init
-  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode)))
+  :mode ("components\\/.*\\.js\\'" . rjsx-mode))
 
 (use-package js2-mode
   :ensure t)
@@ -398,12 +387,15 @@ frame"
 (use-package ess
   :ensure t
   :mode (("\\*\\.R" . ess-site)
-         ("\\*\\.Rmd" . ess-site))
+         ("\\*\\.Rmd" . ess-site)
+         ("\\.Rmd\\'" . poly-markdown+R-mode))
   :commands R
-  :hook (ess-mode-hook . subword-mode)
+  :hook (ess-mode . (lambda ()
+              (subword-mode)
+              (define-key evil-normal-state-local-map (kbd "SPC r s") 'my-ess-start-R)
+              (define-key evil-normal-state-local-map (kbd "SPC r r") (lambda () (interactive) (ess-eval-function-or-paragraph-and-step)))))
   :defer t
   :init
-  (add-to-list 'auto-mode-alist '("\\.Rmd\\'" . poly-markdown+R-mode))
   (setq ess-ask-for-ess-directory nil)
   (setq ess-local-process-name "R")
   (setq scroll-down-aggressively 0.01)
@@ -425,21 +417,20 @@ frame"
                      (w2 (split-window-horizontally)))
                  (set-window-buffer w2 "*R*")
                  (selecte-window w1))))))
-  (add-hook 'ess-mode-hook
-            (lambda ()
-              (define-key evil-normal-state-local-map (kbd "SPC r s") 'my-ess-start-R)
-              (define-key evil-normal-state-local-map (kbd "SPC r r") (lambda () (interactive) (ess-eval-function-or-paragraph-and-step))))))
+)
 
 (use-package company
   :ensure t
+  :delight
+  :hook 
+  (after-init-hook . global-company-mode)
   :config
   (setq company-idle-delay 0)
   (setq company-tooltip-align-annotations t)
   (setq company-minimum-prefix-length 1)
   (setq company-lsp-cache-candidates t)
   (setq company-lsp-async t)
-  (add-to-list 'company-backends 'company-gtags)
-  (add-hook 'after-init-hook 'global-company-mode))
+  (add-to-list 'company-backends 'company-gtags))
 
 ;;
 ;; neotree
@@ -457,12 +448,7 @@ frame"
 
 (use-package neotree
   :ensure t
-  :init
-  (setq neo-theme 'arrow)
-  (setq neo-window-fixed-size nil)
-  (display-line-numbers-mode -1)
-  (add-hook 'neotree-mode-hook
-			(lambda ()
+  :hook (neotree-mode . (lambda ()
               (display-line-numbers-mode -1)
 			  (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter-hide)
 			  (define-key evil-normal-state-local-map (kbd "SPC n t") 'neotree-hide)
@@ -472,7 +458,12 @@ frame"
 			  (define-key evil-normal-state-local-map (kbd "m") 'neotree-rename-node)
 			  (define-key evil-normal-state-local-map (kbd "h") 'neotree-hidden-file-toggle)
 			  (define-key evil-normal-state-local-map (kbd "r") 'neotree-refresh)
-			  (define-key evil-normal-state-local-map (kbd "p") 'neotree-change-root))))
+			  (define-key evil-normal-state-local-map (kbd "p") 'neotree-change-root)))
+  :config
+  (setq neo-theme 'arrow)
+  (setq neo-window-fixed-size nil)
+  (display-line-numbers-mode -1)
+)
 
 (use-package bind-map
   :ensure t
@@ -486,7 +477,7 @@ frame"
     :bindings ("n t" 'neotree-toggle
                "c o" '(lambda () (interactive) (find-file "~/.emacs.d/init.el")) 
                "c l" '(lambda () (interactive) (load-file "~/.emacs.d/init.el"))
-               "t t" 'my-toggle-shell
+               "t t" (lambda () (interactive) (my-toggle-shell "eshell"))
                "t c" 'my-clear-shell
                "v p" 'my-send-to-shell-input
                "v l" 'my-send-to-shell-again
@@ -509,6 +500,7 @@ frame"
                "n d" 'kill-buffer-and-window
                "n b" 'helm-mini
                "n m" 'helm-projectile
+               "n v" 'helm-projectile-switch-project
                "n i" 'helm-imenu
                "i" 'helm-imenu
                ":" 'helm-M-x
@@ -570,15 +562,18 @@ frame"
 
 (use-package vimish-fold
   :ensure t
+  :delight
   :after evil)
 
 (use-package evil-vimish-fold
   :ensure t
+  :delight
   :after vimish-fold
   :hook ((prog-mode conf-mode text-mode) . evil-vimish-fold-mode))
 
 (use-package flycheck
   :ensure t
+  :delight
   :init (global-flycheck-mode))
 
 (use-package rustic
