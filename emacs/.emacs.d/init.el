@@ -48,6 +48,11 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
+(use-package benchmark-init
+  :ensure t
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;;
 ;; custom functions
@@ -132,6 +137,7 @@ shell, e.g. 'shell' or 'eshell'"
                       :height (+ size my-font-size))
   (setq my-font-size (+ size my-font-size)))
 
+
 ;; start package and keybind usage
 
 ;; Use delight for hiding modelines of certain modes.
@@ -139,32 +145,121 @@ shell, e.g. 'shell' or 'eshell'"
   :ensure t
   :config
   (delight '((eldoc-mode nil "eldoc")
-             (auto-revert-mode nil "arev")
-             (magit-auto-revert nil "arev"))))
+             (auto-revert-mode nil "arev"))))
+
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1)
+  (use-package evil-collection
+    :ensure t
+    :config
+    (evil-collection-init)))
+
+(use-package undo-tree
+  :delight
+  :after evil
+  :config
+  (global-undo-tree-mode)
+  (evil-set-undo-system 'undo-tree))
+
 
 (use-package general
-  :ensure t
+  :demand 
   :config
-  (general-evil-setup t)
-  (general-define-key
-    :states '(normal insert emacs)
+  (general-evil-setup)
+  (general-create-definer my-leader-def
     :prefix "SPC"
-    :non-normal-prefix "C-SPC"
+    :non-normal-prefix "C-SPC")
+  (my-leader-def '(normal visual)
+        "n T" 'treemacs
+        "n t" 'neotree-toggle
+        "c o" '(lambda () (interactive) (find-file "~/.emacs.d/init.el")) 
+        "c l" '(lambda () (interactive) (load-file "~/.emacs.d/init.el"))
+        "t t" (lambda () (interactive) (my-toggle-shell "eshell"))
+        "t c" 'my-clear-shell
+        "v p" 'my-send-to-shell-input
+        "v l" 'my-send-to-shell-again
+        "s s" 'ispell
+        "u v" 'undo-tree-visualize
+
+        ;; rg stuff
+        "s r" 'helm-projectile-rg
+        "s R" 'helm-rg
+        "s e" 'rg
+        "s t" 'rg-literal
+        "s p" 'rg-project
+        "s m" 'rg-menu
+        "s d" 'rg-dwim
+
+        ;; "u d" (lambda () (interactive) (setq undo-tree-visualizer-diff (if (= undo-tree-visualizer-diff 1) 0 1)))
+        ;; buffer keybindings
+        "n n" 'next-buffer
+        "n s" 'next-multiframe-window 
+        "n p" 'previous-buffer
+        "n o" 'delete-other-windows
+        "n d" 'kill-buffer-and-window
+        "n b" 'helm-mini
+        "n m" 'helm-projectile
+        "n v" 'helm-projectile-switch-project
+        "n c" 'projectile-persp-switch-project
+        "n i" 'helm-imenu
+        "i" 'helm-imenu
+        ":" 'helm-M-x
+        "n r" '(lambda () (interactive) (switch-to-buffer "*scratch*"))
+        "n a" '(lambda () (interactive) (find-file "~/workspace/notes.org"))
+        "j" 'evil-scroll-down
+        "k" 'evil-scroll-up
+        ;; magit
+        "m s" 'magit
+        "m b" 'magit-blame
+        "m d" 'magit-diff-buffer-file
+
+        ;;code-jump
+        "f j" 'xref-find-definitions
+        "f k" 'xref-pop-marker-stack
+        "f h" 'beginning-of-defun
+        "f l" 'end-of-defun
+
+        ;; Perspectives
+        "p n" 'persp-next
+        "p p" 'persp-prev
+        "p s" 'persp-switch
+
+        ;;window splits
+        "w h" 'split-window-horizontally
+        "w v" 'split-window-vertically
+        "w x" 'delete-window
+
+        ;; view
+        "d t" (lambda () (interactive) (progn (disable-theme 'gruvbox-dark-medium) (disable-theme 'acme) (load-theme 'tsdh-light) (set-face-background 'mode-line "gold")))
+        "d g" (lambda () (interactive) (load-theme 'gruvbox-dark-medium))
+        "d a" (lambda () (interactive) (load-theme 'acme))
+        "d f" (lambda () (interactive) (toggle-frame-fullscreen))
+        "=" (lambda () (interactive) (my-global-font-size 10))
+        "-" (lambda () (interactive) (my-global-font-size -10))
    )
   )
 
-(use-package web-mode
+
+(use-package pdf-tools
   :ensure t
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-page)
+  )
+
+(use-package web-mode
+  :mode ("\\.html?\\'" . web-mode))
+
+(use-package rust-mode
+  :mode "\\.rs\\'"
+  :hook (rust-mode . lsp-deferred)
   :init
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
-
-;;(use-package rust-mode
-;;  :ensure t
-;;  :hook (rust-mode . lsp)
-;;  :init
-;;  (setq rust-format-on-save t)
-;;  (setq indent-tabs-mode nil))
-
+  (setq rust-format-on-save t)
+  (setq indent-tabs-mode nil))
 
 (use-package helm
   :ensure t
@@ -183,7 +278,6 @@ shell, e.g. 'shell' or 'eshell'"
 
 (use-package helm-gtags
   :after helm
-  :ensure t
   :hook ((c-mode . helm-gtags-mode)
          (c++-mode . helm-gtags-mode)
          (asm-mode . helm-gtags-mode)
@@ -194,45 +288,27 @@ shell, e.g. 'shell' or 'eshell'"
               (define-key evil-normal-state-local-map (kbd "SPC g u") 'helm-gtags-update-tags)))))
 
 (use-package yaml-mode
-  :ensure t)
+  :mode ("\\.ya?ml\\'" . yaml-mode))
 
 (use-package powershell
-  :ensure t
   :mode ("\\.ps1\\'" . powershell-mode))
 
 (use-package helm-themes
-  :ensure t)
+  :after helm)
 
 (use-package acme-theme
   :ensure t)
 
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-keybinding nil)
-  :config
-  (evil-mode 1)
-  (use-package evil-collection
-    :ensure t
-    :config
-    (evil-collection-init)))
-
-(use-package undo-tree
-  :ensure t
-  :delight
-  :after evil
-  :config
-  (global-undo-tree-mode)
-  (evil-set-undo-system 'undo-tree))
-
-
 (use-package magit
-  :ensure t
-  :init)
+  :ensure t)
+
+(use-package latex-preview-pane
+  :ensure t)
 
 (require 'ox-latex)
+(add-hook 'latex-mode-hook 'latex-preview-pane-mode)
+
 (use-package org
-  :ensure t
   :hook (org-mode . (lambda ()
               (org-indent-mode)
               ;(add-hook 'after-save-hook 'org-preview-latex-fragment)
@@ -251,81 +327,32 @@ shell, e.g. 'shell' or 'eshell'"
               (define-key evil-normal-state-local-map (kbd "SPC u") 'org-todo)
               (define-key evil-normal-state-local-map (kbd "SPC o") 'org-toggle-checkbox)))
   :config
-  (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
-  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
-  (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
   (use-package ox-gfm
     :ensure t)
   (use-package org-present
     :ensure t
-    :init
-    (defun org-present-add-overlays ()
-    "Add overlays for this mode."
-    (add-to-invisibility-spec '(org-present))
-    (save-excursion
-        ;; cycle code blocks that are tagged as :hidden
-        (goto-char (point-min))
-        (while (re-search-forward "^[[:space:]]*\\(#\\+\\)\\(BEGIN_SRC\\).*\\(:hidden\\).*" nil t)
-          ;;(while (progn
-          ;;         (forward-line 1)
-          ;;          (not (looking-at "^.*\\#\\+END_SRC.*")))
-          ;;  (org-present-add-overlay (line-beginning-position) (line-end-position))
-          ;; )
-          (if (org-invisible-p (line-end-position)) nil (org-cycle))
-        )
-        ;; hide org-mode options starting with #+
-        (goto-char (point-min))
-        (while (re-search-forward "^[[:space:]]*\\(#\\+\\)\\([^[:space:]]+\\).*" nil t)
-        (let ((end (if (org-present-show-option (match-string 2)) 2 0)))
-            (org-present-add-overlay (match-beginning 1) (match-end end))))
-        ;; hide stars in headings
-        (goto-char (point-min))
-        (while (re-search-forward "^\\(*+\\)" nil t)
-        (org-present-add-overlay (match-beginning 1) (match-end 1)))
-        ;; hide emphasis/verbatim markers if not already hidden by org
-        (if org-hide-emphasis-markers nil
-        ;; TODO https://github.com/rlister/org-present/issues/12
-        ;; It would be better to reuse org's own facility for this, if possible.
-        ;; However it is not obvious how to do this.
-        (progn
-            ;; hide emphasis markers
-            (goto-char (point-min))
-            (while (re-search-forward org-emph-re nil t)
-            (org-present-add-overlay (match-beginning 2) (1+ (match-beginning 2)))
-            (org-present-add-overlay (1- (match-end 2)) (match-end 2)))
-            ;; hide verbatim markers
-            (goto-char (point-min))
-            (while (re-search-forward org-verbatim-re nil t)
-            (org-present-add-overlay (match-beginning 2) (1+ (match-beginning 2)))
-            (org-present-add-overlay (1- (match-end 2)) (match-end 2)))))))
-
     :hook ((org-present-mode . (lambda ()
                    (local-set-key (kbd "C-c +") '(lambda () (interactive) (my-global-font-size 10)))
                    (local-set-key (kbd "C-c -") '(lambda () (interactive) (my-global-font-size -10)))
-                   (local-set-key (kbd "C-c q") '(lambda () (interactive) (org-present-quit)))
                    (turn-off-evil-mode)
-                   (hide-mode-line-mode)
                    (org-present-big)
                    (display-line-numbers-mode -1)
                    (org-display-inline-images)
                    (org-present-hide-cursor)
                    (org-present-read-only)))
-       (org-present-mode-quit . (lambda ()
-                   (hide-mode-line-mode)
+       (org-present-mode-quit-hook . (lambda ()
                    (turn-on-evil-mode)
                    (display-line-numbers-mode t)
                    (org-present-small)
                    (org-remove-inline-images)
                    (org-present-show-cursor)
-                   (org-present-read-write)
-                   )))
+                   (org-present-read-write))))
   )
   (setq org-todo-keywords
         '((sequence "PROJECT" "TODO" "IN-PROGRESS" "BACKLOG" "|" "DONE")))
 )
 
 (use-package markdown-mode
-  :ensure t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
@@ -335,44 +362,36 @@ shell, e.g. 'shell' or 'eshell'"
               (turn-on-orgstruct++)))
   :init
   (setq markdown-command "multimarkdown"))
-(use-package plantuml-mode
-  :ensure t
-  :mode ("\\.plantuml|.puml\\'" . plantuml-mode)
-  :hook (plntuml-mode . (lambda () (
-  (setq plantuml-executable-path "/usr/bin/plantuml")
-  (setq plantuml-default-exec-mode 'executable)))
-  ))
 
 (use-package projectile
   :after helm
-  :ensure t
   :config
   (projectile-mode +1)
   (use-package helm-projectile
-    :ensure t
+    :after (projectile helm)
     :init
     (setq projectile-completion-system 'helm-mini)
-    (setq projectile-switch-project-action 'helm-projectile)
+    (setq projectile-switch-project-action 'neotree-projectile-action)
     )
   (use-package org-projectile
-  :bind (("C-c n p" . org-projectile-project-todo-completing-read)
-          ("C-c c" . org-capture))
-  :config
-  (progn
-      (org-projectile-per-project)
-      (setq org-projectile-per-project-filepath "TODO.org")
-      (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
-      (push (org-projectile-project-todo-entry) org-capture-templates))
-  :ensure t)
+    :after (projectile org)
+    :bind (("C-c n p" . org-projectile-project-todo-completing-read)
+            ("C-c c" . org-capture))
+    :config
+    (progn
+        (org-projectile-per-project)
+        (setq org-projectile-per-project-filepath "TODO.org")
+        (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+        (push (org-projectile-project-todo-entry) org-capture-templates))
+    )
 )
 
 (use-package helm-rg
-  :after helm
-  :ensure t)
+  :after helm)
 
 (use-package lsp-mode
-  :ensure t
-  :hook (go-mode . lsp-deferred)
+  :hook ((go-mode . lsp-deferred)
+         (rust-mode . lsp-deferred))
   :commands lsp-deferred
   :config
   (setq gc-cons-threshold 100000000)
@@ -396,26 +415,32 @@ shell, e.g. 'shell' or 'eshell'"
         (define-key lsp-ui-peek-mode-map (kbd "j") 'lsp-ui-peek--select-next)
         (define-key lsp-ui-peek-mode-map (kbd "k") 'lsp-ui-peek--select-prev)))))
 
-;(use-package company-lsp
-;  :ensure t
-;  :commands company-lsp
-;  :after (lsp-mode company))
-
 (use-package helm-lsp
-  :ensure t
+  :after (helm lsp-mode)
   :commands helm-lsp-workspace-symbol)
 
-(use-package go-mode
+(use-package which-key
   :ensure t
-  :mode "\\*\\.go"
-  :hook
-  ((go-mode . (lambda ()
-			  (setq gofmt-command "goimports")
-              (define-key evil-normal-state-local-map (kbd "SPC g g") 'godef-jump)
-              (define-key evil-normal-state-local-map (kbd "SPC g p") 'pop-tag-mark)
-              (define-key evil-normal-state-local-map (kbd "SPC g d") 'godoc-at-point)
-			  (add-hook 'before-save-hook 'gofmt-before-save))))
+  :delight
   :config
+  (which-key-mode))
+
+(use-package go-mode
+  :mode "\\.go\\'"
+  :general
+  (general-evil-define-key 'normal go-mode-map
+   "g g" 'godef-jump)
+    ;("g p" 'pop-tag-mark)
+    ;("g d" 'godoc-at-point)
+  :hook
+  (;(go-mode . (lambda ()
+   ;           (define-key evil-normal-state-local-map (kbd "SPC g g") 'godef-jump)
+   ;           (define-key evil-normal-state-local-map (kbd "SPC g p") 'pop-tag-mark)
+   ;           (define-key evil-normal-state-local-map (kbd "SPC g d") 'godoc-at-point)
+   ; 		  ))
+   (before-save . gofmt-before-save))
+  :config
+  (setq gofmt-command "goimports")
   (use-package go-eldoc
     :ensure t
     :hook (go-mode . go-eldoc-setup)
@@ -428,23 +453,18 @@ shell, e.g. 'shell' or 'eshell'"
   (rg-enable-menu))
 
 (use-package poly-markdown
-  :ensure t)
+  :defer t)
 
 (use-package poly-R
-  :ensure t)
+  :defer t)
 
 (use-package rjsx-mode
-  :ensure t
   :mode ("components\\/.*\\.js\\'" . rjsx-mode))
 
 (use-package js2-mode
-  :ensure t)
-
-(use-package vterm
-  :ensure t)
+  :mode "\\.js\\'")
 
 (use-package ess
-  :ensure t
   :mode (("\\*\\.R" . ess-site)
          ("\\*\\.Rmd" . ess-site)
          ("\\.Rmd\\'" . poly-markdown+R-mode))
@@ -479,10 +499,9 @@ shell, e.g. 'shell' or 'eshell'"
 )
 
 (use-package company
-  :ensure t
   :delight
   :hook 
-  (after-init-hook . global-company-mode)
+  (after-init . global-company-mode)
   :config
   (setq company-idle-delay 0)
   (setq company-tooltip-align-annotations t)
@@ -490,6 +509,21 @@ shell, e.g. 'shell' or 'eshell'"
   (setq company-lsp-cache-candidates t)
   (setq company-lsp-async t)
   (add-to-list 'company-backends 'company-gtags))
+
+(use-package treemacs
+  :ensure t
+  :hook (treemacs-mode . (lambda() (
+               (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter-hide)                    ))))
+
+(use-package treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
+(use-package treemacs-projectile
+  :after (treemacs projectile)
+  :ensure t)
+(use-package treemacs-magit
+  :after (treemacs magit)
+  :ensure t)
 
 ;;
 ;; neotree
@@ -506,8 +540,14 @@ shell, e.g. 'shell' or 'eshell'"
   (neo-buffer--execute arg 'neo-open-file-hide 'neo-open-dir))
 
 (use-package neotree
+  :after evil
   :ensure t
-  :hook (neotree-mode . (lambda ()
+  :init
+  (setq neo-theme 'arrow)
+  (setq neo-window-fixed-size nil)
+  (display-line-numbers-mode -1)
+  (add-hook 'neotree-mode-hook
+			(lambda ()
               (display-line-numbers-mode -1)
 			  (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter-hide)
 			  (define-key evil-normal-state-local-map (kbd "SPC n t") 'neotree-hide)
@@ -517,94 +557,62 @@ shell, e.g. 'shell' or 'eshell'"
 			  (define-key evil-normal-state-local-map (kbd "m") 'neotree-rename-node)
 			  (define-key evil-normal-state-local-map (kbd "h") 'neotree-hidden-file-toggle)
 			  (define-key evil-normal-state-local-map (kbd "r") 'neotree-refresh)
-			  (define-key evil-normal-state-local-map (kbd "p") 'neotree-change-root)))
+			  (define-key evil-normal-state-local-map (kbd "p") 'neotree-change-root))))
+
+(use-package perspective
+  :ensure t
+  :hook
+  (after-init . persp-mode)
   :config
-  (setq neo-theme 'arrow)
-  (setq neo-window-fixed-size nil)
-  (display-line-numbers-mode -1)
-)
+  (setq persp-state-default-file "perspective.save")
+  (add-hook 'kill-emacs-hook #'persp-state-save)
+  (use-package persp-projectile
+    :ensure t
+    :after perspective
+    :hook (persp-switch . cm/persp-neo)
+    :bind ("C-c x" . hydra-persp/body)
 
-(use-package bind-map
-  :ensure t
-  :init
-  (use-package default-text-scale
-	:ensure t)
-  (bind-map my-base-leader-map
-    :keys ("M-m")
-    :evil-keys ("SPC")
-    :evil-states (normal motion visual)
-    :bindings ("n t" 'neotree-toggle
-               "c o" '(lambda () (interactive) (find-file "~/.emacs.d/init.el")) 
-               "c l" '(lambda () (interactive) (load-file "~/.emacs.d/init.el"))
-               "t t" (lambda () (interactive) (my-toggle-shell "eshell"))
-               "t c" 'my-clear-shell
-               "v p" 'my-send-to-shell-input
-               "v l" 'my-send-to-shell-again
-               "s s" 'ispell
-               "u v" 'undo-tree-visualize
+    :config
+    (defun cm/persp-neo ()
+      "Make NeoTree follow the perspective"
+      (interactive)
+      (let ((cw (selected-window))
+            (path (buffer-file-name))) ;; save current window and buffer
+            (progn
+              (when (and (fboundp 'projectile-project-p)
+                         (projectile-project-p)
+                         (fboundp 'projectile-project-root))
+                (neotree-dir (projectile-project-root)))
+              (neotree-find path))
+            (select-window cw)))
 
-               ;; rg.el bindings
-               "s r" 'rg
-               "s t" 'rg-literal
-               "s p" 'rg-project
-               "s m" 'rg-menu
-               "s d" 'rg-dwim
+    (defhydra hydra-persp (:columns 4
+                           :color blue)
+      "Perspective"
+      ("a" persp-add-buffer "Add Buffer")
+      ("i" persp-import "Import")
+      ("c" persp-kill "Close")
+      ("n" persp-next "Next")
+      ("p" persp-prev "Prev")
+      ("k" persp-remove-buffer "Kill Buffer")
+      ("r" persp-rename "Rename")
+      ("A" persp-set-buffer "Set Buffer")
+      ("s" persp-switch "Switch")
+      ("C-x" persp-switch-last "Switch Last")
+      ("b" persp-switch-to-buffer "Switch to Buffer")
+      ("P" projectile-persp-switch-project "Switch Project")
+      ("q" nil "Quit"))))
 
-               ;; "u d" (lambda () (interactive) (setq undo-tree-visualizer-diff (if (= undo-tree-visualizer-diff 1) 0 1)))
-               ;; buffer keybindings
-               "n n" 'next-buffer
-               "n s" 'next-multiframe-window 
-               "n p" 'previous-buffer
-               "n o" 'delete-other-windows
-               "n d" 'kill-buffer-and-window
-               "n b" 'helm-mini
-               "n m" 'helm-projectile
-               "n v" 'helm-projectile-switch-project
-               "n i" 'helm-imenu
-               "i" 'helm-imenu
-               ":" 'helm-M-x
-               "n r" '(lambda () (interactive) (switch-to-buffer "*scratch*"))
-               "n a" '(lambda () (interactive) (find-file "~/workspace/notes.org"))
-               "j" 'evil-scroll-down
-               "k" 'evil-scroll-up
-               ;; magit
-               "m s" 'magit
-               "m b" 'magit-blame
-               "m d" 'magit-diff-buffer-file
+(use-package default-text-scale
+:ensure t)
 
-               ;;code-jump
-               "f j" 'xref-find-definitions
-               "f k" 'xref-pop-marker-stack
-               "f h" 'beginning-of-defun
-               "f l" 'end-of-defun
-
-               ;;window splits
-               "w h" 'split-window-horizontally
-               "w v" 'split-window-vertically
-               "w x" 'delete-window
-
-               ;; view
-               "d t" (lambda () (interactive) (progn (disable-theme 'gruvbox-dark-medium) (disable-theme 'acme) (load-theme 'tsdh-light) (set-face-background 'mode-line "gold")))
-               "d g" (lambda () (interactive) (load-theme 'gruvbox-dark-medium))
-               "d a" (lambda () (interactive) (load-theme 'acme))
-               "d f" (lambda () (interactive) (toggle-frame-fullscreen))
-               "=" (lambda () (interactive) (my-global-font-size 10))
-               "-" (lambda () (interactive) (my-global-font-size -10)))))
-
-;;(use-package evil-org
-;;  :ensure t
-;;  :after org
-;;  :hook (org-mode . (lambda () evil-org-mode))
-;;  :config
-;;  (require 'evil-org-agenda)
-;;  (evil-org-agenda-set-keys))
 (use-package evil-surround
-  :ensure t
+  :after evil
   :config
   (global-evil-surround-mode 1))
 
 (use-package evil-easymotion
-  :ensure t
+  :after evil
   :config
   (evilem-default-keybindings "e"))
 
@@ -615,17 +623,14 @@ shell, e.g. 'shell' or 'eshell'"
   :ensure t)
 
 (use-package org-evil
-  :ensure t
   :after (evil dash))
 
 
 (use-package vimish-fold
-  :ensure t
   :delight
   :after evil)
 
 (use-package evil-vimish-fold
-  :ensure t
   :delight
   :after vimish-fold
   :hook ((prog-mode conf-mode text-mode) . evil-vimish-fold-mode))
@@ -633,17 +638,15 @@ shell, e.g. 'shell' or 'eshell'"
 (use-package flycheck
   :ensure t
   :delight
-  :config (global-flycheck-mode))
+  :init (global-flycheck-mode))
 
 (use-package rustic
-  :ensure t
   :after flycheck)
 
 (use-package page-break-lines
   :ensure t)
 
 (use-package dashboard
-  :ensure t
   :after page-break-lines
   :config
   (dashboard-setup-startup-hook))
