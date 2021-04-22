@@ -86,16 +86,12 @@ shell, e.g. 'shell' or 'eshell'"
 
 (defun my-send-to-shell (cmd &optional set-last-cmd-p)
   (interactive)
-  (with-current-buffer "*eshell*"
-    (evil-insert-state)
-    (eshell-kill-input)
-    (end-of-buffer)
-    (insert cmd)
-    (eshell-send-input)
-    (end-of-buffer)
-    (eshell-bol)
+  (with-current-buffer "*vterm*"
+    (read-only-mode -1)
+    (vterm-send-string cmd)
+    (vterm-send-return)
     (if set-last-cmd-p
-        (setq my-last-eshell-cmd cmd))))
+        (setq my-last-shell-cmd cmd))))
 
 (eval-after-load "comint"
   '(progn
@@ -104,12 +100,12 @@ shell, e.g. 'shell' or 'eshell'"
 (defun my-send-to-shell-again ()
   "sends the previous command to the active shell"
   (interactive)
-  (my-send-to-shell last-shell-cmd))
+  (my-send-to-shell my-last-shell-cmd t))
 
 (defun my-send-to-shell-input ()
   "gets the user command and sends to the buffer containing an active shell"
   (interactive)
-  (my-send-to-shell (read-string "CMD: ")))
+  (my-send-to-shell (read-string "CMD: ") t))
 
 (defun my-start-code-block ()
   "starts a code block in org mode"
@@ -165,6 +161,7 @@ shell, e.g. 'shell' or 'eshell'"
   (global-undo-tree-mode)
   (evil-set-undo-system 'undo-tree))
 
+(use-package vterm :ensure t)
 
 (use-package general
   :demand 
@@ -178,11 +175,16 @@ shell, e.g. 'shell' or 'eshell'"
         "n t" 'neotree-toggle
         "c o" '(lambda () (interactive) (find-file "~/.emacs.d/init.el")) 
         "c l" '(lambda () (interactive) (load-file "~/.emacs.d/init.el"))
-        "t t" (lambda () (interactive) (my-toggle-shell "eshell"))
+
+        "s s" 'ispell
+        "s S" 'ispell-region
+        "s g" 'writegood-mode
+
+        "t t" (lambda () (interactive) (my-toggle-shell "vterm"))
         "t c" 'my-clear-shell
         "v p" 'my-send-to-shell-input
         "v l" 'my-send-to-shell-again
-        "s s" 'ispell
+
         "u v" 'undo-tree-visualize
 
         ;; rg stuff
@@ -196,6 +198,7 @@ shell, e.g. 'shell' or 'eshell'"
 
         ;; "u d" (lambda () (interactive) (setq undo-tree-visualizer-diff (if (= undo-tree-visualizer-diff 1) 0 1)))
         ;; buffer keybindings
+        "n e" 'window-swap-states
         "n n" 'next-buffer
         "n s" 'next-multiframe-window 
         "n p" 'previous-buffer
@@ -510,21 +513,6 @@ shell, e.g. 'shell' or 'eshell'"
   (setq company-lsp-async t)
   (add-to-list 'company-backends 'company-gtags))
 
-(use-package treemacs
-  :ensure t
-  :hook (treemacs-mode . (lambda() (
-               (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter-hide)                    ))))
-
-(use-package treemacs-evil
-  :after (treemacs evil)
-  :ensure t)
-(use-package treemacs-projectile
-  :after (treemacs projectile)
-  :ensure t)
-(use-package treemacs-magit
-  :after (treemacs magit)
-  :ensure t)
-
 ;;
 ;; neotree
 ;;
@@ -558,6 +546,22 @@ shell, e.g. 'shell' or 'eshell'"
 			  (define-key evil-normal-state-local-map (kbd "h") 'neotree-hidden-file-toggle)
 			  (define-key evil-normal-state-local-map (kbd "r") 'neotree-refresh)
 			  (define-key evil-normal-state-local-map (kbd "p") 'neotree-change-root))))
+
+(use-package treemacs
+  :ensure t)
+  ;;:hook (treemacs-mode . (lambda() (
+  ;;             (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter-hide)                    ))))
+
+(use-package treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
+(use-package treemacs-projectile
+  :after (treemacs projectile)
+  :ensure t)
+(use-package treemacs-magit
+  :after (treemacs magit)
+  :ensure t)
+
 
 (use-package perspective
   :ensure t
