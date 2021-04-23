@@ -141,7 +141,8 @@ shell, e.g. 'shell' or 'eshell'"
   :ensure t
   :config
   (delight '((eldoc-mode nil "eldoc")
-             (auto-revert-mode nil "arev"))))
+             (auto-revert-mode nil "arev")
+             (magit-auto-revert-mode nil "arev"))))
 
 (use-package evil
   :ensure t
@@ -330,21 +331,69 @@ shell, e.g. 'shell' or 'eshell'"
               (define-key evil-normal-state-local-map (kbd "SPC u") 'org-todo)
               (define-key evil-normal-state-local-map (kbd "SPC o") 'org-toggle-checkbox)))
   :config
+  (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+  (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
   (use-package ox-gfm
     :ensure t)
   (use-package org-present
     :ensure t
+    :init
+    (defun org-present-add-overlays ()
+    "Add overlays for this mode."
+    (add-to-invisibility-spec '(org-present))
+    (save-excursion
+        ;; cycle code blocks that are tagged as :hidden
+        (goto-char (point-min))
+        (while (re-search-forward "^[[:space:]]*\\(#\\+\\)\\(BEGIN_SRC\\).*\\(:hidden\\).*" nil t)
+          ;;(while (progn
+          ;;         (forward-line 1)
+          ;;          (not (looking-at "^.*\\#\\+END_SRC.*")))
+          ;;  (org-present-add-overlay (line-beginning-position) (line-end-position))
+          ;; )
+          (if (org-invisible-p (line-end-position)) nil (org-cycle))
+        )
+        ;; hide org-mode options starting with #+
+        (goto-char (point-min))
+        (while (re-search-forward "^[[:space:]]*\\(#\\+\\)\\([^[:space:]]+\\).*" nil t)
+        (let ((end (if (org-present-show-option (match-string 2)) 2 0)))
+            (org-present-add-overlay (match-beginning 1) (match-end end))))
+        ;; hide stars in headings
+        (goto-char (point-min))
+        (while (re-search-forward "^\\(*+\\)" nil t)
+        (org-present-add-overlay (match-beginning 1) (match-end 1)))
+        ;; hide emphasis/verbatim markers if not already hidden by org
+        (if org-hide-emphasis-markers nil
+        ;; TODO https://github.com/rlister/org-present/issues/12
+        ;; It would be better to reuse org's own facility for this, if possible.
+        ;; However it is not obvious how to do this.
+        (progn
+            ;; hide emphasis markers
+            (goto-char (point-min))
+            (while (re-search-forward org-emph-re nil t)
+            (org-present-add-overlay (match-beginning 2) (1+ (match-beginning 2)))
+            (org-present-add-overlay (1- (match-end 2)) (match-end 2)))
+            ;; hide verbatim markers
+            (goto-char (point-min))
+            (while (re-search-forward org-verbatim-re nil t)
+            (org-present-add-overlay (match-beginning 2) (1+ (match-beginning 2)))
+            (org-present-add-overlay (1- (match-end 2)) (match-end 2)))))))
+
+
     :hook ((org-present-mode . (lambda ()
                    (local-set-key (kbd "C-c +") '(lambda () (interactive) (my-global-font-size 10)))
                    (local-set-key (kbd "C-c -") '(lambda () (interactive) (my-global-font-size -10)))
+                   (local-set-key (kbd "C-c q") '(lambda () (interactive) (org-present-quit)))
                    (turn-off-evil-mode)
+                   (hide-mode-line-mode)
                    (org-present-big)
                    (display-line-numbers-mode -1)
                    (org-display-inline-images)
                    (org-present-hide-cursor)
                    (org-present-read-only)))
-       (org-present-mode-quit-hook . (lambda ()
+       (org-present-mode-quit . (lambda ()
                    (turn-on-evil-mode)
+                   (hide-mode-line-mode -1)
                    (display-line-numbers-mode t)
                    (org-present-small)
                    (org-remove-inline-images)
@@ -365,6 +414,14 @@ shell, e.g. 'shell' or 'eshell'"
               (turn-on-orgstruct++)))
   :init
   (setq markdown-command "multimarkdown"))
+
+(use-package plantuml-mode
+  :ensure t
+  :mode ("\\.plantuml|.puml\\'" . plantuml-mode)
+  :hook (plntuml-mode . (lambda () (
+  (setq plantuml-executable-path "/usr/bin/plantuml")
+  (setq plantuml-default-exec-mode 'executable)))
+  ))
 
 (use-package projectile
   :after helm
