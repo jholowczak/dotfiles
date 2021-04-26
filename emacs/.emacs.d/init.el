@@ -126,6 +126,14 @@ shell, e.g. 'shell' or 'eshell'"
   (insert ":DATE: ")
   (org-insert-time-stamp (current-time)))
 
+(defun my-reload-config ()
+  "saves the perspective and reloads the config"
+  (interactive)
+  (persp-state-save)
+  (load-file "~/.emacs.d/init.el")
+  (persp-state-load)
+)
+
 (setq my-font-size 105)
 (defun my-global-font-size (size)
   (interactive)
@@ -175,7 +183,7 @@ shell, e.g. 'shell' or 'eshell'"
         "n T" 'treemacs
         "n t" 'neotree-toggle
         "c o" '(lambda () (interactive) (find-file "~/.emacs.d/init.el")) 
-        "c l" '(lambda () (interactive) (load-file "~/.emacs.d/init.el"))
+        "c l" 'my-reload-config
 
         "s s" 'ispell
         "s S" 'ispell-region
@@ -231,6 +239,8 @@ shell, e.g. 'shell' or 'eshell'"
         "p n" 'persp-next
         "p p" 'persp-prev
         "p s" 'persp-switch
+        "p l" 'persp-state-load
+        "p r" 'persp-state-restore
 
         ;;window splits
         "w h" 'split-window-horizontally
@@ -624,9 +634,10 @@ shell, e.g. 'shell' or 'eshell'"
   :ensure t
   :hook
   (after-init . persp-mode)
-  :config
-  (setq persp-state-default-file "perspective.save")
+  :init
+  (setq persp-state-default-file "~/.emacs.d/perspective.save")
   (add-hook 'kill-emacs-hook #'persp-state-save)
+
   (use-package persp-projectile
     :ensure t
     :after perspective
