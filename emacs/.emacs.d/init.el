@@ -131,7 +131,7 @@ shell, e.g. 'shell' or 'eshell'"
   (interactive)
   (persp-state-save)
   (load-file "~/.emacs.d/init.el")
-  (persp-state-load)
+  (persp-state-load "~/.emacs.d/perspective.save")
 )
 
 (setq my-font-size 105)
@@ -497,9 +497,9 @@ shell, e.g. 'shell' or 'eshell'"
 
 (use-package go-mode
   :mode "\\.go\\'"
-  :general
-  (general-evil-define-key 'normal go-mode-map
-   "g g" 'godef-jump)
+  ;;:general
+  ;;(general-evil-define-key 'normal go-mode-map
+  ;; "g g" 'godef-jump)
     ;("g p" 'pop-tag-mark)
     ;("g d" 'godoc-at-point)
   :hook
@@ -569,6 +569,7 @@ shell, e.g. 'shell' or 'eshell'"
 )
 
 (use-package company
+  :ensure t
   :delight
   :hook 
   (after-init . global-company-mode)
@@ -746,3 +747,4 @@ shell, e.g. 'shell' or 'eshell'"
 
 (global-display-line-numbers-mode)
 (global-hl-line-mode)
+(show-paren-mode)
