@@ -247,6 +247,9 @@ shell, e.g. 'shell' or 'eshell'"
         "w v" 'split-window-vertically
         "w x" 'delete-window
 
+        ;; compile
+        "r r" 'projectile-compile-project
+
         ;; view
         "d t" (lambda () (interactive) (progn (disable-theme 'gruvbox-dark-medium) (disable-theme 'acme) (load-theme 'tsdh-light) (set-face-background 'mode-line "gold")))
         "d g" (lambda () (interactive) (load-theme 'gruvbox-dark-medium))
@@ -732,6 +735,7 @@ shell, e.g. 'shell' or 'eshell'"
 (menu-bar-mode -1)
 (xterm-mouse-mode 1)
 (electric-pair-mode 1) ;; close braces
+(show-paren-mode) ;; show matching parens
 
 (fset 'yes-or-no-p 'y-or-n-p)
 ;(load-theme 'tsdh-light)
@@ -747,4 +751,3 @@ shell, e.g. 'shell' or 'eshell'"
 
 (global-display-line-numbers-mode)
 (global-hl-line-mode)
-(show-paren-mode)
