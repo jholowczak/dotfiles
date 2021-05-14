@@ -161,6 +161,7 @@ shell, e.g. 'shell' or 'eshell'"
   (use-package evil-collection
     :ensure t
     :config
+    (setq evil-collection-company-use-tng nil)
     (evil-collection-init)))
 
 (use-package undo-tree
@@ -238,7 +239,8 @@ shell, e.g. 'shell' or 'eshell'"
         ;; Perspectives
         "p n" 'persp-next
         "p p" 'persp-prev
-        "p s" 'persp-switch
+        "p S" 'persp-switch
+        "p s" 'persp-switch-last
         "p l" 'persp-state-load
         "p r" 'persp-state-restore
 
@@ -582,7 +584,9 @@ shell, e.g. 'shell' or 'eshell'"
   (setq company-minimum-prefix-length 1)
   (setq company-lsp-cache-candidates t)
   (setq company-lsp-async t)
-  (add-to-list 'company-backends 'company-gtags))
+  (add-to-list 'company-backends 'company-gtags)(with-eval-after-load 'company
+    (define-key company-active-map [tab] 'company-complete-cycle-next)
+    (define-key company-active-map (kbd "TAB") 'company-complete-cycle-next)))
 
 ;;
 ;; neotree
@@ -738,6 +742,7 @@ shell, e.g. 'shell' or 'eshell'"
 (show-paren-mode) ;; show matching parens
 
 (fset 'yes-or-no-p 'y-or-n-p)
+(company-tng-configure-default)
 ;(load-theme 'tsdh-light)
 ;(set-face-background 'mode-line "gold")
 (use-package gruvbox-theme
