@@ -13,6 +13,3 @@
 [submodule "fish/.local/share/omf"]
 	path = fish/.local/share/omf
 	url = https://github.com/oh-my-fish/oh-my-fish.git
-[submodule "rofi/.config/rofi/rofi-hamster"]
-	path = rofi/.config/rofi/rofi-hamster
-	url = https://gitlab.com/matclab/rofi-hamster
