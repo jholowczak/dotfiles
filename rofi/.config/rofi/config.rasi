@@ -1,24 +1,12 @@
 configuration {
     modi: "window,run,ssh,layout:~/.config/rofi/bsplayout.sh";
-	font: "Overpass Light 16";
-	bw: 0;
-	location: 0;
-	padding: 250;
-	fixed-num-lines: true;
-	terminal: "termite -e";
 	case-sensitive: false;
+	fixed-num-lines: true;
 	matching: "fuzzy";
-	separator-style: "none";
-	hide-scrollbar: true;
-	fullscreen: true;
-	fake-transparency: false;
-	scroll-method: 1;
-	color-normal: "#00000000,#dedede,#00000000,#00000000,#3083ae";
-	color-urgent: "#00000000,#dedede,#00000000,#00000000,#cc0000";
-	color-active: "#00000000,#dedede,#00000000,#00000000,#3083ae";
-	color-window: "#e5000000,#000000,#dedede";
+	font: "Overpass Light 16";
 	kb-remove-to-eol: "";
 	kb-accept-entry: "Return";
 	kb-row-up: "Up,Control+k";
 	kb-row-down: "Down,Control+j";
+    theme: "mytheme";
 }
