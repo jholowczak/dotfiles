@@ -1,5 +1,0 @@
-[options]
-font = Iosevka Term 10
-[colors]
-background = rgba(40,40,40, 0.90)
-foreground = #ebdbb2

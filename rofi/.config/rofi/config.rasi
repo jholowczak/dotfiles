@@ -1,5 +1,5 @@
 configuration {
-    modi: "window,run,ssh,layout:~/.config/rofi/bsplayout.sh";
+    modi: "window,run,ssh,layout:~/.config/rofi/bsplayout.sh,hamster:~/.config/rofi/hamster.py";
 	case-sensitive: false;
 	fixed-num-lines: true;
 	matching: "fuzzy";
