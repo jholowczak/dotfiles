@@ -307,7 +307,8 @@ shell, e.g. 'shell' or 'eshell'"
               (define-key evil-normal-state-local-map (kbd "SPC g u") 'helm-gtags-update-tags)))))
 
 (use-package yaml-mode
-  :mode ("\\.ya?ml\\'" . yaml-mode))
+  :mode ("\\.ya?ml\\'" . yaml-mode)
+  :hook (yaml-mode . (lambda () (setq-default tab-width 2))))
 
 (use-package powershell
   :mode ("\\.ps1\\'" . powershell-mode))
@@ -446,7 +447,7 @@ shell, e.g. 'shell' or 'eshell'"
     :after (projectile helm)
     :init
     (setq projectile-completion-system 'helm-mini)
-    (setq projectile-switch-project-action 'neotree-projectile-action)
+    (setq projectile-switch-project-action '(lambda () (neotree-projectile-action) (neotree-hide)))
     )
   (use-package org-projectile
     :after (projectile org)
@@ -664,7 +665,8 @@ shell, e.g. 'shell' or 'eshell'"
                          (fboundp 'projectile-project-root))
                 (neotree-dir (projectile-project-root)))
               (neotree-find path))
-            (select-window cw)))
+            (select-window cw)
+            (neotree-hide)))
 
     (defhydra hydra-persp (:columns 4
                            :color blue)
