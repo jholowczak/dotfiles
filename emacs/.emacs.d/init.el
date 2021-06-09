@@ -280,6 +280,11 @@ shell, e.g. 'shell' or 'eshell'"
   (setq rust-format-on-save t)
   (setq indent-tabs-mode nil))
 
+(use-package zig-mode
+  :mode "\\.zig\\'"
+  :custom (zig-format-on-save t)
+  :hook (zig-mode . lsp-deferred))
+
 (use-package helm
   :ensure t
   :init
@@ -467,7 +472,8 @@ shell, e.g. 'shell' or 'eshell'"
 
 (use-package lsp-mode
   :hook ((go-mode . lsp-deferred)
-         (rust-mode . lsp-deferred))
+         (rust-mode . lsp-deferred)
+         (zig-mode . lsp-deferred))
   :commands lsp-deferred
   :config
   (setq gc-cons-threshold 100000000)
@@ -476,6 +482,7 @@ shell, e.g. 'shell' or 'eshell'"
   (setq lsp-idle-delay 0.1)
   (setq lsp-enable-file-watchers nil)
   (setq lsp-ui-doc-enable nil)
+  (setq lsp-enable-snippet t)
   (setq lsp-log-io nil))
   (use-package lsp-ui
     :ensure t
@@ -587,7 +594,7 @@ shell, e.g. 'shell' or 'eshell'"
   (setq company-lsp-async t)
   (add-to-list 'company-backends 'company-gtags)(with-eval-after-load 'company
     (define-key company-active-map [tab] 'company-complete-cycle-next)
-    (define-key company-active-map (kbd "TAB") 'company-complete-cycle-next)))
+    (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)))
 
 ;;
 ;; neotree

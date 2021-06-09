@@ -23,7 +23,7 @@ install:
 	#stow xinit
 	stow kitty
 	#stow git
-	stow compton
+	stow picom
 	stow emacs
 	stow paru
 
@@ -40,7 +40,7 @@ reinstall:
 	#stow -R xinit
 	stow -R kitty
 	#stow -R git
-	stow -R compton
+	stow -R picom
 	stow -R emacs
 	stow -R paru
 
@@ -57,7 +57,7 @@ delete:
 	#stow -D xinit
 	stow -D kitty
 	#stow -D git
-	stow -D compton
+	stow -D picom
 	stow -D emacs
 	stow -D paru
 
@@ -67,7 +67,7 @@ update:
 	git submodule update --init --recursive
 
 installdeps:
-	paru -Sy stow fzf neovim redshift tmux sxhkd bspwm rofi fish polybar kitty compton python-pynvim xclip emacs
+	paru -Sy stow fzf neovim redshift tmux sxhkd bspwm rofi fish polybar kitty picom python-pynvim xclip emacs
 
 all:
 	usage
