@@ -469,27 +469,38 @@ shell, e.g. 'shell' or 'eshell'"
   :hook ((go-mode . lsp-deferred)
          (rust-mode . lsp-deferred))
   :commands lsp-deferred
+  :custom
+  (lsp-rust-analyzer-cargo-watch-command "clippy")
+  (lsp-eldoc-render-all t)
+  (lsp-rust-analyzer-server-display-inlay-hints t)
+  (lsp-idle-delay 0.1)
+  (gc-cons-threshold 100000000)
+  (read-process-output-max (* 1024 1024 3)) ;; 1mb
+  (lsp-completion-provider :capf)
+  (lsp-enable-file-watchers nil)
+  (lsp-log-io nil)
+  (lsp-rust-analyzer-server-display-inlay-hints t)
   :config
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024 3)) ;; 1mb
-  (setq lsp-completion-provider :capf)
-  (setq lsp-idle-delay 0.1)
-  (setq lsp-enable-file-watchers nil)
-  (setq lsp-ui-doc-enable nil)
-  (setq lsp-log-io nil))
-  (use-package lsp-ui
-    :ensure t
-    :hook (
-    (lsp-ui-mode . (lambda ()
-        (define-key evil-normal-state-local-map (kbd "SPC l i") 'lsp-ui-imenu)
-        (define-key evil-normal-state-local-map (kbd "SPC l s") 'lsp-ui-sideline-toggle-symbols-info)
-        (define-key evil-normal-state-local-map (kbd "SPC l r") 'lsp-ui-peek-find-references)
-        (define-key evil-normal-state-local-map (kbd "SPC l d") 'lsp-ui-peek-find-definitions)))
-    (lsp-ui-peek-mode . (lambda ()
-        (define-key lsp-ui-peek-mode-map (kbd "l") 'lsp-ui-peek--select-next-file)
-        (define-key lsp-ui-peek-mode-map (kbd "h") 'lsp-ui-peek--select-prev-file)
-        (define-key lsp-ui-peek-mode-map (kbd "j") 'lsp-ui-peek--select-next)
-        (define-key lsp-ui-peek-mode-map (kbd "k") 'lsp-ui-peek--select-prev)))))
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+(use-package lsp-ui
+  :ensure 
+  :commands lsp-ui-mode
+  :custom
+    (lsp-ui-peek-always-show t)
+    (lsp-ui-sideline-show-hover t)
+    (lsp-ui-doc-enable nil)
+  :hook (
+  (lsp-ui-mode . (lambda ()
+      (define-key evil-normal-state-local-map (kbd "SPC l i") 'lsp-ui-imenu)
+      (define-key evil-normal-state-local-map (kbd "SPC l s") 'lsp-ui-sideline-toggle-symbols-info)
+      (define-key evil-normal-state-local-map (kbd "SPC l r") 'lsp-ui-peek-find-references)
+      (define-key evil-normal-state-local-map (kbd "SPC l d") 'lsp-ui-peek-find-definitions)))
+  (lsp-ui-peek-mode . (lambda ()
+      (define-key lsp-ui-peek-mode-map (kbd "l") 'lsp-ui-peek--select-next-file)
+      (define-key lsp-ui-peek-mode-map (kbd "h") 'lsp-ui-peek--select-prev-file)
+      (define-key lsp-ui-peek-mode-map (kbd "j") 'lsp-ui-peek--select-next)
+      (define-key lsp-ui-peek-mode-map (kbd "k") 'lsp-ui-peek--select-prev)))))
 
 (use-package helm-lsp
   :after (helm lsp-mode)
@@ -586,8 +597,8 @@ shell, e.g. 'shell' or 'eshell'"
   (setq company-lsp-cache-candidates t)
   (setq company-lsp-async t)
   (add-to-list 'company-backends 'company-gtags)(with-eval-after-load 'company
-    (define-key company-active-map [tab] 'company-complete-cycle-next)
-    (define-key company-active-map (kbd "TAB") 'company-complete-cycle-next)))
+    (define-key company-active-map [tab] 'company-select-next)
+    (define-key company-active-map (kbd "TAB") 'company-select-next)))
 
 ;;
 ;; neotree
@@ -750,6 +761,9 @@ shell, e.g. 'shell' or 'eshell'"
 (use-package gruvbox-theme
   :ensure t)
 (load-theme 'gruvbox-dark-medium)
+;(use-package powerline
+;  :ensure t
+;  :init (powerline-vim-theme))
 
 (set-face-attribute 'default nil
                     :family "Iosevka Term"
