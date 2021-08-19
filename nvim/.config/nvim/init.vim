@@ -1,8 +1,13 @@
 """""""""""""""""""""""""""""
 "        Behaviour          "
 """""""""""""""""""""""""""""
+
 set nocompatible    " Don't behave like Vi
-set shell=/usr/bin/bash " set shell to bash so bash bindings work (I use fish)
+if has('macunix')
+    set shell=/usr/local/bin/bash
+else
+    set shell=/usr/bin/bash " set shell to bash so bash bindings work (I use fish)
+endif
 set wildmenu        " Enhanced command line completion
 set wildmode=longest,list   " Complete the longest match, then list others
 set backspace=indent,eol,start  " Allow backspacing over more stuff
