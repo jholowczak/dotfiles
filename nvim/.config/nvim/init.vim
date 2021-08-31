@@ -223,8 +223,13 @@ autocmd FileType haskell nnoremap <buffer><leader>rt :!stack test<cr>
 autocmd FileType haskell nnoremap <buffer><leader>rb :!stack build<cr>
 autocmd FileType haskell nnoremap <buffer><leader>re :!stack %<cr>
 autocmd FileType haskell nnoremap <buffer><leader>t :!GhcModType<cr>
-autocmd FileType python nnoremap <buffer><leader>rr :!python %<cr>
-autocmd FileType python nnoremap <buffer><leader>rt :!python -m pytest -s %<cr>
+if has('macunix')
+    autocmd FileType python nnoremap <buffer><leader>rr :!python3 %<cr>
+    autocmd FileType python nnoremap <buffer><leader>rt :!python3 -m pytest -s %<cr>
+else
+    autocmd FileType python nnoremap <buffer><leader>rr :!python %<cr>
+    autocmd FileType python nnoremap <buffer><leader>rt :!python -m pytest -s %<cr>
+endif
 autocmd FileType python nnoremap <buffer><leader>rl :!pylint %<cr>
 autocmd FileType python nnoremap <buffer><leader>rb :!/usr/bin/black %<cr>
 autocmd FileType rust nnoremap <buffer><leader>rr :!cargo run<cr>
