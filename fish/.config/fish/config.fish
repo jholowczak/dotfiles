@@ -4,6 +4,7 @@ set -gx BROWSER "/usr/bin/firefox"
 set -gx TERM "xterm"
 set -gx PATH ~/.cargo/bin ~/go/bin ~/.local/bin $HOME/.gem/ruby/2.7.0/bin $PATH
 set -gx _JAVA_AWT_WM_NONREPARENTING 1
+set -gx CONDA_AUTO_ACTIVATE_BASE false
 # set -gx PATH "/opt/anaconda/bin" $PATH
 # Customize Oh My Fish configuration path.
 #set -gx OMF_CONFIG "/home/john/.config/omf"
@@ -54,3 +55,9 @@ end
 if [ -f '/home/skip/google-cloud-sdk/path.fish.inc' ]; . '/home/skip/google-cloud-sdk/path.fish.inc'; end
 #python issues with latest version, removing as not used for now
 #thefuck --alias | source
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+eval /opt/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+# <<< conda initialize <<<
+

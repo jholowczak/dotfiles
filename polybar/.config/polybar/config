@@ -21,7 +21,7 @@ margin-top = 2
 margin-bottom = 2
 
 [bar/topbar]
-monitor = Virtual1
+monitor = Screen0
 height = 22
 width = 100%:-8px
 offset-x = 4
@@ -55,7 +55,7 @@ modules-right = alsa xkeyboard memory cpu battery powermenu
 wm-restack = bspwm
 
 [bar/bottom]
-monitor = Virtual1
+monitor = DP-4
 width = 100%:-8px
 height = 22
 offset-x = 4

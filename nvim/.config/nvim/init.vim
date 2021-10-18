@@ -215,6 +215,9 @@ Plug 'rust-lang/rust.vim', { 'for': 'rs'}
 " R
 Plug 'jalvesaq/Nvim-R', {'for': 'R', 'branch': 'stable'}
 
+" TERRAFORM
+Plug 'hashivim/vim-terraform', { 'for': 'tf' }
+
 
 " ---
 " RETIRED PLUGINS
