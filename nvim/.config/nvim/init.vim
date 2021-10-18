@@ -62,6 +62,13 @@ augroup myvimrchooks
     autocmd bufwritepost init.vim source ~/.config/nvim/init.vim
 augroup END
 
+" auto-install vim-plug
+"let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+"if empty(glob(data_dir . '/autoload/plug.vim'))
+"  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+"  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+"endif
+
 """""""""""""""""""""""""""""
 "  Self-defined Functions   "
 """""""""""""""""""""""""""""
@@ -92,62 +99,135 @@ endfunction
 "        Plugins            "
 """""""""""""""""""""""""""""
 call plug#begin('~/.config/nvim/plugged')
-Plug 'derekwyatt/vim-fswitch'
-Plug 'severin-lemaignan/vim-minimap'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'tpope/vim-fugitive'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'fatih/vim-go', { 'for': 'go' }
-Plug 'mdempsky/gocode', { 'rtp': 'vim/', 'for': 'go', 'do': 'go get -u github.com/nsf/gocode' }
+" ---
+" FILE-BASED PLUGINS
+" ---
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'derekwyatt/vim-fswitch'
+Plug 'severin-lemaignan/vim-minimap'
+Plug 'tpope/vim-fugitive'
+Plug 'jreybert/vimagit'
+
+" ---
+" FUZZY
+" ---
+" ctrlp is needed for other plugins, must be loaded first
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" ---
+" MOVEMENT PLUGINS
+" ---
+Plug 'benmills/vimux'
+Plug 'benmills/vimux-golang', { 'for': 'go' }
+Plug 'easymotion/vim-easymotion'
+Plug 'christoomey/vim-tmux-navigator'
+
+" ---
+" SNIPPETS
+" ---
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+" ---
+" LSP
+" ---
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'liuchengxu/vista.vim'
+Plug 'dense-analysis/ale'
+
+" ---
+" VIM THEMING
+" ---
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'flazz/vim-colorschemes'
-Plug 'ctrlpvim/ctrlp.vim'
+
+" ---
+" SESSION MANAGEMENT
+" ---
 Plug 'tpope/vim-obsession'
 Plug 'dhruvasagar/vim-prosession'
 Plug 'gikmx/ctrlp-obsession'
-Plug 'Raimondi/delimitMate'
-Plug 'mattn/emmet-vim'
-"Plug 'majutsushi/tagbar'
+
+" ---
+" HELPERS
+" ---
+" auto(smartish) closing of quotes, parens, etc
+Plug 'Raimondi/delimitMate' 
+" Add indent alignment lines to view
 Plug 'Yggdroot/indentLine'
-Plug 'gregsexton/MatchTag'
-Plug 'nanotech/jellybeans.vim'
+" swap common values (booleans, arrows, etc) easily
 Plug 'AndrewRadev/switch.vim'
-Plug 'vim-syntastic/syntastic'
-Plug 'vim-scripts/taglist.vim'
-Plug 'easymotion/vim-easymotion'
-Plug 'mtth/scratch.vim'
-Plug 'junegunn/vim-easy-align'
+" git diff symbols in gutter
 Plug 'airblade/vim-gitgutter'
+" swap between relative and absolute line numbering
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
-"Plug 'racer-rust/vim-racer', { 'for': 'rs' }
-Plug 'rust-lang/rust.vim', { 'for': 'rs'}
-Plug 'justinmk/vim-sneak'
+" alignment plugin
+Plug 'junegunn/vim-easy-align'
+" add/delete/change (parens, brackets, quotes, etc)
 Plug 'tpope/vim-surround'
+" unobtrusive scratch window
+Plug 'mtth/scratch.vim'
+" hex editor in vim
 Plug 'Shougo/vinarise.vim'
-"Plug 'ervandew/supertab'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'benmills/vimux'
-Plug 'benmills/vimux-golang', { 'for': 'go' }
-Plug 'w0rp/ale'
-Plug 'lervag/vimtex', { 'for': 'tex' }
-Plug 'jceb/vim-orgmode', { 'for': 'org' }
+
+" ---
+" LANGUAGES
+" ---
+" syntax checking
+Plug 'vim-syntastic/syntastic'
+
+" C
+" format C family code
+Plug 'rhysd/vim-clang-format', {'for': 'c,h,cpp,hpp'}
+
+" GO
+Plug 'fatih/vim-go', { 'for': 'go' }
+
+" HTML
+" expand html abbreviations similar to emmet
+Plug 'mattn/emmet-vim', {'for': 'html'}
+" highlight matching HTML tags
+Plug 'gregsexton/MatchTag', { 'for': 'html,js'}
+
+" JAVASCRIPT/JSON
 Plug 'pangloss/vim-javascript', { 'for': 'js' }
 Plug 'mxw/vim-jsx', { 'for': 'js' }
-Plug 'plasticboy/vim-markdown', { 'for': 'md'}
 Plug 'elzr/vim-json', { 'for': 'json' }
-Plug 'rhysd/vim-clang-format'
-"Plug 'Valloric/YouCompleteMe'
+
+" LATEX
+Plug 'lervag/vimtex', { 'for': 'tex' }
+
+" MARKDOWN
+Plug 'plasticboy/vim-markdown', { 'for': 'md'}
 Plug 'suan/vim-instant-markdown', {'rtp': 'after', 'for': 'md' }
+
+" ORG
+Plug 'jceb/vim-orgmode', { 'for': 'org' }
+
+" RUST
+Plug 'rust-lang/rust.vim', { 'for': 'rs'}
+
+" R
+Plug 'jalvesaq/Nvim-R', {'for': 'R', 'branch': 'stable'}
+
+
+" ---
+" RETIRED PLUGINS
+" ---
+"Plug 'justinmk/vim-sneak'
+"Plug 'vim-scripts/taglist.vim'
+"Plug 'nanotech/jellybeans.vim'
+"Plug 'mdempsky/gocode', { 'rtp': 'vim/', 'for': 'go', 'do': 'go get -u github.com/nsf/gocode' }
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+"Plug 'majutsushi/tagbar'
+"Plug 'Valloric/YouCompleteMe'
+"Plug 'ervandew/supertab'
 call plug#end()
 
 filetype plugin indent on
@@ -212,6 +292,9 @@ nnoremap <silent> <leader>ao <C-W>o
 nnoremap <silent> <leader>co :edit ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <leader>cl :source ~/.config/nvim/init.vim<CR>
 
+"Scratch binds
+nnoremap <silent> <leader>; :Scratch<CR>
+
 
 " taken from kyle's dotfiles on github, made some changes
 autocmd FileType c,cpp,ocaml nnoremap <buffer><leader>rr :!make run<cr>
@@ -244,6 +327,8 @@ autocmd FileType go nnoremap <buffer><leader>t :GoInfo<cr>
 " vimux-golang
 autocmd FileType go nnoremap <buffer><leader>rt :wa<CR> :GolangTestCurrentPackage<CR>
 autocmd FileType go nnoremap <buffer><leader>rf :wa<CR> :GolangTestFocused<CR>
+
+autocmd FileType sh nnoremap <buffer><leader>rr :!./%<CR>
 
 " F3 toggles paste mode
 set pastetoggle=<F3>
@@ -285,8 +370,8 @@ let g:syntastic_check_on_wq = 0
 
 " YCM and Language Bindings
 " python
-let g:ycm_server_python_interpreter = "/usr/bin/python"
-let g:ycm_python_binary_path = 'python'
+"let g:ycm_server_python_interpreter = "/usr/bin/python"
+"let g:ycm_python_binary_path = 'python'
 
 " ycm
 "let g:ycm_global_ycm_extra_conf = expand("~/.vim/.ycm_extra_conf.py")
@@ -298,6 +383,9 @@ nmap <leader>vv    :Vinarise<CR>
 " vim-numbertoggle
 nmap <silent> <leader>sr     :set number relativenumber<CR>
 nmap <silent> <leader>sn     :set number norelativenumber<CR>
+
+" vim-magit
+nmap <silent> <leader>ms :Magit<CR>
 
 " Switch.vim
 let g:switch_mapping = "-"
@@ -314,11 +402,22 @@ nnoremap <leader>gp :Gpull<CR>
 nnoremap <leader>gP :Gpush<CR>
 
 " Easyalign
-nnoremap <leader>ea :EasyAlign<CR> 
+nnoremap <leader>ea :EasyAlign<CR>
 
 "ALE
 nnoremap <silent> <leader>ale :ALEToggle<CR> 
-"let g:ale_completion_enabled=1
+let g:ale_linters_explicit = 1 
+let g:ale_completion_enabled = 1
+let g:ale_list_window_size = 1
+let g:ale_close_preview_on_insert = 1
+set omnifunc=ale#completion#OmniFunc
+let g:ale_fixers = {
+    \ 'rust': ['rustfmt']
+    \ }
+let g:ale_linters = {
+    \ 'rust': ['rust-analyzer']
+    \ }
+let g:ale_completion_enabled=1
 "let g:ale_linters = {'rust': ['analyzer']}
 
 " indentLine
@@ -361,7 +460,8 @@ function! NERDTreeCustomOpenerTab()
 endfunction
 let NERDTreeIgnore = ['\.pyc$', '^__pycache__$', '^node_modules', '\.png$', '\.jpg', '\.bmp']
 let g:NERDTreeQuitOnOpen=1
-let g:NERDTreeDirArrows = 0   " Disable fancy arrows in NERDTree
+let g:NERDTreeDirArrows=0   " Disable fancy arrows in NERDTree
+let NERDTreeShowHidden=1
 
 " delimitMate
 let delimitMate_expand_cr = 1
@@ -466,7 +566,7 @@ let g:vim_markdown_folding_disabled = 1
 
 " vim-instant-markdown
 nmap <silent> <Leader>mp :InstantMarkdownPreview<cr>
-nmap <silent> <Leader>ms :InstantMarkdownStop<cr>
+nmap <silent> <Leader>mP :InstantMarkdownStop<cr>
 let g:instant_markdown_slow = 0
 let g:instant_markdown_autostart = 0
 let g:instant_markdown_open_to_the_world = 0
@@ -578,3 +678,86 @@ EOF
 lua << EOF
 require'lspconfig'.rust_analyzer.setup{}
 EOF
+
+"
+" R 
+"
+augroup ft_r
+
+let R_assign = 0
+let R_in_buffer = 1
+let R_applescript = 0
+let r_indent_comment_column = 0
+
+function SendRFunc () 
+    let lines = []
+    let leftbracket = 0
+
+    " find first opening bracket
+    while line('.') <= line('$') 
+        let cur = getline(".")
+        execute "normal! j"
+        let lines = add(lines, cur)
+
+        if cur =~ '{$'
+            break
+        endif
+    endwhile
+
+    let leftbracket += 1
+
+    while leftbracket > 0 && line('.') <= line('$')
+        let cur = getline(".")
+        execute "normal! j"
+        let lines = add(lines, cur)
+
+        if cur =~ '}$'
+            let leftbracket -= 1
+        endif
+
+        if cur =~ '{$'
+            let leftbracket += 1
+        endif
+
+    endwhile
+
+    for line in lines
+        VimuxRunCommand(line)
+    endfor
+
+endfunction
+
+function SendRRegion() 
+    let lines = []
+
+    while line('.') <= line('$')
+        let cur = getline(".")
+        execute "normal! j"
+        let lines = add(lines, cur)
+
+        if cur =~ '^$'
+            break
+        endif
+
+    endwhile
+
+    for line in lines
+        VimuxRunCommand(line)
+    endfor
+
+endfunction
+
+function SendToR ()
+    let lines = []
+
+    if getline('.') =~ 'function' || getline('.') =~ 'for'
+        call SendRFunc() 
+    else
+        call SendRRegion()
+    endif
+endfunction
+
+autocmd FileType r,rmd nnoremap <buffer><leader>rr :call SendToR()<cr>
+augroup END
+
+
