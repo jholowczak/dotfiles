@@ -1,3 +1,4 @@
+/*-*- mode: css; -*-*/
 configuration {
     modi: "window,run,ssh,layout:~/.config/rofi/bsplayout.sh,hamster:~/.config/rofi/hamster.py";
 	case-sensitive: false;
@@ -8,5 +9,8 @@ configuration {
 	kb-accept-entry: "Return";
 	kb-row-up: "Up,Control+k";
 	kb-row-down: "Down,Control+j";
-    theme: "mytheme";
+    theme: "sidebar";
 }
+@theme "/usr/share/rofi/themes/sidebar.rasi"
+
+/* vim:ft=css
