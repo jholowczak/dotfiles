@@ -18,6 +18,8 @@ has_secondary() {
         return 0
     fi
 }
+# ensure hamster script is executable
+chmod +x ~/.config/polybar/scripts/polybar-scripts/info-projecthamster/info-projecthamster.sh
 # Launch bar1 and bar2
 polybar topbar &
 #polybar bottom &
