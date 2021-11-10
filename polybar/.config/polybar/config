@@ -100,7 +100,7 @@ wm-restack = bspwm
 [bar/alternatetop]
 monitor = Virtual1
 height = 22
-width = 100%:-8px
+width = 100%:-2px
 offset-x = 4
 offset-y = 4
 
@@ -140,6 +140,7 @@ label-indicator-background = ${colors.secondary}
 label-indicator-underline = ${colors.secondary}
 format-underline = ${colors.secondary}
 format-prefix-foreground = ${colors.foreground}
+format-prefix = " "
 
 [module/xwindow]
 type = internal/xwindow
