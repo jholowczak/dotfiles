@@ -17,6 +17,8 @@ alt + Tab
 super + {_,shift +}space
 	rofi -show {run,layout}
 
+super + p
+    fish -c "xrandr --output (xrandr | grep primary | awk '{print $1}') --auto && ~/.config/polybar/launch.sh &"
 # make sxhkd reload its configuration files:
 super + Escape
 	pkill -USR1 -x sxhkd
