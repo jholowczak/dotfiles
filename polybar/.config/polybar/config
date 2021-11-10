@@ -149,6 +149,7 @@ label = %title%
 type = internal/xkeyboard
 blacklist-0 = num lock
 
+format = <label-layout>
 format-underline = ${colors.secondary}
 format-prefix = " "
 format-prefix-foreground = ${colors.foreground}
