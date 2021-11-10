@@ -3,9 +3,10 @@
 sxhkd &
 setxkbmap -layout 'us' && setxkbmap -option 'grp:shift_caps_toggle' &
 nm-applet &
-redshift-gtk &
-mopidy &
-compton -b --config ~/.compton.conf &
+#redshift-gtk &
+#mopidy &
+#picom -b --config ~/.config/picom.conf &
+picom -b --config ~/.compton.conf &
 xsetroot -cursor_name left_ptr &
 
 bspc config border_width         2
@@ -19,6 +20,6 @@ bspc config remove_unplugged_monitors true
 
 bspc rule -a emacs state=tiled
 
-feh --bg-fill ~/Pictures/ocean_cliffs-wallpaper-1920x1080.jpg &
+feh --bg-fill ~/Pictures/macos-mojave-beta5-fonds-22.jpg &
 ~/.config/polybar/launch.sh &
 dunst -conf ~/.dunstrc &

@@ -21,7 +21,7 @@ margin-top = 2
 margin-bottom = 2
 
 [bar/topbar]
-monitor = Screen0
+monitor = Virtual1
 height = 22
 width = 100%:-8px
 offset-x = 4
@@ -49,13 +49,17 @@ font-0 = fixed:pixelsize=10;0
 font-1 = Unifont:size=6:heavy:fontformat=truetype;-2
 font-2 = Wuncon Siji:pixelsize=10;0
 
-modules-left = bspwm
-modules-center = date
-modules-right = alsa xkeyboard memory cpu battery powermenu
+modules-left = bspwm xwindow hamster
+modules-center = date mpd
+modules-right = eth alsa xkeyboard memory cpu battery
+tray-position = right
+tray-padding = 2
+;tray-background = #0063ff
+tray-background = ${colors.background}
 wm-restack = bspwm
 
 [bar/bottom]
-monitor = DP-4
+monitor = Virtual1
 width = 100%:-8px
 height = 22
 offset-x = 4
@@ -93,7 +97,7 @@ tray-background = ${colors.background}
 wm-restack = bspwm
 
 [bar/alternatetop]
-monitor = Virtual2
+monitor = Virtual1
 height = 22
 width = 100%:-8px
 offset-x = 4
@@ -261,8 +265,8 @@ interval = 2
 format-prefix = " "
 format-prefix-foreground = ${colors.foreground}
 format-underline = #4bffdc
-;label = %percentage_used%
-label = %gb_used%/%gb_total%
+label = %percentage_used%%
+;label = %gb_used%/%gb_total%
 
 [module/wlan]
 type = internal/network
@@ -323,7 +327,7 @@ label-volume-foreground = ${root.foreground}
 
 format-muted-prefix = " "
 format-muted-foreground = ${colors.foreground}
-label-muted = sound muted
+label-muted = muted
 
 bar-volume-width = 10
 bar-volume-foreground-0 = #55aa55

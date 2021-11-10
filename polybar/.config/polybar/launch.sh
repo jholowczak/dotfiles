@@ -20,7 +20,7 @@ has_secondary() {
 }
 # Launch bar1 and bar2
 polybar topbar &
-polybar bottom &
+#polybar bottom &
 has_secondary
 second=$?
 if [ "$second" -eq "1" ]; then
