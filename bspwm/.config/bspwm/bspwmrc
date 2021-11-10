@@ -9,9 +9,9 @@ nm-applet &
 picom -b --config ~/.compton.conf &
 xsetroot -cursor_name left_ptr &
 
-bspc config border_width         2
+bspc config border_width         1
 bspc config focused_border_color        \#ff8700
-bspc config window_gap          4
+bspc config window_gap          2
 bspc config focus_follows_pointer true
 bspc config split_ratio          0.50
 bspc config borderless_monocle   true
