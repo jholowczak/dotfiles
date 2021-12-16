@@ -52,6 +52,11 @@ super + y
 super + g
 	bspc node -s biggest
 
+super + e
+    emacs
+
+super + b
+    qutebrowser
 #
 # state/flags
 #

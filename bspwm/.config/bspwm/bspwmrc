@@ -19,6 +19,7 @@ bspc config gapless_monocle      true
 bspc config remove_unplugged_monitors true
 
 bspc rule -a emacs state=tiled
+bspc rule -a Emacs state=tiled
 
 feh --bg-fill ~/Pictures/macos-mojave-beta5-fonds-22.jpg &
 ~/.config/polybar/launch.sh &

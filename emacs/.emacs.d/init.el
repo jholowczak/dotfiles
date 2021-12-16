@@ -48,15 +48,28 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
-(use-package benchmark-init
-  :ensure t
-  :config
+;;(use-package benchmark-init
+  ;;:ensure t
+  ;;:config
   ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+  ;;(add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;;
 ;; custom functions
 ;;
+(defun helm-persp-projectile-switch-project ()
+  (interactive)
+  (persp-switch (let ((temp-charset "1234567890abcdefghijklmnopqrstuvwxyz")
+                      (random-string ""))
+                  (dotimes (i 6 random-string)
+                    (setq random-string
+                          (concat
+                           random-string
+                           (char-to-string (elt temp-charset (random (length temp-charset)))))
+                          ))
+                  ))
+  (helm-projectile-switch-project)
+  (persp-rename (projectile-project-name)))
 
 (defun my-toggle-shell (the-shell)
   "toggles the shells visibility to the right split window,
@@ -164,6 +177,8 @@ shell, e.g. 'shell' or 'eshell'"
     (setq evil-collection-company-use-tng nil)
     (evil-collection-init)))
 
+(use-package string-inflection :ensure t)
+
 (use-package undo-tree
   :delight
   :after evil
@@ -217,6 +232,7 @@ shell, e.g. 'shell' or 'eshell'"
         "n b" 'helm-mini
         "n m" 'helm-projectile
         "n v" 'helm-projectile-switch-project
+        "n V" 'helm-persp-projectile-switch-project
         "n c" 'projectile-persp-switch-project
         "n i" 'helm-imenu
         "i" 'helm-imenu
@@ -229,6 +245,9 @@ shell, e.g. 'shell' or 'eshell'"
         "m s" 'magit
         "m b" 'magit-blame
         "m d" 'magit-diff-buffer-file
+
+        ;; cycle case
+        "c s" 'string-inflection-cycle
 
         ;;code-jump
         "f j" 'xref-find-definitions
@@ -281,7 +300,8 @@ shell, e.g. 'shell' or 'eshell'"
   :hook (rust-mode . lsp-deferred)
   :init
   (setq rust-format-on-save t)
-  (setq indent-tabs-mode nil))
+  (setq indent-tabs-mode nil)
+  (setq lsp-rust-analyzer-server-display-inlay-hints t))
 
 (use-package helm
   :ensure t
@@ -451,6 +471,7 @@ shell, e.g. 'shell' or 'eshell'"
     :init
     (setq projectile-completion-system 'helm-mini)
     (setq projectile-switch-project-action '(lambda () (neotree-projectile-action) (neotree-hide)))
+
     )
   (use-package org-projectile
     :after (projectile org)
@@ -474,7 +495,7 @@ shell, e.g. 'shell' or 'eshell'"
   :commands lsp-deferred
   :custom
   (lsp-rust-analyzer-cargo-watch-command "clippy")
-  (lsp-eldoc-render-all t)
+  (lsp-eldoc-render-all nil)
   (lsp-rust-analyzer-server-display-inlay-hints t)
   (lsp-idle-delay 0.1)
   (gc-cons-threshold 100000000)
@@ -492,7 +513,8 @@ shell, e.g. 'shell' or 'eshell'"
   :custom
     (lsp-ui-peek-always-show t)
     (lsp-ui-sideline-show-hover t)
-    (lsp-ui-doc-enable nil)
+    (lsp-ui-sideline-enable nil)
+    (lsp-ui-doc-enable t)
   :hook (
   (lsp-ui-mode . (lambda ()
       (define-key evil-normal-state-local-map (kbd "SPC l i") 'lsp-ui-imenu)

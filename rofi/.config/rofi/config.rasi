@@ -9,7 +9,6 @@ configuration {
 	kb-accept-entry: "Return";
 	kb-row-up: "Up,Control+k";
 	kb-row-down: "Down,Control+j";
-    theme: "sidebar";
 }
 @theme "/usr/share/rofi/themes/sidebar.rasi"
 
