@@ -42,6 +42,8 @@
 (add-to-list 'exec-path "~/.cargo/bin")
 (load custom-file)
 
+(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 ;; Bootstrap `use-package`
 (package-initialize)
 (unless (package-installed-p 'use-package)
