@@ -33,6 +33,10 @@ require('packer').startup(function()
   }
   use { 'ctrlpvim/ctrlp.vim' }
   use {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
+  use {
     'phaazon/hop.nvim',
     branch = 'v1', -- optional but strongly recommended
     config = function()
@@ -91,6 +95,12 @@ require("nvim-tree").setup({
 
 vim.mapleader = " "
 vim.g.mapleader = " "
+
+if vim.loop.os_uname().sysname == "Darwin" then
+    vim.opt.shell = "/usr/local/bin/bash"
+else 
+    vim.opt.shell = "/usr/bin/bash"
+end
 
 vim.opt.timeoutlen = 2000
 vim.opt.shortmess = "at"
