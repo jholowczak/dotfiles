@@ -33,6 +33,12 @@ require('packer').startup(function()
   }
   use { 'ctrlpvim/ctrlp.vim' }
   use {
+    'Shatur/neovim-session-manager',
+    requires = { 'nvim-lua/plenary.nvim' },
+    config = function() require('session_manager').setup {} end
+  }
+  use {'nvim-telescope/telescope-ui-select.nvim' }
+  use {
     'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
@@ -43,11 +49,6 @@ require('packer').startup(function()
       -- you can configure Hop the way you like here; see :h hop-config
       require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
     end
-  }
-  use {
-    'jedrzejboczar/possession.nvim',
-    requires = { 'nvim-lua/plenary.nvim' },
-    config = function() require('posession').setup {} end
   }
   -- this is more up to date than the default rust.vim that comes with neovim
   use 'rust-lang/rust.vim' 
@@ -73,10 +74,26 @@ require('packer').startup(function()
         require'nvim-tmux-navigation'.setup {}
     end
   }
+  use {
+    'goolord/alpha-nvim',
+    config = function ()
+        require'alpha'.setup(require'alpha.themes.dashboard'.config)
+    end
+  }
 end)
 
 require('indent_blankline').setup {}
 require'hop'.setup()
+require("telescope").setup {
+  extensions = {
+    ["ui-select"] = {
+      require("telescope.themes").get_dropdown {
+        -- even more opts
+      }
+    }
+  }
+}
+require("telescope").load_extension("ui-select")
 
 -- required for project.nvim to work with nvim-tree
 vim.g.nvim_tree_respect_buf_cwd = 1
@@ -197,10 +214,10 @@ end
 -- Automatically start coq
 vim.g.coq_settings = { auto_start = true }
 local servers = { 'rust_analyzer', 'clangd' }
-for _, lsp in pairs(servers) do
+for _, lsp in ipairs(servers) do
   require('lspconfig')[lsp].setup(
       require('coq').lsp_ensure_capabilities({
-        on_attach = on_attach,
+        --on_attach = on_attach,
         flags = {
           -- This will be the default in neovim 0.7+
           debounce_text_changes = 150,
