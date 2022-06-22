@@ -42,14 +42,17 @@
 (add-to-list 'exec-path "~/.cargo/bin")
 (load custom-file)
 
-(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+;;transparency
+;(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+
 ;; Bootstrap `use-package`
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(require 'use-package)
+(eval-when-compile
+  (require 'use-package))
 ;;(use-package benchmark-init
   ;;:ensure t
   ;;:config
@@ -149,7 +152,7 @@ shell, e.g. 'shell' or 'eshell'"
   (persp-state-load "~/.emacs.d/perspective.save")
 )
 
-(setq my-font-size 105)
+(setq my-font-size 120)
 (defun my-global-font-size (size)
   (interactive)
   (set-face-attribute 'default nil
@@ -254,6 +257,7 @@ shell, e.g. 'shell' or 'eshell'"
         ;;code-jump
         "f j" 'xref-find-definitions
         "f k" 'xref-pop-marker-stack
+        "f r" 'xref-find-references
         "f h" 'beginning-of-defun
         "f l" 'end-of-defun
 
@@ -338,6 +342,9 @@ shell, e.g. 'shell' or 'eshell'"
 (use-package powershell
   :mode ("\\.ps1\\'" . powershell-mode))
 
+(use-package dockerfile-mode
+  :mode ("\\Dockerfil.*\\" . dockerfile-mode))
+
 (use-package helm-themes
   :after helm)
 
@@ -347,13 +354,18 @@ shell, e.g. 'shell' or 'eshell'"
 (use-package magit
   :ensure t)
 
+(setenv "PDFLATEX" "pdflatex --shell-escape")
 (use-package latex-preview-pane
   :ensure t)
 
 (require 'ox-latex)
 (add-hook 'latex-mode-hook 'latex-preview-pane-mode)
+(setq org-latex-listings 'minted)
+(add-to-list 'org-latex-packages-alist '("" "minted"))
+
 
 (use-package org
+  :mode "\\.org\\'"
   :hook (org-mode . (lambda ()
               (org-indent-mode)
               ;(add-hook 'after-save-hook 'org-preview-latex-fragment)
@@ -540,6 +552,7 @@ shell, e.g. 'shell' or 'eshell'"
   (which-key-mode))
 
 (use-package go-mode
+  :ensure t
   :mode "\\.go\\'"
   ;;:general
   ;;(general-evil-define-key 'normal go-mode-map
@@ -547,12 +560,12 @@ shell, e.g. 'shell' or 'eshell'"
     ;("g p" 'pop-tag-mark)
     ;("g d" 'godoc-at-point)
   :hook
-  (;(go-mode . (lambda ()
-   ;           (define-key evil-normal-state-local-map (kbd "SPC g g") 'godef-jump)
-   ;           (define-key evil-normal-state-local-map (kbd "SPC g p") 'pop-tag-mark)
-   ;           (define-key evil-normal-state-local-map (kbd "SPC g d") 'godoc-at-point)
-   ; 		  ))
-   (before-save . gofmt-before-save))
+  ;((go-mode . (lambda ()
+  ;            (define-key evil-normal-state-local-map (kbd "SPC g g") 'godef-jump)
+  ;            (define-key evil-normal-state-local-map (kbd "SPC g p") 'pop-tag-mark)
+  ;            (define-key evil-normal-state-local-map (kbd "SPC g d") 'godoc-at-point)
+  ;  		  ))
+   (before-save . gofmt-before-save)
   :config
   (setq gofmt-command "goimports")
   (use-package go-eldoc
@@ -742,8 +755,20 @@ shell, e.g. 'shell' or 'eshell'"
 (use-package monitor
   :ensure t)
 
-(use-package org-evil
-  :after (evil dash))
+(use-package hydra
+  :ensure t)
+
+(use-package evil-org
+  :after (evil dash org)
+  :ensure t
+  :hook (org-mode . (lambda ()
+              (evil-org-mode)
+         ))
+  :config 
+    (setf evil-org-key-theme '(navigation insert textobjects additional shift todo heading))
+    (setf org-special-ctrl-a/e t)
+    )
+
 
 
 (use-package vimish-fold
@@ -761,6 +786,8 @@ shell, e.g. 'shell' or 'eshell'"
   :init (global-flycheck-mode))
 
 (use-package rustic
+  :ensure t
+  :mode ("\\.rs\\'" . rustic-mode)
   :after flycheck)
 
 (use-package page-break-lines
