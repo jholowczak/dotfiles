@@ -7,6 +7,8 @@ nvim/.config/coc/mru
 nvim/.config/coc/snippets-mru
 nvim/.config/coc/history.json
 nvim/.config/coc/lists
+nvim/.local
+nvim/.config/nvim/plugin/
 vim/.vim/session
 vim/.vim/bundle
 plug.vim.old
