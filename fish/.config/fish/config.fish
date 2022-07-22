@@ -30,6 +30,10 @@ if test -n "$SSH_CONNECTION"
     if test -z "$TMUX"
         tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
     end
+else
+    if test -z "$TMUX"
+        tmux attach-session -t local || tmux new-session -s local
+    end
 end
 
 function vterm_printf;
