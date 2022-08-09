@@ -343,7 +343,7 @@ shell, e.g. 'shell' or 'eshell'"
   :mode ("\\.ps1\\'" . powershell-mode))
 
 (use-package dockerfile-mode
-  :mode ("\\Dockerfil.*\\" . dockerfile-mode))
+  :mode ("\\Dockerfil.*\\'" . dockerfile-mode))
 
 (use-package helm-themes
   :after helm)
@@ -560,12 +560,12 @@ shell, e.g. 'shell' or 'eshell'"
     ;("g p" 'pop-tag-mark)
     ;("g d" 'godoc-at-point)
   :hook
+   (before-save . gofmt-before-save)
   ;((go-mode . (lambda ()
   ;            (define-key evil-normal-state-local-map (kbd "SPC g g") 'godef-jump)
   ;            (define-key evil-normal-state-local-map (kbd "SPC g p") 'pop-tag-mark)
   ;            (define-key evil-normal-state-local-map (kbd "SPC g d") 'godoc-at-point)
   ;  		  ))
-   (before-save . gofmt-before-save)
   :config
   (setq gofmt-command "goimports")
   (use-package go-eldoc
@@ -694,6 +694,8 @@ shell, e.g. 'shell' or 'eshell'"
   :ensure t
   :hook
   (after-init . persp-mode)
+  :custom
+  (persp-mode-prefix-key (kbd "C-c M-p"))
   :init
   (setq persp-state-default-file "~/.emacs.d/perspective.save")
   (add-hook 'kill-emacs-hook #'persp-state-save)
