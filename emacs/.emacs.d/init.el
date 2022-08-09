@@ -299,15 +299,22 @@ shell, e.g. 'shell' or 'eshell'"
   )
 
 (use-package web-mode
+  :ensure t
   :mode ("\\.html?\\'" . web-mode))
 
 (use-package rust-mode
+  :ensure t
   :mode "\\.rs\\'"
   :hook (rust-mode . lsp-deferred)
   :init
   (setq rust-format-on-save t)
   (setq indent-tabs-mode nil)
   (setq lsp-rust-analyzer-server-display-inlay-hints t))
+
+(use-package rustic
+  :ensure t
+  :mode ("\\.rs\\'" . rustic-mode)
+  :after flycheck)
 
 (use-package helm
   :ensure t
@@ -325,6 +332,7 @@ shell, e.g. 'shell' or 'eshell'"
           "\\*.+\\*"))))
 
 (use-package helm-gtags
+  :ensure t
   :after helm
   :hook ((c-mode . helm-gtags-mode)
          (c++-mode . helm-gtags-mode)
@@ -336,16 +344,20 @@ shell, e.g. 'shell' or 'eshell'"
               (define-key evil-normal-state-local-map (kbd "SPC g u") 'helm-gtags-update-tags)))))
 
 (use-package yaml-mode
+  :ensure t
   :mode ("\\.ya?ml\\'" . yaml-mode)
   :hook (yaml-mode . (lambda () (setq-default tab-width 2))))
 
 (use-package powershell
+  :ensure t
   :mode ("\\.ps1\\'" . powershell-mode))
 
 (use-package dockerfile-mode
+  :ensure t
   :mode ("\\Dockerfil.*\\'" . dockerfile-mode))
 
 (use-package helm-themes
+  :ensure t
   :after helm)
 
 (use-package acme-theme
@@ -365,6 +377,7 @@ shell, e.g. 'shell' or 'eshell'"
 
 
 (use-package org
+  :ensure t
   :mode "\\.org\\'"
   :hook (org-mode . (lambda ()
               (org-indent-mode)
@@ -458,6 +471,7 @@ shell, e.g. 'shell' or 'eshell'"
 )
 
 (use-package markdown-mode
+  :ensure t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
@@ -477,10 +491,12 @@ shell, e.g. 'shell' or 'eshell'"
   ))
 
 (use-package projectile
+  :ensure t
   :after helm
   :config
   (projectile-mode +1)
   (use-package helm-projectile
+    :ensure t
     :after (projectile helm)
     :init
     (setq projectile-completion-system 'helm-mini)
@@ -488,6 +504,7 @@ shell, e.g. 'shell' or 'eshell'"
 
     )
   (use-package org-projectile
+    :ensure t
     :after (projectile org)
     :bind (("C-c n p" . org-projectile-project-todo-completing-read)
             ("C-c c" . org-capture))
@@ -501,9 +518,11 @@ shell, e.g. 'shell' or 'eshell'"
 )
 
 (use-package helm-rg
+  :ensure t
   :after helm)
 
 (use-package lsp-mode
+  :ensure t
   :hook ((go-mode . lsp-deferred)
          (rust-mode . lsp-deferred))
   :commands lsp-deferred
@@ -522,7 +541,7 @@ shell, e.g. 'shell' or 'eshell'"
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 (use-package lsp-ui
-  :ensure 
+  :ensure t
   :commands lsp-ui-mode
   :custom
     (lsp-ui-peek-always-show t)
@@ -586,12 +605,19 @@ shell, e.g. 'shell' or 'eshell'"
   :defer t)
 
 (use-package rjsx-mode
+  :ensure t
   :mode ("components\\/.*\\.js\\'" . rjsx-mode))
 
 (use-package js2-mode
+  :ensure t
   :mode "\\.js\\'")
 
+(use-package terraform-mode
+  :ensure t
+  :mode "\\.tf|.tfvars\\'")
+
 (use-package ess
+  :ensure t
   :mode (("\\*\\.R" . ess-site)
          ("\\*\\.Rmd" . ess-site)
          ("\\.Rmd\\'" . poly-markdown+R-mode))
@@ -787,10 +813,6 @@ shell, e.g. 'shell' or 'eshell'"
   :delight
   :init (global-flycheck-mode))
 
-(use-package rustic
-  :ensure t
-  :mode ("\\.rs\\'" . rustic-mode)
-  :after flycheck)
 
 (use-package page-break-lines
   :ensure t)
