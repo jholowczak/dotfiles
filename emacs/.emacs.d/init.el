@@ -494,7 +494,7 @@ shell, e.g. 'shell' or 'eshell'"
 
 (use-package projectile
   :ensure t
-  :delight '(:eval (concat " " (projectile-project-name))))
+  :delight '(:eval (concat " " (projectile-project-name)))
   :after helm
   :config
   (projectile-mode +1)
@@ -528,7 +528,6 @@ shell, e.g. 'shell' or 'eshell'"
   :ensure t
   :hook ((go-mode . lsp-deferred)
          (rust-mode . lsp-deferred))
-  :delight '(:eval (concat " " (projectile-project-name))))
   :commands lsp-deferred
   :custom
   (lsp-rust-analyzer-cargo-watch-command "clippy")
