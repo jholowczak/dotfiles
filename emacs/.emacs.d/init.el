@@ -62,6 +62,10 @@
 ;;
 ;; custom functions
 ;;
+(defun update-persp-to-project-name ()
+  (interactive)
+  (persp-rename (projectile-project-name)))
+
 (defun helm-persp-projectile-switch-project ()
   (interactive)
   (persp-switch (let ((temp-charset "1234567890abcdefghijklmnopqrstuvwxyz")
@@ -74,7 +78,7 @@
                           ))
                   ))
   (helm-projectile-switch-project)
-  (persp-rename (projectile-project-name)))
+  )
 
 (defun my-toggle-shell (the-shell)
   "toggles the shells visibility to the right split window,
@@ -496,6 +500,8 @@ shell, e.g. 'shell' or 'eshell'"
   :ensure t
   :delight '(:eval (concat " " (projectile-project-name)))
   :after helm
+  :init
+  (add-hook 'projectile-after-switch-project-hook (lambda () (update-persp-to-project-name)))
   :config
   (projectile-mode +1)
   (use-package helm-projectile
