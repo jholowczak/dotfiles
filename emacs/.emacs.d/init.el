@@ -283,6 +283,9 @@ shell, e.g. 'shell' or 'eshell'"
         ;; compile
         "r r" 'projectile-compile-project
 
+        ;; dap-mode
+        "h" 'dap-hydra
+
         ;; view
         "d t" (lambda () (interactive) (progn (disable-theme 'gruvbox-dark-medium) (disable-theme 'acme) (load-theme 'tsdh-light) (set-face-background 'mode-line "gold")))
         "d g" (lambda () (interactive) (load-theme 'gruvbox-dark-medium))
@@ -530,6 +533,29 @@ shell, e.g. 'shell' or 'eshell'"
   :ensure t
   :after helm)
 
+(use-package dap-mode
+  :ensure t
+  :commands dap-mode
+  :hook (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
+  :config
+  (dap-mode 1)
+  (require 'dap-ui)
+  (dap-ui-mode 1)
+  (require 'dap-lldb)
+  (require 'dap-gdb-lldb)
+  (require 'dap-cpptools)
+    (dap-register-debug-template "Rust::CppTools Run Configuration"
+                                 (list :type "cppdbg"
+                                       :request "launch"
+                                       :name "Rust::Run"
+                                       :MIMode "gdb"
+                                       :miDebuggerPath "rust-gdb"
+                                       :environment []
+                                       :program "${workspaceFolder}/target/debug/hello / replace with binary"
+                                       :cwd "${workspaceFolder}"
+                                       :console "external"
+                                       :dap-compilation "cargo build"
+                                       :dap-compilation-dir "${workspaceFolder}")))
 (use-package lsp-mode
   :ensure t
   :hook ((go-mode . lsp-deferred)
