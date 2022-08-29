@@ -1,7 +1,7 @@
 # Path to Oh My Fish install.
 set -gx OMF_PATH "$HOME/.local/share/omf"
 set -gx BROWSER "/usr/bin/firefox"  
-set -gx TERM "xterm"
+# set -gx TERM "xterm"
 set -gx PATH ~/.cargo/bin ~/go/bin ~/.local/bin $HOME/.gem/ruby/2.7.0/bin $PATH
 set -gx _JAVA_AWT_WM_NONREPARENTING 1
 set -gx CONDA_AUTO_ACTIVATE_BASE false
@@ -31,8 +31,9 @@ if test -n "$SSH_CONNECTION"
         tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
     end
 else
-    if test -z "$TMUX"
-        tmux attach-session -t local || tmux new-session -s local
+    if test -z "$TMUX" 
+        and test (tmux list-session | grep local | wc -l) -ne 1
+            tmux attach-session -t local || tmux new-session -s local
     end
 end
 
