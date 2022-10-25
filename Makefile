@@ -26,6 +26,7 @@ install:
 	stow compton
 	stow emacs
 	stow paru
+	stow sway
 
 reinstall:
 
@@ -43,6 +44,7 @@ reinstall:
 	stow -R compton
 	stow -R emacs
 	stow -R paru
+	stow -R sway
 
 delete:
 
@@ -60,6 +62,7 @@ delete:
 	stow -D compton
 	stow -D emacs
 	stow -D paru
+	stow -D sway
 
 update:
 

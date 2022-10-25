@@ -494,7 +494,7 @@ shell, e.g. 'shell' or 'eshell'"
 (use-package plantuml-mode
   :ensure t
   :mode ("\\.plantuml|.puml\\'" . plantuml-mode)
-  :hook (plntuml-mode . (lambda () (
+  :hook (plantuml-mode . (lambda () (
   (setq plantuml-executable-path "/usr/bin/plantuml")
   (setq plantuml-default-exec-mode 'executable)))
   ))
