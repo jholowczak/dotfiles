@@ -131,8 +131,8 @@ require("telescope").setup {
 require("telescope").load_extension("ui-select")
 
 -- required for project.nvim to work with nvim-tree
-vim.g.nvim_tree_respect_buf_cwd = 1
 require("nvim-tree").setup({
+  respect_buf_cwd = true,
   update_cwd = true,
   update_focused_file = {
     enable = true,
