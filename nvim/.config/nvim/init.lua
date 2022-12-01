@@ -183,9 +183,6 @@ require("nvim-tree").setup({
   }
 })
 
-vim.mapleader = " "
-vim.g.mapleader = " "
-
 if vim.loop.os_uname().sysname == "Darwin" then
     vim.opt.shell = "/usr/local/bin/bash"
 else 
@@ -216,51 +213,60 @@ vim.o.background = "dark" -- or "light" for light mode
 vim.cmd([[colorscheme gruvbox]])
 vim.opt.colorcolumn = "0"
 
+-- KEYMAPS
+vim.mapleader = " "
+vim.g.mapleader = " "
 
-local opts = { noremap=true, silent=true }
+local function kmap(mode, lhs, rhs, opts)
+  local options = { noremap=true, silent=true }
+  if opts then
+    options = vim.tbl_extend('force', options, opts)
+  end
+  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+end
 
-vim.api.nvim_set_keymap("n", "<leader>nm", ":bprevious<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>nn", ":bnext<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>nd", ":bdelete<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>no", ":only<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>ns", "<C-W><C-W>", opts)
-vim.api.nvim_set_keymap("n", "<leader>nb", ":CtrlPBuffer<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>j", "<C-d>", opts)
-vim.api.nvim_set_keymap("n", "<leader>k", "<C-u>", opts)
-vim.api.nvim_set_keymap("n", "<leader>=", "<C-w>=", opts)
-vim.api.nvim_set_keymap("n", "<leader>-", ":res -5<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>+", ":res +5<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>nt", ":NvimTreeOpen<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>ss", ":setlocal spell spelllang=en_us<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>sf", ":setlocal nospell", opts)
-vim.api.nvim_set_keymap("n", "<leader>sn", "]s", opts)
-vim.api.nvim_set_keymap("n", "<leader>sp", "[s", opts)
-vim.api.nvim_set_keymap("n", "<leader>sr", "z=", opts)
-vim.api.nvim_set_keymap("n", "<leader>sa", "zg", opts)
-vim.api.nvim_set_keymap("n", "<leader>rr", ":lua tmux_send_buf()<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>vp", ":lua tmux_send_command('')<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>vl", ":lua tmux_send_last_command()<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>mb", ":lua tmux_send_command('git blame -L ' .. vim.fn.line('.') .. ',' .. vim.fn.line('.') .. ' ' .. vim.fn.expand('%:p'))<cr>", opts)
-vim.api.nvim_set_keymap('n', '<leader>dd', '<cmd>lua vim.diagnostic.open_float()<cr>', opts)
-vim.api.nvim_set_keymap("n", "<leader>co", ":edit ~/.config/nvim/init.lua<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>cl", ":source ~/.config/nvim/init.lua<cr>", opts)
-vim.api.nvim_set_keymap("n", "<leader>ms", "<cmd>lua require('neogit').open({ kind = \"split\" })<cr>", opts)
+kmap("n", "<leader>nm", ":bprevious<cr>")
+kmap("n", "<leader>nn", ":bnext<cr>")
+kmap("n", "<leader>nd", ":bdelete<cr>")
+kmap("n", "<leader>no", ":only<cr>")
+kmap("n", "<leader>ns", "<C-W><C-W>")
+kmap("n", "<leader>nb", ":CtrlPBuffer<cr>")
+kmap("n", "<leader>j", "<C-d>")
+kmap("n", "<leader>k", "<C-u>")
+kmap("n", "<leader>=", "<C-w>=")
+kmap("n", "<leader>-", ":res -5<cr>")
+kmap("n", "<leader>+", ":res +5<cr>")
+kmap("n", "<leader>nt", ":NvimTreeOpen<cr>")
+kmap("n", "<leader>ss", ":setlocal spell spelllang=en_us<cr>")
+kmap("n", "<leader>sf", ":setlocal nospell<cr>")
+kmap("n", "<leader>sn", "]s")
+kmap("n", "<leader>sp", "[s")
+kmap("n", "<leader>sr", "z=")
+kmap("n", "<leader>sa", "zg")
+kmap("n", "<leader>rr", ":lua tmux_send_buf()<cr>")
+kmap("n", "<leader>vp", ":lua tmux_send_command('')<cr>")
+kmap("n", "<leader>vl", ":lua tmux_send_last_command()<cr>")
+kmap("n", "<leader>mb", ":lua tmux_send_command('git blame -L ' .. vim.fn.line('.') .. ',' .. vim.fn.line('.') .. ' ' .. vim.fn.expand('%:p'))<cr>", opts)
+kmap('n', '<leader>dd', '<cmd>lua vim.diagnostic.open_float()<cr>')
+kmap("n", "<leader>co", ":edit ~/.config/nvim/init.lua<CR>")
+kmap("n", "<leader>cl", ":source ~/.config/nvim/init.lua<cr>")
+kmap("n", "<leader>ms", "<cmd>lua require('neogit').open({ kind = \"split\" })<cr>")
 vim.keymap.set({ "n", "x" }, "<leader>rs", function() require("ssr").open() end)
 
-vim.api.nvim_set_keymap("n", "<Leader><Leader>b", "<cmd>HopWordBC<CR>", {noremap=true})
-vim.api.nvim_set_keymap("n", "<Leader><Leader>w", "<cmd>HopWordAC<CR>", {noremap=true})
-vim.api.nvim_set_keymap("n", "<Leader><Leader>j", "<cmd>HopLineAC<CR>", {noremap=true})
-vim.api.nvim_set_keymap("n", "<Leader><Leader>k", "<cmd>HopLineBC<CR>", {noremap=true})
-vim.api.nvim_set_keymap("v", "<Leader><Leader>w", "<cmd>HopWordAC<CR>", {noremap=true})
-vim.api.nvim_set_keymap("v", "<Leader><Leader>b", "<cmd>HopWordBC<CR>", {noremap=true})
-vim.api.nvim_set_keymap("v", "<Leader><Leader>j", "<cmd>HopLineAC<CR>", {noremap=true})
-vim.api.nvim_set_keymap("v", "<Leader><Leader>k", "<cmd>HopLineBC<CR>", {noremap=true})
-vim.api.nvim_set_keymap('n', "<C-h>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<cr>", opts)
-vim.api.nvim_set_keymap('n', "<C-j>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<cr>", opts)
-vim.api.nvim_set_keymap('n', "<C-k>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<cr>", opts)
-vim.api.nvim_set_keymap('n', "<C-l>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<cr>", opts)
-vim.api.nvim_set_keymap('n', "<C-\\>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLastActive()<cr>", opts)
---vim.api.nvim_set_keymap('n', "<C-Space>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateNext()<cr>", opts)
+kmap("n", "<Leader><Leader>b", "<cmd>HopWordBC<CR>")
+kmap("n", "<Leader><Leader>w", "<cmd>HopWordAC<CR>")
+kmap("n", "<Leader><Leader>j", "<cmd>HopLineAC<CR>")
+kmap("n", "<Leader><Leader>k", "<cmd>HopLineBC<CR>")
+kmap("v", "<Leader><Leader>w", "<cmd>HopWordAC<CR>")
+kmap("v", "<Leader><Leader>b", "<cmd>HopWordBC<CR>")
+kmap("v", "<Leader><Leader>j", "<cmd>HopLineAC<CR>")
+kmap("v", "<Leader><Leader>k", "<cmd>HopLineBC<CR>")
+kmap('n', "<C-h>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<cr>")
+kmap('n', "<C-j>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<cr>")
+kmap('n', "<C-k>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<cr>")
+kmap('n', "<C-l>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<cr>")
+kmap('n', "<C-\\>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLastActive()<cr>")
+--kmap('n', "<C-Space>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateNext()<cr>", opts)
 
 -- airline
 vim.cmd("let g:airline#extensions#tabline#enabled = 1")
