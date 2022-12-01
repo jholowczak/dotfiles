@@ -6,7 +6,7 @@ end
 
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim' -- Package manager
-  use {'nvim-treesitter/nvim-treesitter'}
+  use{'nvim-treesitter/nvim-treesitter', run = ":TSUpdate"}
   use 'neovim/nvim-lspconfig' -- Collection of configurations for the built-in LSP client
   use 'ms-jpq/coq_nvim'
   use 'ms-jpq/coq.artifacts'
@@ -183,6 +183,23 @@ require("nvim-tree").setup({
   }
 })
 
+-- lsp configuration
+-- Automatically start coq
+vim.g.coq_settings = { auto_start = true }
+local servers = { 'rust_analyzer', 'clangd' }
+for _, lsp in ipairs(servers) do
+  require('lspconfig')[lsp].setup(
+      require('coq').lsp_ensure_capabilities({
+        --on_attach = on_attach,
+        flags = {
+          -- This will be the default in neovim 0.7+
+          debounce_text_changes = 150,
+        }
+      })
+  )
+end
+
+--vim options
 if vim.loop.os_uname().sysname == "Darwin" then
     vim.opt.shell = "/usr/local/bin/bash"
 else 
@@ -288,22 +305,6 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gr', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gh', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-end
-
--- lsp configuration
--- Automatically start coq
-vim.g.coq_settings = { auto_start = true }
-local servers = { 'rust_analyzer', 'clangd' }
-for _, lsp in ipairs(servers) do
-  require('lspconfig')[lsp].setup(
-      require('coq').lsp_ensure_capabilities({
-        --on_attach = on_attach,
-        flags = {
-          -- This will be the default in neovim 0.7+
-          debounce_text_changes = 150,
-        }
-      })
-  )
 end
 
 -- rust specific configs
