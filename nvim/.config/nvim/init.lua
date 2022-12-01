@@ -29,6 +29,23 @@ require('packer').startup(function(use)
     }
   }
   use {
+    "cshuaimin/ssr.nvim",
+    module = "ssr",
+    -- Calling setup is optional.
+    config = function()
+      require("ssr").setup {
+        min_width = 50,
+        min_height = 5,
+        keymaps = {
+          close = "q",
+          next_match = "n",
+          prev_match = "N",
+          replace_all = "<leader><cr>",
+        },
+      }
+    end
+  }
+  use {
   "ahmedkhalf/project.nvim",
     config = function()
       require("project_nvim").setup {
@@ -40,9 +57,6 @@ require('packer').startup(function(use)
     "iamcco/markdown-preview.nvim",
     run = function() vim.fn["mkdp#util#install"]() end,
   })
-
-  use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
-
 
   use {
     'Shatur/neovim-session-manager',
@@ -73,10 +87,34 @@ require('packer').startup(function(use)
     },
     config = function() require('rust-tools').setup {} end
   }
-  use {'nvim-orgmode/orgmode', config = function()
-    require('orgmode').setup{}
-  end
+
+  use {'nvim-orgmode/orgmode', 
+    config = function()
+      require('orgmode').setup{}
+    end
   }
+
+  -- snippet support
+  use { 'L3MON4D3/LuaSnip' }
+  use {
+    'hrsh7th/nvim-cmp',
+    config = function ()
+      require'cmp'.setup {
+      snippet = {
+        expand = function(args)
+          require'luasnip'.lsp_expand(args.body)
+        end
+      },
+      sources = {
+        { name = 'nvim-lsp' },
+        { name = 'luasnip' },
+        { name = 'orgmode' }
+      },
+    }
+    end
+  }
+  use { 'saadparwaiz1/cmp_luasnip' }
+
   use { 
       'TimUntersberger/neogit', 
       requires = 'nvim-lua/plenary.nvim',
@@ -207,6 +245,7 @@ vim.api.nvim_set_keymap('n', '<leader>dd', '<cmd>lua vim.diagnostic.open_float()
 vim.api.nvim_set_keymap("n", "<leader>co", ":edit ~/.config/nvim/init.lua<CR>", opts)
 vim.api.nvim_set_keymap("n", "<leader>cl", ":source ~/.config/nvim/init.lua<cr>", opts)
 vim.api.nvim_set_keymap("n", "<leader>ms", "<cmd>lua require('neogit').open({ kind = \"split\" })<cr>", opts)
+vim.keymap.set({ "n", "x" }, "<leader>rs", function() require("ssr").open() end)
 
 vim.api.nvim_set_keymap("n", "<Leader><Leader>b", "<cmd>HopWordBC<CR>", {noremap=true})
 vim.api.nvim_set_keymap("n", "<Leader><Leader>w", "<cmd>HopWordAC<CR>", {noremap=true})
