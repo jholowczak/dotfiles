@@ -14,7 +14,17 @@ require('packer').startup(function(use)
   use 'vim-airline/vim-airline'
   use 'vim-airline/vim-airline-themes'
   use "ellisonleao/gruvbox.nvim"
+  use 'kyazdani42/nvim-web-devicons'
   use 'ervandew/supertab'
+  use {
+    "jiaoshijie/undotree",
+    config = function()
+      require('undotree').setup()
+    end,
+    requires = {
+      "nvim-lua/plenary.nvim",
+    },
+  }
   use "lukas-reineke/indent-blankline.nvim"
   use {
     'lewis6991/gitsigns.nvim',
@@ -27,6 +37,10 @@ require('packer').startup(function(use)
     requires = {
       'kyazdani42/nvim-web-devicons', -- optional, for file icon
     }
+  }
+  use {
+    "SmiteshP/nvim-navic",
+    requires = "neovim/nvim-lspconfig"
   }
   use {
     "cshuaimin/ssr.nvim",
@@ -137,7 +151,6 @@ require'nvim-treesitter.configs'.setup {
 }
 
 require('indent_blankline').setup {}
-require'hop'.setup()
 require("telescope").setup {
   extensions = {
     ["ui-select"] = {
@@ -163,24 +176,6 @@ require("nvim-tree").setup({
     }
   }
 })
-
--- lsp configuration
--- Automatically start coq
-vim.g.coq_settings = { auto_start = true }
-local servers = { 'rust_analyzer', 'clangd', 'gopls', 'terraformls', 'pylsp', 'zls', 'yamlls',
-    'hls', 'jsonls', 'jsonnet_ls', 'marksman', 'html', 'texlab', 'sumneko_lua'
-    }
-for _, lsp in ipairs(servers) do
-  require('lspconfig')[lsp].setup(
-      require('coq').lsp_ensure_capabilities({
-        --on_attach = on_attach,
-        flags = {
-          -- This will be the default in neovim 0.7+
-          debounce_text_changes = 150,
-        }
-      })
-  )
-end
 
 --vim options
 if vim.loop.os_uname().sysname == "Darwin" then
@@ -217,13 +212,17 @@ vim.opt.colorcolumn = "0"
 vim.mapleader = " "
 vim.g.mapleader = " "
 
-local function kmap(mode, lhs, rhs, opts)
+local function kmap(mode, lhs, rhs, opts, buf)
+  local lhs_e = string.gsub(lhs, '<l>', '<leader>')
   local options = { noremap=true, silent=true }
   if opts then
     options = vim.tbl_extend('force', options, opts)
   end
-  local lhs_e = string.gsub(lhs, '<l>', '<leader>')
-  vim.api.nvim_set_keymap(mode, lhs_e, rhs, options)
+  if buf then
+      vim.api.nvim_buf_set_keymap(buf, mode, lhs_e, rhs, options)
+  else
+      vim.api.nvim_set_keymap(mode, lhs_e, rhs, options)
+  end
 end
 
 kmap("n", "<l>nm", ":bprevious<cr>")
@@ -247,12 +246,15 @@ kmap("n", "<l>sa", "zg")
 kmap("n", "<l>rr", ":lua tmux_send_buf()<cr>")
 kmap("n", "<l>vp", ":lua tmux_send_command('')<cr>")
 kmap("n", "<l>vl", ":lua tmux_send_last_command()<cr>")
-kmap("n", "<l>mb", ":lua tmux_send_command('git blame -L ' .. vim.fn.line('.') .. ',' .. vim.fn.line('.') .. ' ' .. vim.fn.expand('%:p'))<cr>", opts)
+--kmap("n", "<l>mb", ":lua tmux_send_command('git blame -L ' .. vim.fn.line('.') .. ',' .. vim.fn.line('.') .. ' ' .. vim.fn.expand('%:p'))<cr>", opts)
 kmap('n', '<l>dd', '<cmd>lua vim.diagnostic.open_float()<cr>')
 kmap("n", "<l>co", ":edit ~/.config/nvim/init.lua<CR>")
 kmap("n", "<l>cl", ":source ~/.config/nvim/init.lua<cr>")
 kmap("n", "<l>ms", "<cmd>lua require('neogit').open({ kind = \"split\" })<cr>")
 vim.keymap.set({ "n", "x" }, "<leader>rs", function() require("ssr").open() end)
+vim.keymap.set('n', '<leader>u', require('undotree').toggle, { noremap = true, silent = true })
+
+
 
 kmap("n", "<l><l>b", "<cmd>HopWordBC<CR>")
 kmap("n", "<l><l>w", "<cmd>HopWordAC<CR>")
@@ -274,22 +276,43 @@ vim.cmd("let g:airline#extensions#tabline#enabled = 1")
 vim.cmd("let g:airline#extensions#tabline#show_buffers=1")
 vim.cmd("let g:airline_powerline_fonts=1")
 vim.cmd("let g:airline_theme = 'hybrid'")
+-- lsp configuration
+-- Automatically start coq
+local on_attach = function(client, bufnr)
+  if client.server_capabilities.documentSymbolProvider then
+    require("nvim-navic").attach(client, bufnr)
+  end
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  
+  kmap('n', '<leader>t', '<cmd>lua vim.lsp.buf.hover()<cr>', nil, bufnr)
+  kmap('n', '<leader>gg', '<cmd>lua vim.lsp.buf.definition()<cr>', nil, bufnr)
+  kmap('n', '<leader>gp', ':pop<cr>', nil, bufnr)
+  kmap('n', '<leader>gl', '<cmd>lua vim.lsp.buf.references()<cr>', nil, bufnr)
+  kmap('n', '<leader>gr', '<cmd>lua vim.lsp.buf.rename()<cr>', nil, bufnr)
+  kmap('n', '<leader>gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', nil, bufnr)
+  kmap('n', '<leader>gh', '<cmd>lua vim.lsp.buf.signature_help()<cr>', nil, bufnr)
+end
+
+vim.g.coq_settings = { auto_start = true }
+local servers = { 'rust_analyzer', 'clangd', 'gopls', 'terraformls', 'pylsp', 'zls', 'yamlls',
+    'hls', 'jsonls', 'jsonnet_ls', 'marksman', 'html', 'texlab', 'sumneko_lua'
+    }
+for _, lsp in ipairs(servers) do
+  require('lspconfig')[lsp].setup(
+      require('coq').lsp_ensure_capabilities({
+        on_attach = on_attach,
+        flags = {
+          -- This will be the default in neovim 0.7+
+          debounce_text_changes = 150,
+        }
+      })
+  )
+end
 
 -- supertab for lsp tab completion
 vim.g.SuperTabDefaultCompletionType = "<c-x><c-o>"
 
-local on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-  
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>t', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gg', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gp', ':pop<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gl', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gr', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gh', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-end
 
 -- rust specific configs
 vim.g.rust_recommended_style = 1
