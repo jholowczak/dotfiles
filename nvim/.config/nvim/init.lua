@@ -94,27 +94,6 @@ require('packer').startup(function(use)
     end
   }
 
-  -- snippet support
-  use { 'L3MON4D3/LuaSnip' }
-  use {
-    'hrsh7th/nvim-cmp',
-    config = function ()
-      require'cmp'.setup {
-      snippet = {
-        expand = function(args)
-          require'luasnip'.lsp_expand(args.body)
-        end
-      },
-      sources = {
-        { name = 'nvim-lsp' },
-        { name = 'luasnip' },
-        { name = 'orgmode' }
-      },
-    }
-    end
-  }
-  use { 'saadparwaiz1/cmp_luasnip' }
-
   use { 
       'TimUntersberger/neogit', 
       requires = 'nvim-lua/plenary.nvim',
