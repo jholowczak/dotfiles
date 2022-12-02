@@ -11,10 +11,16 @@ require('packer').startup(function(use)
   use 'ms-jpq/coq_nvim'
   use 'ms-jpq/coq.artifacts'
   use 'ms-jpq/coq.thirdparty'
-  use 'vim-airline/vim-airline'
-  use 'vim-airline/vim-airline-themes'
   use "ellisonleao/gruvbox.nvim"
   use 'kyazdani42/nvim-web-devicons'
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = {{
+      'kyazdani42/nvim-web-devicons',
+      opt = true
+    },
+    {'arkav/lualine-lsp-progress'}}
+  }
   use 'ervandew/supertab'
   use {
     "jiaoshijie/undotree",
@@ -91,7 +97,7 @@ require('packer').startup(function(use)
     end
   }
   -- this is more up to date than the default rust.vim that comes with neovim
-  use 'rust-lang/rust.vim' 
+  use 'rust-lang/rust.vim'
   use { 
     'simrat39/rust-tools.nvim',
     requires = {
@@ -102,7 +108,7 @@ require('packer').startup(function(use)
     config = function() require('rust-tools').setup {} end
   }
 
-  use {'nvim-orgmode/orgmode', 
+  use {'nvim-orgmode/orgmode',
     config = function()
       require('orgmode').setup{
         org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
@@ -112,7 +118,7 @@ require('packer').startup(function(use)
   }
 
   use { 
-      'TimUntersberger/neogit', 
+      'TimUntersberger/neogit',
       requires = 'nvim-lua/plenary.nvim',
       config = function() require('neogit').setup {} end
   }
@@ -143,7 +149,7 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
     additional_vim_regex_highlighting = {'org'}, -- Required for spellcheck, some LaTex highlights and code block highlights that do not have ts grammar
   },
-  ensure_installed = {'org', 'go', 'gomod', 'html', 'latex', 'rust', 'c', 'python', 
+  ensure_installed = {'org', 'go', 'gomod', 'html', 'latex', 'rust', 'c', 'python',
     'toml', 'lua', 'json', 'jsonnet', 'v', 'yaml', 'r', 'regex', 'sql', 'zig',
     'javascript', 'make', 'jq', 'hcl', 'haskell', 'diff', 'cpp', 'css',
     'bash', 'fish', 'dockerfile', 'nix', 'gitignore', 'gitcommit', 'git_rebase', 'markdown'
@@ -271,16 +277,12 @@ kmap('n', "<C-l>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<c
 kmap('n', "<C-\\>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLastActive()<cr>")
 --kmap('n', "<C-Space>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateNext()<cr>", opts)
 
--- airline
-vim.cmd("let g:airline#extensions#tabline#enabled = 1")
-vim.cmd("let g:airline#extensions#tabline#show_buffers=1")
-vim.cmd("let g:airline_powerline_fonts=1")
-vim.cmd("let g:airline_theme = 'hybrid'")
+local navic = require('nvim-navic')
 -- lsp configuration
 -- Automatically start coq
 local on_attach = function(client, bufnr)
   if client.server_capabilities.documentSymbolProvider then
-    require("nvim-navic").attach(client, bufnr)
+    navic.attach(client, bufnr)
   end
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -309,6 +311,52 @@ for _, lsp in ipairs(servers) do
       })
   )
 end
+
+
+-- airline
+-- vim.g.airline.extensions.tabline.enabled = 1
+-- vim.g.airline.extensions.tabline.show_buffers = 1
+-- vim.g.airline_powerline_fonts = 1
+-- vim.g.airline_theme = 'hybrid'
+local function navic_location()
+	local none_display = " "
+	if navic.is_available() then
+		local l = navic.get_location()
+		return (l ~= "") and l or none_display
+	else
+		return none_display
+	end
+end
+require('lualine').setup {
+  options = {
+    theme = 'horizon',
+  },
+  winbar = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {navic_location},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename', "lsp_progress"},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  tabline = {
+    lualine_a = {{"buffers", mode=2}},
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {{"tabs", mode=2}},
+  },
+  extensions = {'nvim-tree', 'nvim-dap-ui'}
+}
 
 -- supertab for lsp tab completion
 vim.g.SuperTabDefaultCompletionType = "<c-x><c-o>"
