@@ -48,10 +48,10 @@ require('packer').startup(function(use)
   use {
   "ahmedkhalf/project.nvim",
     config = function()
-      require("project_nvim").setup {
-      }
+      require("project_nvim").setup {}
     end
   }
+  use 'lervag/vimtex'
   use { 'ctrlpvim/ctrlp.vim' }
   use({
     "iamcco/markdown-preview.nvim",
@@ -90,7 +90,10 @@ require('packer').startup(function(use)
 
   use {'nvim-orgmode/orgmode', 
     config = function()
-      require('orgmode').setup{}
+      require('orgmode').setup{
+        org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
+        org_default_notes_file = '~/Dropbox/org/refile.org',
+      }
     end
   }
 
@@ -126,13 +129,12 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
     additional_vim_regex_highlighting = {'org'}, -- Required for spellcheck, some LaTex highlights and code block highlights that do not have ts grammar
   },
-  ensure_installed = {'org'}, -- Or run :TSUpdate org
+  ensure_installed = {'org', 'go', 'gomod', 'html', 'latex', 'rust', 'c', 'python', 
+    'toml', 'lua', 'json', 'jsonnet', 'v', 'yaml', 'r', 'regex', 'sql', 'zig',
+    'javascript', 'make', 'jq', 'hcl', 'haskell', 'diff', 'cpp', 'css',
+    'bash', 'fish', 'dockerfile', 'nix', 'gitignore', 'gitcommit', 'git_rebase', 'markdown'
+    }, -- Or run :TSUpdate org
 }
-
-require('orgmode').setup({
-  org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
-  org_default_notes_file = '~/Dropbox/org/refile.org',
-})
 
 require('indent_blankline').setup {}
 require'hop'.setup()
@@ -165,7 +167,9 @@ require("nvim-tree").setup({
 -- lsp configuration
 -- Automatically start coq
 vim.g.coq_settings = { auto_start = true }
-local servers = { 'rust_analyzer', 'clangd' }
+local servers = { 'rust_analyzer', 'clangd', 'gopls', 'terraformls', 'pylsp', 'zls', 'yamlls',
+    'hls', 'jsonls', 'jsonnet_ls', 'marksman', 'html', 'texlab', 'sumneko_lua'
+    }
 for _, lsp in ipairs(servers) do
   require('lspconfig')[lsp].setup(
       require('coq').lsp_ensure_capabilities({
