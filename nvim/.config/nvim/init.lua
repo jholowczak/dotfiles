@@ -239,7 +239,8 @@ local function kmap(mode, lhs, rhs, opts)
   if opts then
     options = vim.tbl_extend('force', options, opts)
   end
-  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+  local lhs_e = string.gsub(lhs, '<l>', '<leader>')
+  vim.api.nvim_set_keymap(mode, lhs_e, rhs, options)
 end
 
 kmap("n", "<l>nm", ":bprevious<cr>")
