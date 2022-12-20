@@ -23,15 +23,7 @@ require('packer').startup(function(use)
     {'arkav/lualine-lsp-progress'}}
   }
   use 'ervandew/supertab'
-  use {
-    "jiaoshijie/undotree",
-    config = function()
-      require('undotree').setup()
-    end,
-    requires = {
-      "nvim-lua/plenary.nvim",
-    },
-  }
+  use 'lambdalisue/suda.vim'
   use "lukas-reineke/indent-blankline.nvim"
   use {
     'lewis6991/gitsigns.nvim',
@@ -164,8 +156,8 @@ require'nvim-treesitter.configs'.setup {
   },
   ensure_installed = {'org', 'go', 'gomod', 'html', 'latex', 'rust', 'c', 'python',
     'toml', 'lua', 'json', 'jsonnet', 'v', 'yaml', 'r', 'regex', 'sql', 'zig',
-    'javascript', 'make', 'jq', 'hcl', 'haskell', 'diff', 'cpp', 'css',
-    'bash', 'fish', 'dockerfile', 'nix', 'gitignore', 'gitcommit', 'git_rebase', 'markdown'
+    'javascript', 'make', 'hcl', 'haskell', 'diff', 'cpp', 'css',
+    'bash', 'fish', 'dockerfile', 'nix', 'gitignore', 'markdown'
     }, -- Or run :TSUpdate org
 }
 vim.wo.foldmethod = 'expr'
@@ -273,7 +265,6 @@ kmap("n", "<l>co", ":edit ~/.config/nvim/init.lua<CR>")
 kmap("n", "<l>cl", ":source ~/.config/nvim/init.lua<cr>")
 kmap("n", "<l>ms", "<cmd>lua require('neogit').open({ kind = \"split\" })<cr>")
 vim.keymap.set({ "n", "x" }, "<leader>rs", function() require("ssr").open() end)
-vim.keymap.set('n', '<leader>u', require('undotree').toggle, { noremap = true, silent = true })
 
 
 
