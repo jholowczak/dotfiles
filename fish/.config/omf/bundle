@@ -1,6 +1,7 @@
 package archlinux
 package argu
 package bass
+package cd
 package config
 package expand
 package extract

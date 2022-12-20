@@ -78,6 +78,7 @@
                           ))
                   ))
   (helm-projectile-switch-project)
+  (update-persp-to-project-name)
   )
 
 (defun my-toggle-shell (the-shell)
@@ -194,6 +195,7 @@ shell, e.g. 'shell' or 'eshell'"
   :delight
   :after evil
   :config
+  (setq undo-tree-history-directory-alist '(("." . "~/.local/emacs/undo")))
   (global-undo-tree-mode)
   (evil-set-undo-system 'undo-tree))
 
@@ -719,7 +721,7 @@ shell, e.g. 'shell' or 'eshell'"
   :after evil
   :ensure t
   :init
-  (setq neo-theme 'arrow)
+  (setq neo-theme 'icons)
   (setq neo-window-fixed-size nil)
   (display-line-numbers-mode -1)
   (add-hook 'neotree-mode-hook

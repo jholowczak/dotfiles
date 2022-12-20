@@ -12,6 +12,7 @@ require('packer').startup(function(use)
   use 'ms-jpq/coq.artifacts'
   use 'ms-jpq/coq.thirdparty'
   use "ellisonleao/gruvbox.nvim"
+  use {'glepnir/dashboard-nvim'}
   use 'kyazdani42/nvim-web-devicons'
   use {
     'nvim-lualine/lualine.nvim',
@@ -79,9 +80,8 @@ require('packer').startup(function(use)
   })
 
   use {
-    'Shatur/neovim-session-manager',
+    'jedrzejboczar/possession.nvim',
     requires = { 'nvim-lua/plenary.nvim' },
-    config = function() require('session_manager').setup {} end
   }
   use {'nvim-telescope/telescope-ui-select.nvim' }
   use {
@@ -105,7 +105,19 @@ require('packer').startup(function(use)
       'nvim-lua/plenary.nvim',
       'mfussenegger/nvim-dap'
     },
-    config = function() require('rust-tools').setup {} end
+    config = function()
+        local rt = require('rust-tools')
+        rt.setup({
+          server = {
+            on_attach = function(_, bufnr)
+              -- Hover actions
+              vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+              -- Code action groups
+              vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+            end,
+          },
+        })
+    end
   }
 
   use {'nvim-orgmode/orgmode',
@@ -139,6 +151,7 @@ require('packer').startup(function(use)
   end
 end)
 
+require('possession').setup{ ... }
 -- Load custom tree-sitter grammar for org filetype
 require('orgmode').setup_ts_grammar()
 
@@ -155,6 +168,8 @@ require'nvim-treesitter.configs'.setup {
     'bash', 'fish', 'dockerfile', 'nix', 'gitignore', 'gitcommit', 'git_rebase', 'markdown'
     }, -- Or run :TSUpdate org
 }
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
 
 require('indent_blankline').setup {}
 require("telescope").setup {
@@ -318,6 +333,9 @@ end
 -- vim.g.airline.extensions.tabline.show_buffers = 1
 -- vim.g.airline_powerline_fonts = 1
 -- vim.g.airline_theme = 'hybrid'
+local function session_name()
+  return require('possession.session').session_name or ''
+end
 local function navic_location()
 	local none_display = " "
 	if navic.is_available() then
@@ -335,7 +353,7 @@ require('lualine').setup {
     lualine_a = {},
     lualine_b = {},
     lualine_c = {navic_location},
-    lualine_x = {},
+    lualine_x = {session_name},
     lualine_y = {},
     lualine_z = {}
   },
