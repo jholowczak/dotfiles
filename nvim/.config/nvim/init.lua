@@ -162,6 +162,7 @@ require'nvim-treesitter.configs'.setup {
 }
 vim.wo.foldmethod = 'expr'
 vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.wo.foldenable = false
 
 require('indent_blankline').setup {}
 require("telescope").setup {
