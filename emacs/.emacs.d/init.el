@@ -409,8 +409,15 @@ shell, e.g. 'shell' or 'eshell'"
               (define-key evil-normal-state-local-map (kbd "SPC o") 'org-toggle-checkbox)))
   :config
   (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
-  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
-  (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
+  (add-to-list 'org-src-lang-modes
+               '(("plantuml" . plantuml)
+                 (shell . t)
+                 )
+               )
+  (org-babel-do-load-languages 'org-babel-load-languages
+            '((plantuml . t)
+            (shell . t))
+            )
   (use-package ox-gfm
     :ensure t)
   (use-package org-present
