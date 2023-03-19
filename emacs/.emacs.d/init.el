@@ -389,7 +389,7 @@ shell, e.g. 'shell' or 'eshell'"
 
 (use-package org
   :ensure t
-  :mode "\\.org\\'"
+  :mode ("\\.org\\'" . org-mode)
   :hook (org-mode . (lambda ()
               (org-indent-mode)
               ;(add-hook 'after-save-hook 'org-preview-latex-fragment)
