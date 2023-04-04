@@ -25,6 +25,7 @@
               inhibit-startup-screen t
               auto-save-default nil
               make-backup-files nil
+              column-number-mode t
               backup-directory-alist '(("" . "~/.emacs.d/backup"))
               default-directory "~/workspace/"
               custom-file "~/.emacs.d/custom.el")
@@ -46,18 +47,38 @@
 ;(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
 ;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 
+;; Install straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+	(url-retrieve-synchronously
+	 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+	 'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
 ;; Bootstrap `use-package`
-(package-initialize)
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(eval-when-compile
-  (require 'use-package))
+;; (package-initialize)
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
+;; (eval-when-compile
+;;   (require 'use-package))
+(straight-use-package 'use-package)
 ;;(use-package benchmark-init
   ;;:ensure t
   ;;:config
   ;; To disable collection of benchmark data after init is done.
   ;;(add-hook 'after-init-hook 'benchmark-init/deactivate))
+(setq chatgpt-shell-openai-key
+      (lambda ()
+        (nth 0 (process-lines "gopass" "show" "-o" "openai-key"))))
+(setq native-comp-deferred-compilation-deny-list nil)
+(straight-use-package '(chatgpt-shell :type git :host github :repo "xenodium/chatgpt-shell"))
 
 ;;
 ;; custom functions
@@ -408,6 +429,8 @@ shell, e.g. 'shell' or 'eshell'"
               (define-key evil-normal-state-local-map (kbd "SPC u") 'org-todo)
               (define-key evil-normal-state-local-map (kbd "SPC o") 'org-toggle-checkbox)))
   :config
+  (require 'ob-chatgpt-shell)
+  (ob-chatgpt-shell-setup)
   (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
   (add-to-list 'org-src-lang-modes
                '(("plantuml" . plantuml)
