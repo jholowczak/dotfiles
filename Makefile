@@ -27,6 +27,7 @@ install:
 	stow emacs
 	stow paru
 	stow sway
+	stow nushell
 
 reinstall:
 
@@ -45,6 +46,7 @@ reinstall:
 	stow -R emacs
 	stow -R paru
 	stow -R sway
+	stor -R nushell
 
 delete:
 
@@ -63,6 +65,7 @@ delete:
 	stow -D emacs
 	stow -D paru
 	stow -D sway
+	stow -D nushell
 
 update:
 
@@ -70,7 +73,7 @@ update:
 	git submodule update --init --recursive
 
 installdeps:
-	paru -Sy stow fzf neovim redshift tmux sxhkd bspwm rofi fish polybar kitty compton python-pynvim xclip emacs
+	paru -Sy stow fzf neovim redshift tmux sxhkd bspwm rofi fish polybar kitty compton python-pynvim xclip emacs nushell
 
 all:
 	usage
