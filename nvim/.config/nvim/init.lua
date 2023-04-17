@@ -305,7 +305,7 @@ end
 
 vim.g.coq_settings = { auto_start = true }
 local servers = { 'rust_analyzer', 'clangd', 'gopls', 'terraformls', 'pylsp', 'zls', 'yamlls',
-    'hls', 'jsonls', 'jsonnet_ls', 'marksman', 'html', 'texlab', 'sumneko_lua'
+    'hls', 'jsonls', 'jsonnet_ls', 'marksman', 'html', 'texlab', 'lua_ls'
     }
 for _, lsp in ipairs(servers) do
   require('lspconfig')[lsp].setup(
