@@ -6,9 +6,10 @@ package config
 package expand
 package extract
 package foreign-env
+package fzf
 package getopts
 package hash
-package https://github.com/danhper/fish-ssh-agent
+package https://github.com/danielperezh/fish-ssh-agent
 package https://github.com/FabioAntunes/fish-nvm
 package license
 package nvm

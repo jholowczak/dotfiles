@@ -297,6 +297,7 @@ shell, e.g. 'shell' or 'eshell'"
         "p s" 'persp-switch-last
         "p l" 'persp-state-load
         "p r" 'persp-state-restore
+        "p R" 'persp-rename
 
         ;;window splits
         "w h" 'split-window-horizontally
