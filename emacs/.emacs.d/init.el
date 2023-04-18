@@ -399,6 +399,16 @@ shell, e.g. 'shell' or 'eshell'"
 (use-package magit
   :ensure t)
 
+(use-package magit-todos
+    :ensure t
+    :after magit
+    :delight magit-todos-mode
+    :config
+    (setq magit-todos-depth 100)
+    :hook ((magit-mode . magit-todos-mode)))
+;; TODO: figure out how to ignore colon with todo
+;; TODO: allow this to access hidden files as well
+
 (setenv "PDFLATEX" "pdflatex --shell-escape")
 (use-package latex-preview-pane
   :ensure t)
