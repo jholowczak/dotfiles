@@ -29,7 +29,7 @@ alias tmux="tmux -2"
 # SSH tmux login
 if test -n "$SSH_CONNECTION"
     if test -z "$TMUX"
-        tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
+        tmux attach-session -t (hostname) || tmux new-session -s (hostname)
     end
 else
     if test -z "$TMUX" 
