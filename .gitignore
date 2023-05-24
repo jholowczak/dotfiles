@@ -20,3 +20,4 @@ nvim/.local/share/nvim/swap/
 emacs/*
 !emacs/.emacs.d/init.el
 nushell/.config/nushell/history.txt
+fish/.config/fish/functions/*.fish
