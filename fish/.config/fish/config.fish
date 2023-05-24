@@ -56,9 +56,6 @@ end
 # tabtab source for packages
 # uninstall by removing these lines
 [ -f ~/.config/tabtab/__tabtab.fish ]; and . ~/.config/tabtab/__tabtab.fish; or true
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/skip/google-cloud-sdk/path.fish.inc' ]; . '/home/skip/google-cloud-sdk/path.fish.inc'; end
 #python issues with latest version, removing as not used for now
 #thefuck --alias | source
 
@@ -69,3 +66,6 @@ if test -e ~/miniconda3/bin/conda
 end
 # <<< conda initialize <<<
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/skip/google-cloud-sdk/path.fish.inc' ]; . '/home/skip/google-cloud-sdk/path.fish.inc'; end
