@@ -8,7 +8,7 @@ require('packer').startup(function(use)
   use 'wbthomason/packer.nvim' -- Package manager
   use{'nvim-treesitter/nvim-treesitter', run = ":TSUpdate"}
   use 'neovim/nvim-lspconfig' -- Collection of configurations for the built-in LSP client
-  use 'ms-jpq/coq_nvim'
+  use {'ms-jpq/coq_nvim', run = ":COQdeps"}
   use 'ms-jpq/coq.artifacts'
   use 'ms-jpq/coq.thirdparty'
   use "ellisonleao/gruvbox.nvim"
