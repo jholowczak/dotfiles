@@ -31,6 +31,12 @@ install:
 	stow hypr
 	stow waybar
 	stow waypaper
+	stow wlogout
+	stow gtklock
+	stow gtk-2.0
+	stow gtk-3.0
+	stow gtk-3.0
+	stow fuzzel
 
 reinstall:
 
@@ -53,6 +59,12 @@ reinstall:
 	stow -R hypr
 	stow -R waybar
 	stow -R waypaper
+	stow -R wlogout
+	stow -R gtklock
+	stow -R gtk-2.0
+	stow -R gtk-3.0
+	stow -R gtk-3.0
+	stow -R fuzzel
 
 delete:
 
@@ -75,6 +87,12 @@ delete:
 	stow -D hypr
 	stow -D waybar
 	stow -D waypaper
+	stow -D wlogout
+	stow -D gtklock
+	stow -D gtk-2.0
+	stow -D gtk-3.0
+	stow -D gtk-3.0
+	stow -D fuzzel
 
 update:
 

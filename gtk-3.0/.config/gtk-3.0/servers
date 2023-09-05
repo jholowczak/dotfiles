@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xbel version="1.0"
+      xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks"
+      xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info"
+>
+  <bookmark href="smb://deltaplus.lab.devfla.me/" added="2021-08-09T14:04:18.647096Z" modified="2021-08-09T14:04:18.647100Z" visited="2021-08-09T14:04:18.647097Z">
+    <title>Windows shares on deltaplus.lab.devfla.me</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2021-08-09T14:04:18.647098Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="smb://deltaplus.lab.devfla.me/encrypt/" added="2021-09-13T17:15:06.202581Z" modified="2022-05-20T18:47:28.789361Z" visited="2022-05-20T18:47:28.789359Z">
+    <title>encrypt on deltaplus.lab.devfla.me</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2022-05-20T18:47:28.789360Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="nfs://deltaplus/rpool/backup" added="2021-09-26T18:27:54.086418Z" modified="2021-09-26T18:27:54.086422Z" visited="2021-09-26T18:27:54.086419Z">
+    <title>backup</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2021-09-26T18:27:54.086420Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="smb://deltaplus/encrypt/" added="2021-10-26T13:19:39.408979Z" modified="2021-10-26T13:19:39.408982Z" visited="2021-10-26T13:19:39.408980Z">
+    <title>encrypt on deltaplus</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2021-10-26T13:19:39.408981Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="nfs://deltaplus/rpool/encrypt" added="2021-10-26T13:23:04.350805Z" modified="2021-10-26T13:23:04.350808Z" visited="2021-10-26T13:23:04.350806Z">
+    <title>encrypt</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2021-10-26T13:23:04.350807Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="smb://deltaplus/" added="2022-08-10T20:42:23.405691Z" modified="2022-08-10T20:42:23.405694Z" visited="2022-08-10T20:42:23.405692Z">
+    <title>Windows shares on deltaplus</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2022-08-10T20:42:23.405693Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+</xbel>
