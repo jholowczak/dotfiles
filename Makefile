@@ -28,6 +28,9 @@ install:
 	stow paru
 	stow sway
 	stow nushell
+	stow hypr
+	stow waybar
+	stow waypaper
 
 reinstall:
 
@@ -46,7 +49,10 @@ reinstall:
 	stow -R emacs
 	stow -R paru
 	stow -R sway
-	stor -R nushell
+	stow -R nushell
+	stow -R hypr
+	stow -R waybar
+	stow -R waypaper
 
 delete:
 
@@ -66,6 +72,9 @@ delete:
 	stow -D paru
 	stow -D sway
 	stow -D nushell
+	stow -D hypr
+	stow -D waybar
+	stow -D waypaper
 
 update:
 
