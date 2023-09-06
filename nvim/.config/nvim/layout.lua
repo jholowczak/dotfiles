@@ -21,6 +21,8 @@ end
 require('lualine').setup {
   options = {
     theme = 'horizon',
+    ignore_focus = {'NvimTree'},
+    disabled_filetypes = {'NvimTree'}
   },
   winbar = {
     lualine_a = {},

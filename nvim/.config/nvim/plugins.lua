@@ -1,3 +1,5 @@
+-- plugins
+
 -- load lazy.nvim from disk, if not grab from git
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -119,7 +121,7 @@ local plugins = {
     },
     config = true
   },
-
+  'rcarriga/nvim-notify',
   'alexghergh/nvim-tmux-navigation',
   {
     'goolord/alpha-nvim',

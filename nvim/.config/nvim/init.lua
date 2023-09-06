@@ -11,8 +11,7 @@ local wo = vim.wo
 require('orgmode').setup_ts_grammar()
 
 -- Tree-sitter configuration
-require'nvim-treesitter.configs'.setup {
-  modules = { "highlight" },
+require'nvim-treesitter.configs'.setup { modules = { "highlight" },
   -- If TS highlights are not enabled at all, or disabled via `disable` prop, highlighting will fallback to default Vim syntax highlighting
   highlight = {
     enable = true,
@@ -45,6 +44,7 @@ require("telescope").load_extension("ui-select")
 
 -- required for project.nvim to work with nvim-tree
 require("nvim-tree").setup({
+  -- sync_root_with_cwd = true,
   respect_buf_cwd = true,
   update_cwd = true,
   update_focused_file = {
@@ -57,6 +57,9 @@ require("nvim-tree").setup({
     }
   }
 })
+
+require("telescope").load_extension("projects")
+
 
 --vim options
 if vim.loop.os_uname().sysname == "Darwin" then
@@ -87,13 +90,30 @@ opt.termguicolors = true
 opt.background = "dark" -- or "light" for light mode
 vim.cmd([[colorscheme gruvbox]])
 opt.colorcolumn = "0"
+opt.termguicolors = true
 
+opt.list = true
+opt.listchars:append "space:⋅"
+opt.listchars:append "eol:↴"
+vim.cmd [[highlight IndentBlanklineIndent1 guibg=#1f1f1f gui=nocombine]]
+vim.cmd [[highlight IndentBlanklineIndent2 guibg=#1a1a1a gui=nocombine]]
 
-
+require("indent_blankline").setup {
+    char = "",
+    char_highlight_list = {
+        "IndentBlanklineIndent1",
+        "IndentBlanklineIndent2",
+    },
+    space_char_highlight_list = {
+        "IndentBlanklineIndent1",
+        "IndentBlanklineIndent2",
+    },
+    show_trailing_blankline_indent = false,
+    show_current_context_start = true,
+}
 
 -- supertab for lsp tab completion
 vim.g.SuperTabDefaultCompletionType = "<c-x><c-o>"
-
 
 -- rust specific configs
 vim.g.rust_recommended_style = 1
