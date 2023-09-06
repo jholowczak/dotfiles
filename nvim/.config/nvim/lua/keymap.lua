@@ -1,5 +1,5 @@
 -- KEYMAPS
-require 'utils/keys'
+require 'utils.keys'
 
 vim.mapleader = " "
 vim.g.mapleader = " "

@@ -1,6 +1,6 @@
 -- lsp configuration
 
-require 'utils/keys'
+require 'utils.keys'
 local lspconfig = require('lspconfig')
 local navic = require('nvim-navic')
 
