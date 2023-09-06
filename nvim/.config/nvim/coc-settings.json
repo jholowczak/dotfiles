@@ -1,3 +1,4 @@
 {
-    "rust-analyzer.updates.channel": "nightly"
+    "rust-analyzer.updates.channel": "nightly",
+    "Lua.diagnostics.globals": ["vim"]
 }
