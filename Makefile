@@ -35,8 +35,9 @@ install:
 	stow gtklock
 	stow gtk-2.0
 	stow gtk-3.0
-	stow gtk-3.0
+	stow gtk-4.0
 	stow fuzzel
+	stow wezterm
 
 reinstall:
 
@@ -63,8 +64,9 @@ reinstall:
 	stow -R gtklock
 	stow -R gtk-2.0
 	stow -R gtk-3.0
-	stow -R gtk-3.0
+	stow -R gtk-4.0
 	stow -R fuzzel
+	stow -R wezterm
 
 delete:
 
@@ -91,8 +93,9 @@ delete:
 	stow -D gtklock
 	stow -D gtk-2.0
 	stow -D gtk-3.0
-	stow -D gtk-3.0
+	stow -D gtk-4.0
 	stow -D fuzzel
+	stow -D wezterm
 
 update:
 
