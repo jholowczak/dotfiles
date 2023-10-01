@@ -1,8 +1,17 @@
 # dotfiles
 ## Install
-Clone this repository using the following command: `git clone https://github.com/jholowczak/dotfiles $HOME/.dotfiles`
+Clone this repository using the following command: `git clone --recursive https://github.com/jholowczak/dotfiles $HOME/.dotfiles`
 ## Usage
-Change into the newly created `$HOME/.dotfiles` directory and run `make installdeps && make install`.
-Note: Stow will fail if the target directories exist, so they must be removed before stow will work properly.
+### Dotbot
+Dotbot is recommended to be installed, however it is not required. It can be installed with `pip install dotbot`.
+
+From the new created dotfiles directory, run `dotbot -c ./install.conf.yaml`.
+
+#### Alternative install 
+If you do not want to install dotbot, the dotbot files should have been cloned when this repo was cloned, as it is a submodule.
+
+From the newly created dotfiles directory, run `cp dotbot/tools/git-submodule/install .`.
+You can then invoke ./install from this directory to run dotbot and link the configuration files
+
 ### Note on editors
-Currently trying out emacs, so nvim configs will not be updated as often
+I swap often between emacs and neovim, so one tool's configs will remain unchanged longer than the other.
