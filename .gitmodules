@@ -1,15 +1,11 @@
 [submodule "polybar/.config/polybar/scripts"]
-	path = polybar/.config/polybar/scripts
+	path = config/polybar/scripts
 	url = https://github.com/polybar/polybar-scripts
+	ignore = dirty
 [submodule "tmux/.tmux/plugins/tpm"]
-	path = tmux/.tmux/plugins/tpm
+	path = tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
-[submodule "fish/.local/share/omf"]
-	path = fish/.local/share/omf
-	url = https://github.com/oh-my-fish/oh-my-fish.git
-[submodule "tmux/.tmux/plugins/tmux-sensible"]
-	path = tmux/.tmux/plugins/tmux-sensible
-	url = https://github.com/tmux-plugins/tmux-sensible
-[submodule "tmux/.tmux/plugins/tmux-gruvbox"]
-	path = tmux/.tmux/plugins/tmux-gruvbox
-	url = https://github.com/egel/tmux-gruvbox
+[submodule "dotbot"]
+	path = dotbot
+	url = https://github.com/anishathalye/dotbot
+	ignore = dirty

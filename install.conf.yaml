@@ -1,0 +1,40 @@
+- defaults:
+    link:
+      relink: true
+      create: true
+
+- shell:
+  - command: git submodule update --init --recursive
+    description: Installing submodules
+
+- clean:
+    ~/:
+      force: true
+    ~/.config:
+      recursive: true
+
+
+- link:
+    ~/.config/:
+        glob: true
+        path: config/*
+    ~/.tmux.conf: .tmux.conf
+    ~/.compton.conf: .compton.conf
+    ~/.gitconfig: 
+        path: git/.gitconfig
+    ~/.xinitrc: .xinitrc
+    ~/.emacs.d/: emacs
+    ~/.tmux/: tmux
+
+- create:
+    ~/build:
+        mode: 0751
+    ~/.ssh:
+        mode: 0700
+
+- shell:
+    - command: chsh -s $(which fish)
+      description: Making fish the default shell
+      stdin: true
+      stdout: true
+      stderr: true
