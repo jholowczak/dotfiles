@@ -25,6 +25,7 @@
     ~/.xinitrc: .xinitrc
     ~/.emacs.d/: emacs
     ~/.tmux/: tmux
+    ~/.gdbinit: .gdbinit
 
 - create:
     ~/build:
