@@ -20,8 +20,10 @@
         path: config/*
     ~/.tmux.conf: .tmux.conf
     ~/.compton.conf: .compton.conf
-    ~/.gitconfig: 
+    ~/.gitconfig:
         path: git/.gitconfig
+    ~/.gitignore:
+        path: git/.gitignore
     ~/.xinitrc: .xinitrc
     ~/.emacs.d/: emacs
     ~/.tmux/: tmux
