@@ -1,4 +1,4 @@
-set -gx BROWSER "/usr/bin/firefox"  
+set -gx BROWSER "/usr/bin/firefox"
 # set -gx TERM "xterm"
 set -gx PATH ~/.cargo/bin ~/go/bin ~/.local/bin $HOME/.gem/ruby/2.7.0/bin $PATH
 set -gx _JAVA_AWT_WM_NONREPARENTING 1
@@ -22,19 +22,19 @@ alias tmux="tmux -2"
 #end
 
 # SSH tmux login
-if test -n "$SSH_CONNECTION"
+if test -n "$SSH_CONNECTION"; and test (env | grep NO_SSH_TMUX | wc -l) -eq 0
     if test -z "$TMUX"
         tmux attach-session -t (hostname) || tmux new-session -s (hostname)
     end
 else
-    if test -z "$TMUX" 
+    if test -z "$TMUX"
         and test (tmux list-session | grep local | wc -l) -ne 1
             tmux attach-session -t local || tmux new-session -s local
     end
 end
 
 function vterm_printf;
-    if begin; [  -n "$TMUX" ]  ; and  string match -q -r "screen|tmux" "$TERM"; end 
+    if begin; [  -n "$TMUX" ]  ; and  string match -q -r "screen|tmux" "$TERM"; end
         # tell tmux to pass the escape sequences through
         printf "\ePtmux;\e\e]%s\007\e\\" "$argv"
     else if string match -q -- "screen*" "$TERM"
