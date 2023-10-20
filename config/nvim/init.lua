@@ -5,7 +5,7 @@ require 'keymap'
 require 'layout'
 
 local opt = vim.opt
-local wo = vim.wo
+local cmd = vim.cmd
 
 -- Load custom tree-sitter grammar for org filetype
 require('orgmode').setup_ts_grammar()
@@ -17,7 +17,7 @@ require'nvim-treesitter.configs'.setup { modules = { "highlight" },
     enable = true,
     additional_vim_regex_highlighting = {'org'}, -- Required for spellcheck, some LaTex highlights and code block highlights that do not have ts grammar
   },
-  auto_install = true,
+  auto_install = false,
   sync_install = false,
   ignore_install = {},
   ensure_installed = {'org', 'go', 'gomod', 'html', 'latex', 'rust', 'c', 'python',
@@ -26,9 +26,9 @@ require'nvim-treesitter.configs'.setup { modules = { "highlight" },
     'bash', 'fish', 'dockerfile', 'nix', 'gitignore', 'markdown'
     }, -- Or run :TSUpdate org
 }
-wo.foldmethod = 'expr'
-wo.foldexpr = 'nvim_treesitter#foldexpr()'
-wo.foldenable = false
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldenable = false
 
 require('indent_blankline').setup {}
 require("telescope").setup {
@@ -88,15 +88,15 @@ opt.clipboard = "unnamedplus"
 opt.background = "dark"
 opt.termguicolors = true
 opt.background = "dark" -- or "light" for light mode
-vim.cmd([[colorscheme gruvbox]])
+cmd([[colorscheme gruvbox]])
 opt.colorcolumn = "0"
 opt.termguicolors = true
 
 opt.list = true
 opt.listchars:append "space:⋅"
 opt.listchars:append "eol:↴"
-vim.cmd [[highlight IndentBlanklineIndent1 guibg=#1f1f1f gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent2 guibg=#1a1a1a gui=nocombine]]
+cmd [[highlight IndentBlanklineIndent1 guibg=#1f1f1f gui=nocombine]]
+cmd [[highlight IndentBlanklineIndent2 guibg=#1a1a1a gui=nocombine]]
 
 require("indent_blankline").setup {
     char = "",

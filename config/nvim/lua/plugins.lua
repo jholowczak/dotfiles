@@ -16,7 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
   { "folke/neodev.nvim", opts = {} },
-  {'nvim-treesitter/nvim-treesitter', build = ":TSUpdate"},
+  {'nvim-treesitter/nvim-treesitter'},
   'neovim/nvim-lspconfig', -- Collection of configurations for the built-in LSP client
   {'ms-jpq/coq_nvim', build = ":COQdeps"},
   'ms-jpq/coq.artifacts',
