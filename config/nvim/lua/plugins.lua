@@ -34,7 +34,7 @@ local plugins = {
   },
   'ervandew/supertab',
   'lambdalisue/suda.vim',
-  'lukas-reineke/indent-blankline.nvim',
+  { 'lukas-reineke/indent-blankline.nvim', main = "ibl", opts = {} },
   'lewis6991/gitsigns.nvim',
   {
     'kyazdani42/nvim-tree.lua',

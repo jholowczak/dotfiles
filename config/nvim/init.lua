@@ -30,7 +30,6 @@ opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.foldenable = false
 
-require('indent_blankline').setup {}
 require("telescope").setup {
   extensions = {
     ["ui-select"] = {
@@ -95,22 +94,6 @@ opt.termguicolors = true
 opt.list = true
 opt.listchars:append "space:⋅"
 opt.listchars:append "eol:↴"
-cmd [[highlight IndentBlanklineIndent1 guibg=#1f1f1f gui=nocombine]]
-cmd [[highlight IndentBlanklineIndent2 guibg=#1a1a1a gui=nocombine]]
-
-require("indent_blankline").setup {
-    char = "",
-    char_highlight_list = {
-        "IndentBlanklineIndent1",
-        "IndentBlanklineIndent2",
-    },
-    space_char_highlight_list = {
-        "IndentBlanklineIndent1",
-        "IndentBlanklineIndent2",
-    },
-    show_trailing_blankline_indent = false,
-    show_current_context_start = true,
-}
 
 -- supertab for lsp tab completion
 vim.g.SuperTabDefaultCompletionType = "<c-x><c-o>"
