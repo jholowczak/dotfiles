@@ -85,7 +85,6 @@ opt.mouse = "a"
 opt.backspace = "indent,eol,start"
 opt.clipboard = "unnamedplus"
 opt.background = "dark"
-opt.termguicolors = true
 opt.background = "dark" -- or "light" for light mode
 cmd([[colorscheme gruvbox]])
 opt.colorcolumn = "0"
@@ -95,8 +94,13 @@ opt.list = true
 opt.listchars:append "space:⋅"
 opt.listchars:append "eol:↴"
 
+--require("indent_blankline").setup {
+--    --show_trailing_blankline_indent = false,
+--    --show_current_context_start =false
+--}
+
 -- supertab for lsp tab completion
-vim.g.SuperTabDefaultCompletionType = "<c-x><c-o>"
+--vim.g.SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 -- rust specific configs
 vim.g.rust_recommended_style = 1

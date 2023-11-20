@@ -23,23 +23,24 @@ local plugins = {
   'ms-jpq/coq.thirdparty',
   "ellisonleao/gruvbox.nvim",
   'glepnir/dashboard-nvim',
-  'kyazdani42/nvim-web-devicons',
+  'edluffy/specs.nvim',
+  'nvim-tree/nvim-web-devicons',
   {
     'nvim-lualine/lualine.nvim',
     dependencies = {{
-      'kyazdani42/nvim-web-devicons',
+      'nvim-tree/nvim-web-devicons',
       lazy = true
     },
     'arkav/lualine-lsp-progress'}
   },
-  'ervandew/supertab',
+  --'ervandew/supertab',
   'lambdalisue/suda.vim',
   { 'lukas-reineke/indent-blankline.nvim', main = "ibl", opts = {} },
   'lewis6991/gitsigns.nvim',
   {
     'kyazdani42/nvim-tree.lua',
     dependencies = {
-      'kyazdani42/nvim-web-devicons', -- optional, for file icon
+      'nvim-tree/nvim-web-devicons', -- optional, for file icon
     }
   },
   {
@@ -92,17 +93,6 @@ local plugins = {
       'mfussenegger/nvim-dap'
     },
     config = function()
-        local rt = require('rust-tools')
-        rt.setup({
-          server = {
-            on_attach = function(_, bufnr)
-              -- Hover actions
-              vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
-              -- Code action groups
-              vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
-            end,
-          },
-        })
     end
     },
   {

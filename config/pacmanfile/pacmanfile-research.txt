@@ -61,6 +61,7 @@ ocaml
 opam
 openssh
 p7zip
+pacmanfile
 pandoc-cli
 paru
 peda
@@ -71,6 +72,7 @@ pwndbg
 python-pip
 python-r2pipe
 python-rzpipe
+python-z3-solver
 qemu-full
 qemu-guest-agent
 qemu-system-aarch64
@@ -104,6 +106,9 @@ winetricks
 xorg-xeyes
 yaml-language-server
 yarn
+z3
 zig
 zls
 zram-generator
+kind
+aardvark-dns
