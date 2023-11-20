@@ -84,7 +84,8 @@ local plugins = {
     opts = { keys = 'etovxqpdygfblzhckisuran' }
   },
   -- this is more up to date than the default rust.vim that comes with neovim
-  'rust-lang/rust.vim',
+  --'rust-lang/rust.vim',
+  --disabling for now, no updates in a year
   {
     'simrat39/rust-tools.nvim',
     dependencies = {
@@ -92,8 +93,8 @@ local plugins = {
       'nvim-lua/plenary.nvim',
       'mfussenegger/nvim-dap'
     },
-    config = function()
-    end
+    --config = function()
+    --end
     },
   {
     'nvim-orgmode/orgmode',

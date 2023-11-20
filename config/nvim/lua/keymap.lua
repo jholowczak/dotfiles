@@ -27,10 +27,6 @@ Kmap("n", "<l>vp", ":lua tmux_send_command('')<cr>")
 Kmap("n", "<l>vl", ":lua tmux_send_last_command()<cr>")
 --Kmap("n", "<l>mb", ":lua tmux_send_command('git blame -L ' .. vim.fn.line('.') .. ',' .. vim.fn.line('.') .. ' ' .. vim.fn.expand('%:p'))<cr>", opts)
 Kmap('n', '<l>dd', '<cmd>lua vim.diagnostic.open_float()<cr>')
-Kmap("n", "<l>co", ":edit ~/.config/nvim/init.lua<CR>")
-Kmap("n", "<l>ck", ":edit ~/.config/nvim/lua/keymap.lua<cr>")
-Kmap("n", "<l>cp", ":edit ~/.config/nvim/lua/plugins.lua<cr>")
-Kmap("n", "<l>cl", ":source ~/.config/nvim/init.lua<cr>")
 Kmap("n", "<l>ms", "<cmd>lua require('neogit').open({ kind = \"split\" })<cr>")
 vim.keymap.set({ "n", "x" }, "<leader>rs", function() require("ssr").open() end)
 
@@ -44,6 +40,7 @@ Kmap("v", "<l><l>w", "<cmd>HopWordAC<CR>")
 Kmap("v", "<l><l>b", "<cmd>HopWordBC<CR>")
 Kmap("v", "<l><l>j", "<cmd>HopLineAC<CR>")
 Kmap("v", "<l><l>k", "<cmd>HopLineBC<CR>")
+-- TMUX movement keybinds
 Kmap('n', "<C-h>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<cr>")
 Kmap('n', "<C-j>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<cr>")
 Kmap('n', "<C-k>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<cr>")
@@ -51,6 +48,7 @@ Kmap('n', "<C-l>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<c
 Kmap('n', "<C-\\>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLastActive()<cr>")
 --Kmap('n', "<C-Space>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateNext()<cr>", opts)
 --
+-- Language-specific binds
 local fileTypeBindings = {
     {   pattern = { "c", "cpp", "ocaml" },
         binds = {
@@ -139,3 +137,30 @@ end
 --autocmd FileType go nnoremap <buffer><leader>rf :wa<CR> :GolangTestFocused<CR>
 --
 --autocmd FileType sh nnoremap <buffer><leader>rr :!./%<CR>
+
+-- Easy access to configuration files and loading
+local configFiles = {
+    {k="<l>co", t="edit", p="~/.config/nvim/init.lua"},
+    {k="<l>ck", t="edit", p="~/.config/nvim/lua/keymap.lua"},
+    {k="<l>cp", t="edit", p="~/.config/nvim/lua/plugins.lua"},
+    {k="<l>cl", t="edit", p="~/.config/nvim/lua/lsp.lua"},
+    {k="<l>cc", t="source", p="~/.config/nvim/init.lua"},
+}
+
+for _, c in pairs(configFiles) do
+    Kmap("n", c.k, ":" .. c.t .. " " .. c.p .."<cr>")
+    local rep = c.p:gsub("~", "*")
+    vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
+        pattern = { rep },
+        callback = function()
+            Kmap('n', c.k, ":bdelete<cr>")
+        end
+    })
+    vim.api.nvim_create_autocmd({"BufLeave", "BufDelete"}, {
+        pattern = { rep },
+        callback = function()
+            Kmap("n", c.k, ":" .. c.t .. " " .. c.p .."<cr>")
+        end
+    })
+end
+
