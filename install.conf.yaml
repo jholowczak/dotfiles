@@ -28,6 +28,7 @@
     ~/.emacs.d/: emacs
     ~/.tmux/: tmux
     ~/.gdbinit: .gdbinit
+    ~/.w3m: w3m
 
 - create:
     ~/build:
