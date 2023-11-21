@@ -22,6 +22,7 @@ local plugins = {
   'ms-jpq/coq.artifacts',
   'ms-jpq/coq.thirdparty',
   "ellisonleao/gruvbox.nvim",
+  'nvim-telescope/telescope.nvim',
   --{'nvimdev/dashboard-nvim',
   --  event = 'VimEnter',
   --  config = function()
@@ -100,7 +101,8 @@ local plugins = {
                 current = true
             },
             plugins = {
-                delete_hidden_buffers = false
+                delete_hidden_buffers = false,
+                delete_buffers = true
             }
         }
     end,

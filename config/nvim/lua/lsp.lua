@@ -63,8 +63,12 @@ rt.setup({
       -- Code action groups
       vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
       my_on_attach(client, bufnr)
+      local settings = vim.g.coq_settings or {}
+      if settings.auto_start then
+          local args = settings.auto_start == "shut-up" and {"--shut-up"} or {}
+          require'coq'.Now(unpack(args))
+      end
     end,
   },
 })
-rt.inlay_hints.enable()
-vim.g.coq_settings = { limits = {completion_auto_timeout = 0.2 } }
+--vim.g.coq_settings = { limits = {completion_auto_timeout = 0.2 } }
