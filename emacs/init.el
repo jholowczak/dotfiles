@@ -404,6 +404,7 @@ shell, e.g. 'shell' or 'eshell'"
     :after magit
     :delight magit-todos-mode
     :config
+    (setq magit-todos-exclude-globs '(".git/" "go/"))
     (setq magit-todos-depth 100)
     :hook ((magit-mode . magit-todos-mode)))
 ;; TODO: figure out how to ignore colon with todo
@@ -521,6 +522,21 @@ shell, e.g. 'shell' or 'eshell'"
   (setq org-todo-keywords
         '((sequence "PROJECT" "TODO" "IN-PROGRESS" "BACKLOG" "|" "DONE")))
 )
+(use-package org-super-agenda
+  :ensure t
+  :hook (org-agenda-mode . org-super-agenda-mode)
+  :config
+  (setq org-super-agenda-groups
+        '((:name "Next Items"
+                  :time-grid t
+                  :tag ("NEXT" "outbox"))
+           (:name "Important"
+                  :priority "A")
+           (:name "Quick Picks"
+                  :effort< "0:30")
+           (:priority<= "B"
+                        :scheduled future
+                        :order 1))))
 
 (use-package markdown-mode
   :ensure t
@@ -928,3 +944,4 @@ shell, e.g. 'shell' or 'eshell'"
 
 (global-display-line-numbers-mode)
 (global-hl-line-mode)
+(global-hl-todo-mode)
