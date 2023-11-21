@@ -113,8 +113,7 @@ local plugins = {
     opts = { keys = 'etovxqpdygfblzhckisuran' }
   },
   -- this is more up to date than the default rust.vim that comes with neovim
-  --'rust-lang/rust.vim',
-  --disabling for now, no updates in a year
+  'rust-lang/rust.vim',
   {
     'simrat39/rust-tools.nvim',
     dependencies = {

@@ -62,8 +62,9 @@ rt.setup({
       vim.keymap.set("n", "<S-tab>", rt.hover_actions.hover_actions, { buffer = bufnr })
       -- Code action groups
       vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
-      my_on_attach(_, bufnr)
+      --my_on_attach(_, bufnr)
     end,
   },
 })
 rt.inlay_hints.enable()
+vim.g.coq_settings = { limits = {completion_auto_timeout = 0.2 } } 
