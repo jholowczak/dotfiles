@@ -6,14 +6,19 @@
     "spacing": 10, // Gaps between modules (4px)
     "margin": 10,
     
-    "modules-left": ["wlr/workspaces", "hyprland/window"],
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
     "modules-right": ["mpris", "disk", "pulseaudio", "tray"],
     
-    "wlr/workspaces": {
-        "sort-by-number": true,
+    "hyprland/workspaces": {
+        "sort-by": "number",
         "format": "{icon}",
         "on-click": "activate",
+        "persistent-workspaces": {
+            //"DP-3": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            "DP-2": [11,12,13,14,15],
+            //"DP-1": [21, 22, 23, 24, 25, 26, 27, 28, 29],
+        },
         "format-icons":{
             "1": "1",
             "2": "2",

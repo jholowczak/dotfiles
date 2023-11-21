@@ -451,8 +451,8 @@ shell, e.g. 'shell' or 'eshell'"
                )
   (org-babel-do-load-languages 'org-babel-load-languages
             '((plantuml . t)
-            (shell . t))
-            )
+            (shell . t)
+            (python . t)))
   (use-package ox-gfm
     :ensure t)
   (use-package org-present
