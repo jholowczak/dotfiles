@@ -108,3 +108,5 @@ opt.listchars:append "eol:↴"
 vim.g.rust_recommended_style = 1
 vim.g.rustfmt_autosave = 1
 
+vim.api.nvim_set_hl(0, "SignColumn", {bg = "NONE", ctermbg="NONE"})
+

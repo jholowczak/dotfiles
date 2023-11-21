@@ -46,7 +46,11 @@ local plugins = {
   },
   'lambdalisue/suda.vim',
   { 'lukas-reineke/indent-blankline.nvim', main = "ibl", opts = {} },
-  'lewis6991/gitsigns.nvim',
+  {'lewis6991/gitsigns.nvim',
+    config = function()
+        require 'gitsigns'.setup {}
+    end
+  },
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = {

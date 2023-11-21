@@ -21,7 +21,7 @@ end
 
 require('lualine').setup {
   options = {
-    theme = 'horizon',
+    theme = 'onedark',
     ignore_focus = {'NvimTree'},
     disabled_filetypes = {'NvimTree'}
   },
