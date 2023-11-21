@@ -25,3 +25,4 @@ fish/.config/fish/conf.d/virtualfish-loader.fish
 tmux/plugins/tmux*
 config/nvim/lua/.luarc.json
 config/eww/scripts
+config/fish/extra.fish
