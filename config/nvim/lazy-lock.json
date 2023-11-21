@@ -11,7 +11,7 @@
   "go.nvim": { "branch": "master", "commit": "e749ff85ffec5a4ef11cb8252a2030be5726cb6c" },
   "gruvbox.nvim": { "branch": "main", "commit": "517b012757fbe7a4d6e507baf5cc75837e62734f" },
   "guihua.lua": { "branch": "master", "commit": "cd68996069abedffcd677ca7eee3a660b79e5b32" },
-  "hop.nvim": { "branch": "v1", "commit": "75f73d3959a0df7ef3642fd5138acdb1ce50fdc8" },
+  "hop.nvim": { "branch": "master", "commit": "df0b5b693ef8c3d414b5b85e4bc11cea99c4958d" },
   "indent-blankline.nvim": { "branch": "master", "commit": "29be0919b91fb59eca9e90690d76014233392bef" },
   "lazy.nvim": { "branch": "main", "commit": "96584866b9c5e998cbae300594d0ccfd0c464627" },
   "lualine-lsp-progress": { "branch": "master", "commit": "56842d097245a08d77912edf5f2a69ba29f275d7" },

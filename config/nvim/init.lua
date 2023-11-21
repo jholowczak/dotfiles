@@ -60,6 +60,8 @@ require("nvim-tree").setup({
 require("telescope").load_extension("projects")
 
 
+require("telescope").load_extension("possession")
+
 --vim options
 if vim.loop.os_uname().sysname == "Darwin" then
     opt.shell = "/usr/local/bin/bash"

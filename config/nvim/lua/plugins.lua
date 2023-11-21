@@ -22,7 +22,18 @@ local plugins = {
   'ms-jpq/coq.artifacts',
   'ms-jpq/coq.thirdparty',
   "ellisonleao/gruvbox.nvim",
-  'glepnir/dashboard-nvim',
+  --{'nvimdev/dashboard-nvim',
+  --  event = 'VimEnter',
+  --  config = function()
+  --      require('dashboard').setup {
+  --          theme = 'hyper',
+  --          config = {
+  --              project = { enable = true, limit = 8, action = 'Telescope projects' }
+  --          }
+  --      }
+  --  end,
+  --  dependencies = {{'nvim-tree/nvim-web-devicons'}}
+  --},
   'edluffy/specs.nvim',
   'nvim-tree/nvim-web-devicons',
   {
@@ -33,12 +44,11 @@ local plugins = {
     },
     'arkav/lualine-lsp-progress'}
   },
-  --'ervandew/supertab',
   'lambdalisue/suda.vim',
   { 'lukas-reineke/indent-blankline.nvim', main = "ibl", opts = {} },
   'lewis6991/gitsigns.nvim',
   {
-    'kyazdani42/nvim-tree.lua',
+    'nvim-tree/nvim-tree.lua',
     dependencies = {
       'nvim-tree/nvim-web-devicons', -- optional, for file icon
     }
@@ -61,7 +71,11 @@ local plugins = {
       },
     }
   },
-  "ahmedkhalf/project.nvim",
+  {'ahmedkhalf/project.nvim',
+    config = function()
+        require('project_nvim').setup {}
+    end
+  },
   'lervag/vimtex',
   'ctrlpvim/ctrlp.vim',
   {
@@ -70,6 +84,22 @@ local plugins = {
   },
   {
     'jedrzejboczar/possession.nvim',
+    config = function()
+        require('possession').setup {
+            commands = {
+                save = 'SSave',
+                load = 'SLoad',
+                delete = 'SDelete',
+                list = 'SList',
+            },
+            autosave = {
+                current = true
+            },
+            plugins = {
+                delete_hidden_buffers = false
+            }
+        }
+    end,
     dependencies = { 'nvim-lua/plenary.nvim' },
   },
   'nvim-telescope/telescope-ui-select.nvim',
@@ -78,9 +108,8 @@ local plugins = {
     dependencies = { 'nvim-lua/plenary.nvim' }
   },
   {
-    'phaazon/hop.nvim',
-    branch = 'v1', -- optional but strongly recommended
-      -- you can configure Hop the way you like here; see :h hop-config
+    'smoka7/hop.nvim',
+    version = "*",
     opts = { keys = 'etovxqpdygfblzhckisuran' }
   },
   -- this is more up to date than the default rust.vim that comes with neovim
@@ -93,9 +122,7 @@ local plugins = {
       'nvim-lua/plenary.nvim',
       'mfussenegger/nvim-dap'
     },
-    --config = function()
-    --end
-    },
+  },
   {
     'nvim-orgmode/orgmode',
     dependencies = {
@@ -128,7 +155,36 @@ local plugins = {
   {
     'goolord/alpha-nvim',
     config = function ()
-        require'alpha'.setup(require'alpha.themes.dashboard'.config)
+        local db = require'alpha.themes.startify'
+        local config = db.config
+        -- add sessions
+        local utils = require 'possession.utils'
+        local query = require 'possession.query'
+        local workspaces = {
+            {'Sessions', 'a', {'~/projects'}}
+        }
+        local get_layout = function()
+            return query.alpha_workspace_layout(workspaces, db.button, {})
+        end
+
+        local sessions = {
+            type = 'group',
+            val = utils.throttle(get_layout, 5000)
+        }
+        table.insert(config.layout, sessions)
+        -- helpers
+        local helpers = {
+            type = 'group',
+            val = {
+                {type = 'padding', val = 1},
+                {type = 'text', val = 'Helpers', opts = {hl = 'Type'}},
+                {type = 'padding', val = 1},
+                db.button("z", "鈴" .. " Lazy", ":Lazy<CR>"),
+            }
+        }
+        table.insert(config.layout, helpers)
+
+        require'alpha'.setup(config)
     end
   },
   {

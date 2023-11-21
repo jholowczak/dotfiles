@@ -18,6 +18,7 @@ local function navic_location()
 		return none_display
 	end
 end
+
 require('lualine').setup {
   options = {
     theme = 'horizon',

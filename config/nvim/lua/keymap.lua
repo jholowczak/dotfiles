@@ -29,6 +29,7 @@ Kmap("n", "<l>vl", ":lua tmux_send_last_command()<cr>")
 Kmap('n', '<l>dd', '<cmd>lua vim.diagnostic.open_float()<cr>')
 Kmap("n", "<l>ms", "<cmd>lua require('neogit').open({ kind = \"split\" })<cr>")
 vim.keymap.set({ "n", "x" }, "<leader>rs", function() require("ssr").open() end)
+Kmap("n", "<l>ns", ":Telescope possession list<cr>")
 
 
 
