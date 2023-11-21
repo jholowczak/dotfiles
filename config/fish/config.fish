@@ -63,6 +63,6 @@ end
 
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/skip/google-cloud-sdk/path.fish.inc' ]; . '/home/skip/google-cloud-sdk/path.fish.inc'; end
+if [ -f '~/google-cloud-sdk/path.fish.inc' ]; . '~/google-cloud-sdk/path.fish.inc'; end
 
-source ./extra.fish
+source ~/.config/fish/extra.fish
