@@ -29,6 +29,7 @@
     ~/.tmux/: tmux
     ~/.gdbinit: .gdbinit
     ~/.w3m: w3m
+    ~/.rizinrc: rizinrc
 
 - create:
     ~/build:
