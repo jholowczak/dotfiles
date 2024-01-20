@@ -5,6 +5,12 @@ require'nvim-treesitter.configs'.setup { modules = { "highlight" },
     enable = true,
     additional_vim_regex_highlighting = {'org'}, -- Required for spellcheck, some LaTex highlights and code block highlights that do not have ts grammar
   },
+  ident = { enable = true },
+  rainbow = { 
+      enable = true,
+      extended_mode = true,
+      max_file_lines = nil,
+  },
   auto_install = false,
   sync_install = false,
   ignore_install = {},

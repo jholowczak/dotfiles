@@ -4,10 +4,73 @@ require 'utils.keys'
 local lspconfig = require('lspconfig')
 local navic = require('nvim-navic')
 
--- Automatically start coq
---vim.lsp.settings.Lua.diagnostics.globals = {"vim"}
-vim.g.coq_settings = { auto_start = true }
+require("mason").setup({
+    ui = {
+        icons = {
+            package_installed = "",
+            package_pending = "",
+            package_uninstalled = "",
+        },
+    }
+})
+require("mason-lspconfig").setup()
 
+-- Completion Plugin Setup
+local cmp = require'cmp'
+cmp.setup({
+  -- Enable LSP snippets
+  snippet = {
+    expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    -- Add tab support
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<C-S-f>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    })
+  },
+  -- Installed sources:
+  sources = {
+    { name = 'path' },                              -- file paths
+    { name = 'nvim_lsp', keyword_length = 3 },      -- from language server
+    { name = 'nvim_lsp_signature_help'},            -- display function signatures with current parameter emphasized
+    { name = 'nvim_lua', keyword_length = 2},       -- complete neovim's Lua runtime API such vim.lsp.*
+    { name = 'buffer', keyword_length = 2 },        -- source current buffer
+    { name = 'vsnip', keyword_length = 2 },         -- nvim-cmp source for vim-vsnip 
+    { name = 'calc'},                               -- source for math calculation
+  },
+  window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+  },
+  formatting = {
+      fields = {'menu', 'abbr', 'kind'},
+      format = function(entry, item)
+          local menu_icon ={
+              nvim_lsp = 'λ',
+              vsnip = '⋗',
+              buffer = 'Ω',
+              path = '🖫',
+          }
+          item.menu = menu_icon[entry.source.name]
+          return item
+      end,
+  },
+})
+
+
+---- Automatically start coq
+----vim.lsp.settings.Lua.diagnostics.globals = {"vim"}
+--vim.g.coq_settings = { auto_start = true }
+--
 local my_on_attach = function(client, bufnr)
   if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufnr)
@@ -41,16 +104,12 @@ local servers = {
     lua_ls = {}
 }
 
+local default_c = require('cmp_nvim_lsp').default_capabilities()
 for lsp, _ in pairs(servers) do
-  lspconfig[lsp].setup(
-      require('coq').lsp_ensure_capabilities({
-        on_attach = my_on_attach,
-        flags = {
-          -- This will be the default in neovim 0.7+
-          debounce_text_changes = 150,
-        }
-      })
-  )
+  lspconfig[lsp].setup{
+    on_attach = my_on_attach,
+    capabilities = default_c,
+  }
 end
 
 -- set up rust-analyzer
@@ -63,11 +122,6 @@ rt.setup({
       -- Code action groups
       vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
       my_on_attach(client, bufnr)
-      local settings = vim.g.coq_settings or {}
-      if settings.auto_start then
-          local args = settings.auto_start == "shut-up" and {"--shut-up"} or {}
-          require'coq'.Now(unpack(args))
-      end
     end,
   },
 })

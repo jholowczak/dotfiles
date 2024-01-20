@@ -1,5 +1,6 @@
 local opt = vim.opt
 local cmd = vim.cmd
+local api = vim.api
 
 opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
@@ -39,4 +40,15 @@ opt.listchars:append "space:⋅"
 opt.listchars:append "eol:↴"
 
 -- gitsigns coloring
-vim.api.nvim_set_hl(0, "SignColumn", {bg = "NONE", ctermbg="NONE"})
+api.nvim_set_hl(0, "SignColumn", {bg = "NONE", ctermbg="NONE"})
+
+-- lsp
+opt.completeopt = {'menuone', 'noselect', 'noinsert'}
+opt.shortmess = vim.opt.shortmess + { c = true}
+api.nvim_set_option('updatetime', 300) 
+api.nvim_create_autocmd('CursorHold', {
+    pattern = "*",
+    callback = function()
+        vim.diagnostic.open_float(nil, { focusable = false })
+    end,
+})

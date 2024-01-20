@@ -18,23 +18,24 @@ local plugins = {
   { "folke/neodev.nvim", opts = {} },
   {'nvim-treesitter/nvim-treesitter'},
   'neovim/nvim-lspconfig', -- Collection of configurations for the built-in LSP client
-  {'ms-jpq/coq_nvim', build = ":COQdeps"},
-  'ms-jpq/coq.artifacts',
-  'ms-jpq/coq.thirdparty',
+  'williamboman/mason.nvim',
+  'williamboman/mason-lspconfig.nvim',
+  -- Completion framework:
+  'hrsh7th/nvim-cmp',
+
+  -- LSP completion source:
+  'hrsh7th/cmp-nvim-lsp',
+
+  -- Useful completion sources:
+  'hrsh7th/cmp-nvim-lua',
+  'hrsh7th/cmp-nvim-lsp-signature-help',
+  'hrsh7th/cmp-vsnip',
+  'hrsh7th/cmp-path',
+  'hrsh7th/cmp-buffer',
+  'hrsh7th/vim-vsnip',
+
   "ellisonleao/gruvbox.nvim",
   'nvim-telescope/telescope.nvim',
-  --{'nvimdev/dashboard-nvim',
-  --  event = 'VimEnter',
-  --  config = function()
-  --      require('dashboard').setup {
-  --          theme = 'hyper',
-  --          config = {
-  --              project = { enable = true, limit = 8, action = 'Telescope projects' }
-  --          }
-  --      }
-  --  end,
-  --  dependencies = {{'nvim-tree/nvim-web-devicons'}}
-  --},
   'edluffy/specs.nvim',
   'nvim-tree/nvim-web-devicons',
   {
