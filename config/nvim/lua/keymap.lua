@@ -27,10 +27,12 @@ Kmap("n", "<l>vp", ":lua tmux_send_command('')<cr>")
 Kmap("n", "<l>vl", ":lua tmux_send_last_command()<cr>")
 --Kmap("n", "<l>mb", ":lua tmux_send_command('git blame -L ' .. vim.fn.line('.') .. ',' .. vim.fn.line('.') .. ' ' .. vim.fn.expand('%:p'))<cr>", opts)
 Kmap('n', '<l>dd', '<cmd>lua vim.diagnostic.open_float()<cr>')
-Kmap("n", "<l>ms", "<cmd>lua require('neogit').open({ kind = \"split\" })<cr>")
 vim.keymap.set({ "n", "x" }, "<leader>rs", function() require("ssr").open() end)
 Kmap("n", "<l>ns", ":Telescope possession list<cr>")
 
+--  GIT
+Kmap("n", "<l>ms", "<cmd>lua require('neogit').open({ kind = \"split\" })<cr>")
+Kmap("n", "<l>mb", ":ToggleBlame<cr>")
 
 
 Kmap("n", "<l><l>b", "<cmd>HopWordBC<CR>")

@@ -146,6 +146,7 @@ local plugins = {
       })
     end,
   },
+  "FabijanZulj/blame.nvim",
   {
     "NeogitOrg/neogit",
     dependencies = {
