@@ -6,9 +6,6 @@ require 'lsp'
 require 'keymap'
 require 'layout'
 
--- Load custom tree-sitter grammar for org filetype
-require('orgmode').setup_ts_grammar()
-
 -- required for project.nvim to work with nvim-tree
 require("nvim-tree").setup({
   -- sync_root_with_cwd = true,
