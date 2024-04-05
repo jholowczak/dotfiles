@@ -52,6 +52,7 @@ cmp.setup({
       documentation = cmp.config.window.bordered(),
   },
   formatting = {
+      expandable_indicator = true,
       fields = {'menu', 'abbr', 'kind'},
       format = function(entry, item)
           local menu_icon ={
@@ -152,12 +153,12 @@ vim.g.rustaceanvim = {
   server = {
     on_attach = function(client, bufnr)
       -- Hover actions
-      vim.keymap.set("n", "<S-tab>", vim.lsp.buf.hover())
+      --vim.keymap.set("n", "<S-tab>", vim.lsp.buf.hover())
       -- Code action groups
       --vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
       my_on_attach(client, bufnr)
     end,
-    settings = {
+    default_settings = {
         ["rust-analyzer"] = {}
     },
   }
