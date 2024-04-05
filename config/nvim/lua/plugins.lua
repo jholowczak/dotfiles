@@ -122,12 +122,12 @@ local plugins = {
   -- this is more up to date than the default rust.vim that comes with neovim
   'rust-lang/rust.vim',
   {
-    'simrat39/rust-tools.nvim',
+    'mrcjkb/rustaceanvim',
+    version = '^4', -- Recommended
+    ft = { 'rust' },
     dependencies = {
-      'neovim/nvim-lspconfig',
-      'nvim-lua/plenary.nvim',
       'mfussenegger/nvim-dap'
-    },
+    }
   },
   {
     'nvim-orgmode/orgmode',

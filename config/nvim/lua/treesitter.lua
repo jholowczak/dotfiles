@@ -14,9 +14,9 @@ require'nvim-treesitter.configs'.setup { modules = { "highlight" },
   auto_install = false,
   sync_install = false,
   ignore_install = {},
-  ensure_installed = {'org', 'go', 'gomod', 'html', 'latex', 'rust', 'c', 'python',
+  ensure_installed = {'go', 'gomod', 'html', 'latex', 'rust', 'c', 'python',
     'toml', 'lua', 'json', 'jsonnet', 'v', 'yaml', 'r', 'regex', 'sql', 'zig',
     'javascript', 'make', 'hcl', 'haskell', 'diff', 'cpp', 'css',
-    'bash', 'fish', 'dockerfile', 'nix', 'gitignore', 'markdown'
-    }, -- Or run :TSUpdate org
+    'bash', 'fish', 'dockerfile', 'nix', 'gitignore', 'markdown',
+    'ocaml'}, -- Or run :TSUpdate org
 }

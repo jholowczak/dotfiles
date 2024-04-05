@@ -71,6 +71,33 @@ cmp.setup({
 ----vim.lsp.settings.Lua.diagnostics.globals = {"vim"}
 --vim.g.coq_settings = { auto_start = true }
 --
+local sign = function(opts)
+  vim.fn.sign_define(opts.name, {
+    texthl = opts.name,
+    text = opts.text,
+    numhl = ''
+  })
+end
+
+sign({name = 'DiagnosticSignError', text = ''})
+sign({name = 'DiagnosticSignWarn', text = ''})
+sign({name = 'DiagnosticSignHint', text = ''})
+sign({name = 'DiagnosticSignInfo', text = ''})
+
+vim.diagnostic.config({
+    virtual_text = false,
+    signs = true,
+    update_in_insert = true,
+    underline = true,
+    severity_sort = false,
+    float = {
+        border = 'rounded',
+        source = 'always',
+        header = '',
+        prefix = '',
+    },
+})
+
 local my_on_attach = function(client, bufnr)
   if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufnr)
@@ -90,7 +117,6 @@ end
 -- ignore rust-analyzer here as it will be setup by rust-tools
 local servers = {
     clangd = {},
-    gopls = {},
     terraformls = {},
     pylsp = {},
     zls = {},
@@ -104,7 +130,7 @@ local servers = {
     lua_ls = {}
 }
 
-local default_c = require('cmp_nvim_lsp').default_capabilities()
+local default_c = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 for lsp, _ in pairs(servers) do
   lspconfig[lsp].setup{
     on_attach = my_on_attach,
@@ -112,17 +138,28 @@ for lsp, _ in pairs(servers) do
   }
 end
 
+require('go').setup({
+    lsp_cfg = {
+        on_attach = function(c, b)
+            my_on_attach(c, b)
+        end,
+        capabilities = default_c
+    }
+})
+
 -- set up rust-analyzer
-local rt = require('rust-tools')
-rt.setup({
+vim.g.rustaceanvim = {
   server = {
     on_attach = function(client, bufnr)
       -- Hover actions
-      vim.keymap.set("n", "<S-tab>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      vim.keymap.set("n", "<S-tab>", vim.lsp.buf.hover())
       -- Code action groups
-      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+      --vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
       my_on_attach(client, bufnr)
     end,
-  },
-})
+    settings = {
+        ["rust-analyzer"] = {}
+    },
+  }
+}
 --vim.g.coq_settings = { limits = {completion_auto_timeout = 0.2 } }
