@@ -1,14 +1,4 @@
 tmux/.tmux/resurrect
-nvim/.local/share/nvim/shada/main.shada
-nvim/.config/nvim/plugged
-nvim/.config/nvim/swap
-nvim/.config/nvim/.netrwhist
-nvim/.config/coc/mru
-nvim/.config/coc/snippets-mru
-nvim/.config/coc/history.json
-nvim/.config/coc/lists
-nvim/.local
-nvim/.config/nvim/plugin/
 vim/.vim/session
 vim/.vim/bundle
 plug.vim.old
@@ -24,5 +14,6 @@ fish/.config/fish/functions/*.fish
 fish/.config/fish/conf.d/virtualfish-loader.fish
 tmux/plugins/tmux*
 config/nvim/lua/.luarc.json
+config/nvim/.luarc.json
 config/eww/scripts
 config/fish/extra.fish
