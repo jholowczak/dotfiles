@@ -147,7 +147,7 @@ local configFiles = {
     {k="<l>ck", t="edit", p="~/.config/nvim/lua/keymap.lua"},
     {k="<l>cp", t="edit", p="~/.config/nvim/lua/plugins.lua"},
     {k="<l>cl", t="edit", p="~/.config/nvim/lua/lsp.lua"},
-    {k="<l>cc", t="source", p="~/.config/nvim/init.lua"},
+    {k="<l>cR", t="source", p="~/.config/nvim/init.lua"},
 }
 
 for _, c in pairs(configFiles) do

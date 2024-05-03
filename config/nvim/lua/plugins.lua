@@ -129,6 +129,7 @@ local plugins = {
       'mfussenegger/nvim-dap'
     }
   },
+  { 'rcarriga/nvim-dap-ui', dependencies = {'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio'} },
   {
     'nvim-orgmode/orgmode',
     dependencies = {
@@ -205,6 +206,7 @@ local plugins = {
     ft = {"go", 'gomod'},
     build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
   },
+  'jamestthompson3/nvim-remote-containers',
 }
 
 local opts = {}

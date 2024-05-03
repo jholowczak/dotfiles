@@ -19,6 +19,10 @@ local function navic_location()
 	end
 end
 
+local function currentContainer()
+    return vim.g.currentContainer
+end
+
 require('lualine').setup {
   options = {
     theme = 'onedark',
@@ -37,7 +41,7 @@ require('lualine').setup {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff', 'diagnostics'},
     lualine_c = {'filename', "lsp_progress"},
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_x = {currentContainer, 'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },

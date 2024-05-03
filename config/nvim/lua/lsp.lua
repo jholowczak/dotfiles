@@ -164,3 +164,10 @@ vim.g.rustaceanvim = {
   }
 }
 --vim.g.coq_settings = { limits = {completion_auto_timeout = 0.2 } }
+
+-- custom filetypes
+vim.filetype.add({
+    filename = {
+        ['devcontainer.json'] = 'jsonc',
+    },
+})
