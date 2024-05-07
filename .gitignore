@@ -6,7 +6,6 @@ plug.vim.old
 *.diff
 fish/.config/fish/fishd*
 fish/.config/fish/fish_history
-nvim
 emacs/*
 !emacs/.emacs.d/init.el
 nushell/.config/nushell/history.txt

@@ -156,7 +156,11 @@ local plugins = {
     config = true
   },
   'rcarriga/nvim-notify',
-  'alexghergh/nvim-tmux-navigation',
+  {'numToStr/Navigator.nvim',
+    config = function()
+        require('Navigator').setup()
+    end
+  },
   {
     'goolord/alpha-nvim',
     config = function ()

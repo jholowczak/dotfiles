@@ -46,13 +46,13 @@ Kmap("v", "<l><l>b", "<cmd>HopWordBC<CR>")
 Kmap("v", "<l><l>j", "<cmd>HopLineAC<CR>")
 Kmap("v", "<l><l>k", "<cmd>HopLineBC<CR>")
 
--- TMUX movement keybinds
-local tmux = require('nvim-tmux-navigation')
-Kmap('n', "<C-h>", tmux.NvimTmuxNavigateLeft)
-Kmap('n', "<C-j>", tmux.NvimTmuxNavigateDown)
-Kmap('n', "<C-k>", tmux.NvimTmuxNavigateUp)
-Kmap('n', "<C-l>", tmux.NvimTmuxNavigateRight)
-Kmap('n', "<C-\\>", tmux.NvimTmuxNavigateLastActive)
+-- multiplexer movement keybinds
+local nav = require("Navigator")
+Kmap('n', "<C-h>", nav.left)
+Kmap('n', "<C-j>", nav.down)
+Kmap('n', "<C-k>", nav.up)
+Kmap('n', "<C-l>", nav.right)
+Kmap('n', "<C-\\>", nav.previous)
 --Kmap('n', "<C-Space>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateNext()<cr>", opts)
 --
 -- Language-specific binds
