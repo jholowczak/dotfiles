@@ -70,7 +70,7 @@ wt.on(
 wt.on('update-status', function(window, pane)
   window:set_left_status(wt.format {
     { Background = { Color = gbgrey3 } },
-    { Text = ' ' .. window:get_title() .. ' ' },
+    { Text = ' ' .. ' ' },
     { Foreground = { Color = gbgrey3 } },
     { Background = { Color = gbgrey } },
     { Text = nf.pl_left_hard_divider },
@@ -93,8 +93,11 @@ wt.on('update-right-status', function(window, pane)
 end)
 
 -- keys
-c.leader = { key = ' ', mods = 'CTRL', timeout_milliseconds = 1000 }
-c.keys = require 'keys'
+local keys = require('keys')
+c.leader = keys.leader 
+c.keys = keys.keys
+
+c.warn_about_missing_glyphs = false
 
 -- merge tabs config
 return c
