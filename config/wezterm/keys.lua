@@ -31,7 +31,7 @@ M.keys = {
     { key = 'l', mods = 'CTRL', action = act.EmitEvent('ActivatePaneDirection-right') },
     { key = ',', mods = 'LEADER', action = act.PromptInputLine {
         description = '(rename-tab)',
-        action = wt.action_callback(function(window, pane, line)
+        action = wt.action_callback(function(window, _, line)
             if line then
                 window:active_tab():set_title(line)
             end

@@ -1,4 +1,5 @@
 local wt = require 'wezterm'
+local mux = wt.mux
 
 local c = wt.config_builder()
 
@@ -8,8 +9,6 @@ c.color_scheme = color_scheme
 -- useful formatting vars
 local nf = wt.nerdfonts
 local gb = wt.color.get_builtin_schemes()[color_scheme]
-local host = wt.hostname()
-
 -- font and color scheme
 c.font = wt.font_with_fallback({
     {
@@ -68,9 +67,10 @@ wt.on(
 
 -- status
 wt.on('update-status', function(window, pane)
+  local title = window:mux_window():get_title()
   window:set_left_status(wt.format {
     { Background = { Color = gbgrey3 } },
-    { Text = ' ' .. ' ' },
+    { Text = ' ' .. title .. ' ' },
     { Foreground = { Color = gbgrey3 } },
     { Background = { Color = gbgrey } },
     { Text = nf.pl_left_hard_divider },
@@ -79,6 +79,12 @@ end)
 wt.on('update-right-status', function(window, pane)
   local date = wt.strftime '%Y-%m-%d'
   local time = wt.strftime '%H:%M'
+  local host = mux.get_domain(pane:get_domain_name()):name()
+  if host == "local" then
+    host = wt.hostname()
+  else
+    host = string.gsub(host, '(.*):(.*)', '%2')
+  end
 
   window:set_right_status(wt.format {
     { Foreground = { Color = gb.cursor_fg } },
