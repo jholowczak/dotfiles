@@ -6,7 +6,7 @@ plug.vim.old
 *.diff
 fish/.config/fish/fishd*
 fish/.config/fish/fish_history
-nvim/.local/share/nvim/swap/
+nvim
 emacs/*
 !emacs/.emacs.d/init.el
 nushell/.config/nushell/history.txt
@@ -17,3 +17,4 @@ config/nvim/lua/.luarc.json
 config/nvim/.luarc.json
 config/eww/scripts
 config/fish/extra.fish
+config/gtk-*.0/**.svg

@@ -46,7 +46,9 @@ function vterm_printf;
 end
 
 if test -n "$DESKTOP_SESSION"
-    set (gnome-keyring-daemon --start | string split "=")
+    if type -q gnome-keyring-daemon
+        set (gnome-keyring-daemon --start | string split "=")
+    end
 end
 # tabtab source for packages
 # uninstall by removing these lines
@@ -56,7 +58,7 @@ end
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-if test -e ~/miniconda3/bin/conda
+if test -e ~/miniconda3/bin/conda; and not set -q NIX_PATH
     eval ~/miniconda3/bin/conda "shell.fish" "hook" $argv | source
 end
 # <<< conda initialize <<<
