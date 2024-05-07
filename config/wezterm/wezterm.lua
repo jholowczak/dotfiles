@@ -67,7 +67,7 @@ wt.on(
 
 -- status
 wt.on('update-status', function(window, pane)
-  local title = window:mux_window():get_title()
+  local title = pane:get_title()
   window:set_left_status(wt.format {
     { Background = { Color = gbgrey3 } },
     { Text = ' ' .. title .. ' ' },
@@ -99,9 +99,9 @@ wt.on('update-right-status', function(window, pane)
 end)
 
 -- keys
-local keys = require('keys')
-c.leader = keys.leader 
-c.keys = keys.keys
+local keymap = require('keymap')
+c.leader = keymap.leader
+c.keys = keymap.keys
 
 c.warn_about_missing_glyphs = false
 
