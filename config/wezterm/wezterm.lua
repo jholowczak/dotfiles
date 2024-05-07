@@ -57,7 +57,7 @@ wt.on(
       { Foreground = { Color = gbgrey } },
       { Text = nf.pl_left_hard_divider },
       { Foreground = { Color = gb.selection_bg } },
-      { Text = ' ' .. tab.tab_id .. ' ' .. nf.pl_left_soft_divider .. ' ' .. title .. ' ' },
+      { Text = ' ' .. tab.tab_index .. ' ' .. nf.pl_left_soft_divider .. ' ' .. title .. ' ' },
       { Background = { Color = gbgrey } },
       { Foreground = { Color = gbgrey2 } },
       { Text = nf.pl_left_hard_divider },
