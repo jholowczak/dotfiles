@@ -22,12 +22,12 @@ alias tmux="tmux -2"
 #end
 
 # SSH tmux login
-if test -n "$SSH_CONNECTION"; and test (env | grep NO_SSH_TMUX | wc -l) -eq 0
+if test -n "$SSH_CONNECTION"; and test (env | grep NO_SSH_TMUX | wc -l) -eq 0; and test (env | grep WEZTERM | wc -l) -eq 0
     if test -z "$TMUX"
         tmux attach-session -t (hostname) || tmux new-session -s (hostname)
     end
 else
-    if test -z "$TMUX"
+    if test -z "$TMUX"; and test (env | grep WEZTERM | wc -l) -eq 0
         and test (tmux list-session | grep local | wc -l) -ne 1
             tmux attach-session -t local || tmux new-session -s local
     end
