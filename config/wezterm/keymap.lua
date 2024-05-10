@@ -21,6 +21,7 @@ end)
 M.leader = { key = ' ', mods = 'CTRL', timeout_milliseconds = 1000 }
 M.keys = {
     { key = 'q', mods = 'LEADER', action = act.CloseCurrentPane {confirm = false} },
+    { key = 'Q', mods = 'LEADER|SHIFT', action = act.CloseCurrentTab {confirm = true} },
     { key = 'n', mods = 'LEADER', action = act.ActivateTabRelative(1) },
     { key = 'p', mods = 'LEADER', action = act.ActivateTabRelative(-1) },
     { key = 'c', mods = 'LEADER', action = act.SpawnTab 'CurrentPaneDomain' },
