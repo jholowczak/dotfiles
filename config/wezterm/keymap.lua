@@ -1,6 +1,5 @@
 local wt = require 'wezterm'
 local act = wt.action
-local mux = wt.mux
 local nav = require 'navigation'
 local util = require 'util'
 
@@ -13,7 +12,8 @@ M.keys = {
     { key = 'n', mods = 'LEADER',       action = act.ActivateTabRelative(1) },
     { key = 'p', mods = 'LEADER',       action = act.ActivateTabRelative(-1) },
     { key = 'c', mods = 'LEADER',       action = act.SpawnTab 'CurrentPaneDomain' },
-    { key = 'C', mods = 'LEADER|SHIFT', action = wt.action_callback(util.openDomainTab)},
+    { key = 'C', mods = 'LEADER|SHIFT', action = wt.action_callback(util.openTabInDomain)},
+    { key = 'r', mods = 'LEADER',       action = wt.action_callback(util.openRemoteDomain)},
     { key = '|', mods = 'LEADER|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' }, },
     { key = '-', mods = 'LEADER',       action = act.SplitVertical { domain = 'CurrentPaneDomain' }, },
     { key = ',', mods = 'LEADER',       action = act.PromptInputLine { description = '(rename-tab)', action = wt.action_callback(util.setTabTitle)}},
