@@ -24,4 +24,10 @@ M.openDomainTab = function(window, pane)
     pane)
 end
 
+M.setTabTitle = function(window, _, line)
+    if line then
+        window:active_tab():set_title(line)
+    end
+end
+
 return M
