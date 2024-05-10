@@ -2,6 +2,7 @@ local wt = require 'wezterm'
 local mux = wt.mux
 
 local c = wt.config_builder()
+c.check_for_updates = false
 
 local color_scheme = "Gruvbox dark, medium (base16)"
 c.color_scheme = color_scheme

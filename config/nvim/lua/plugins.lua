@@ -158,7 +158,7 @@ local plugins = {
   'rcarriga/nvim-notify',
   {'numToStr/Navigator.nvim',
     config = function()
-        require('Navigator').setup()
+        require('Navigator').setup({})
     end
   },
   {
