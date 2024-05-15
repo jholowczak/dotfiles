@@ -34,7 +34,8 @@ Kmap("n", "<l>ns", ":Telescope possession list<cr>")
 Kmap("n", "<l>ms", function()
     require('neogit').open({ kind = "split" })
 end)
-Kmap("n", "<l>mb", ":ToggleBlame<cr>")
+Kmap("n", "<l>mb", ":BlameToggle<cr>")
+Kmap("n", "<l>mB", ":BlameToggle virtual<cr>")
 
 
 Kmap("n", "<l><l>b", "<cmd>HopWordBC<CR>")

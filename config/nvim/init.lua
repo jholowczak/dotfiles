@@ -5,6 +5,7 @@ require 'treesitter'
 require 'lsp'
 require 'keymap'
 require 'layout'
+require 'ts'
 
 -- required for project.nvim to work with nvim-tree
 require("nvim-tree").setup({

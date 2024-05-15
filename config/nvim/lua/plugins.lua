@@ -144,7 +144,11 @@ local plugins = {
       })
     end,
   },
-  "FabijanZulj/blame.nvim",
+  {"FabijanZulj/blame.nvim",
+    config = function()
+        require("blame").setup()
+    end
+  },
   {
     "NeogitOrg/neogit",
     dependencies = {
@@ -212,6 +216,7 @@ local plugins = {
     build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
   },
   'jamestthompson3/nvim-remote-containers',
+  'puremourning/vimspector',
 }
 
 local opts = {}

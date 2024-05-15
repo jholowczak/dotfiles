@@ -106,13 +106,13 @@ local my_on_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  Kmap('n', '<l><tab>', '<cmd>lua vim.lsp.buf.hover()<cr>', nil, bufnr)
-  Kmap('n', '<l>fj', '<cmd>lua vim.lsp.buf.definition()<cr>', nil, bufnr)
-  Kmap('n', '<l>fk', ':pop<cr>', nil, bufnr)
-  Kmap('n', '<l>fl', '<cmd>lua vim.lsp.buf.references()<cr>', nil, bufnr)
-  Kmap('n', '<l>fr', '<cmd>lua vim.lsp.buf.rename()<cr>', nil, bufnr)
-  Kmap('n', '<l>fi', '<cmd>lua vim.lsp.buf.implementation()<cr>', nil, bufnr)
-  Kmap('n', '<l>fh', '<cmd>lua vim.lsp.buf.signature_help()<cr>', nil, bufnr)
+  Kmap('n', '<l><tab>', '<cmd>lua vim.lsp.buf.hover()<cr>', { buffer = bufnr})
+  Kmap('n', '<l>fj', '<cmd>lua vim.lsp.buf.definition()<cr>', { buffer = bufnr})
+  Kmap('n', '<l>fk', ':pop<cr>', { buffer = bufnr})
+  Kmap('n', '<l>fl', '<cmd>lua vim.lsp.buf.references()<cr>', { buffer = bufnr})
+  Kmap('n', '<l>fr', '<cmd>lua vim.lsp.buf.rename()<cr>', { buffer = bufnr})
+  Kmap('n', '<l>fi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { buffer = bufnr})
+  Kmap('n', '<l>fh', '<cmd>lua vim.lsp.buf.signature_help()<cr>', { buffer = bufnr})
 end
 
 -- ignore rust-analyzer here as it will be setup by rust-tools
