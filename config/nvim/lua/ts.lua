@@ -1,5 +1,6 @@
 -- telescope configuration
-require("telescope").setup {
+local telescope = require('telescope')
+telescope.setup {
   extensions = {
     ["ui-select"] = {
       require("telescope.themes").get_dropdown {
@@ -10,3 +11,5 @@ require("telescope").setup {
     ["possession"] = {}
   }
 }
+
+telescope.load_extension('ui-select')

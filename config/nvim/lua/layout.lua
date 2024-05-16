@@ -7,7 +7,7 @@
 -- vim.g.airline_theme = 'hybrid'
 local navic = require('nvim-navic')
 local function session_name()
-  return require('possession.session').session_name or ''
+  return require('possession.session').get_session_name() or ''
 end
 local function navic_location()
 	local none_display = " "

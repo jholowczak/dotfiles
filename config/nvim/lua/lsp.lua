@@ -1,6 +1,9 @@
 -- lsp configuration
 
 require 'utils.keys'
+-- for lsp support of configs
+require('neodev').setup()
+
 local lspconfig = require('lspconfig')
 local navic = require('nvim-navic')
 
@@ -14,6 +17,13 @@ require("mason").setup({
     }
 })
 require("mason-lspconfig").setup()
+
+local pop = function(close)
+    local tagstack = vim.fn.gettagstack()
+    if vim.tbl_isempty(tagstack) then
+        return
+    end
+end
 
 -- Completion Plugin Setup
 local cmp = require'cmp'
@@ -103,16 +113,20 @@ local my_on_attach = function(client, bufnr)
   if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufnr)
   end
+  if client.server_capabilities.inlayHintProvider then
+      vim.g.inlay_hints_visible = true
+      vim.lsp.inlay_hint.enable(true, {bufnr = bufnr})
+  end
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  Kmap('n', '<l><tab>', '<cmd>lua vim.lsp.buf.hover()<cr>', { buffer = bufnr})
-  Kmap('n', '<l>fj', '<cmd>lua vim.lsp.buf.definition()<cr>', { buffer = bufnr})
+  Kmap('n', '<l><tab>', vim.lsp.buf.hover, { buffer = bufnr})
+  Kmap('n', '<l>fj', vim.lsp.buf.definition, { buffer = bufnr})
   Kmap('n', '<l>fk', ':pop<cr>', { buffer = bufnr})
-  Kmap('n', '<l>fl', '<cmd>lua vim.lsp.buf.references()<cr>', { buffer = bufnr})
-  Kmap('n', '<l>fr', '<cmd>lua vim.lsp.buf.rename()<cr>', { buffer = bufnr})
-  Kmap('n', '<l>fi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { buffer = bufnr})
-  Kmap('n', '<l>fh', '<cmd>lua vim.lsp.buf.signature_help()<cr>', { buffer = bufnr})
+  Kmap('n', '<l>fl', vim.lsp.buf.references, { buffer = bufnr})
+  Kmap('n', '<l>fr', vim.lsp.buf.rename, { buffer = bufnr})
+  Kmap('n', '<l>fi', vim.lsp.buf.implementation, { buffer = bufnr})
+  Kmap('n', '<l>fh', vim.lsp.buf.signature_help, { buffer = bufnr})
 end
 
 -- ignore rust-analyzer here as it will be setup by rust-tools
@@ -131,7 +145,7 @@ local servers = {
     lua_ls = {}
 }
 
-local default_c = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+local default_c = require('cmp_nvim_lsp').default_capabilities()
 for lsp, _ in pairs(servers) do
   lspconfig[lsp].setup{
     on_attach = my_on_attach,
@@ -151,11 +165,20 @@ require('go').setup({
 -- set up rust-analyzer
 vim.g.rustaceanvim = {
   server = {
+    capabilities = default_c,
     on_attach = function(client, bufnr)
       -- Hover actions
       --vim.keymap.set("n", "<S-tab>", vim.lsp.buf.hover())
+      local ha = function()
+        vim.cmd.RustLsp({'hover', 'actions'})
+      end
+      Kmap("n", "<S-tab>", ha, { buffer = bufnr })
       -- Code action groups
       --vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+      local ca = function()
+          vim.cmd.RustLsp('codeAction')
+      end
+      Kmap("n", "<l>a", ca, { buffer = bufnr })
       my_on_attach(client, bufnr)
     end,
     default_settings = {
