@@ -17,6 +17,10 @@ M.keys = {
     { key = '|', mods = 'LEADER|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' }, },
     { key = '-', mods = 'LEADER',       action = act.SplitVertical { domain = 'CurrentPaneDomain' }, },
     { key = ',', mods = 'LEADER',       action = act.PromptInputLine { description = '(rename-tab)', action = wt.action_callback(util.setTabTitle)}},
+    { key = 'PageUp', mods = 'SHIFT',   action = act.ScrollByPage(-1) },
+    { key = 'PageDown', mods = 'SHIFT', action = act.ScrollByPage(1) },
+    { key = 'PageUp', mods = 'LEADER',   action = act.ScrollByPage(-1) },
+    { key = 'PageDown', mods = 'LEADER', action = act.ScrollByPage(1) },
     -- Navigator.nvim keybinds
     { key = 'h', mods = 'CTRL',         action = act.EmitEvent('ActivatePaneDirection-left') },
     { key = 'j', mods = 'CTRL',         action = act.EmitEvent('ActivatePaneDirection-down') },
