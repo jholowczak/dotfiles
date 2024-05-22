@@ -32,6 +32,7 @@ cmp.setup({
   snippet = {
     expand = function(args)
         vim.fn["vsnip#anonymous"](args.body)
+        vim.snippet.expand(args.body)
     end,
   },
   mapping = {
@@ -48,7 +49,7 @@ cmp.setup({
     })
   },
   -- Installed sources:
-  sources = {
+  sources = cmp.config.sources({
     { name = 'path' },                              -- file paths
     { name = 'nvim_lsp', keyword_length = 3 },      -- from language server
     { name = 'nvim_lsp_signature_help'},            -- display function signatures with current parameter emphasized
@@ -56,7 +57,7 @@ cmp.setup({
     { name = 'buffer', keyword_length = 2 },        -- source current buffer
     { name = 'vsnip', keyword_length = 2 },         -- nvim-cmp source for vim-vsnip 
     { name = 'calc'},                               -- source for math calculation
-  },
+  }),
   window = {
       completion = cmp.config.window.bordered(),
       documentation = cmp.config.window.bordered(),
@@ -103,7 +104,7 @@ vim.diagnostic.config({
     severity_sort = false,
     float = {
         border = 'rounded',
-        source = 'always',
+        source = true,
         header = '',
         prefix = '',
     },
@@ -127,6 +128,7 @@ local my_on_attach = function(client, bufnr)
   Kmap('n', '<l>fr', vim.lsp.buf.rename, { buffer = bufnr})
   Kmap('n', '<l>fi', vim.lsp.buf.implementation, { buffer = bufnr})
   Kmap('n', '<l>fh', vim.lsp.buf.signature_help, { buffer = bufnr})
+  Kmap('n', '<l>HH', function() vim.g.inlay_hints_visible = not vim.g.inlay_hints_visible end, { buffer = bufnr})
 end
 
 -- ignore rust-analyzer here as it will be setup by rust-tools
