@@ -19,8 +19,23 @@ local function navic_location()
 	end
 end
 
+local function arduino_status()
+  if vim.bo.filetype ~= "arduino" then
+    return ""
+  end
+  local port = vim.fn["arduino#GetPort"]()
+  local line = string.format("[%s]", vim.g.arduino_board)
+  if vim.g.arduino_programmer ~= "" then
+    line = line .. string.format(" [%s]", vim.g.arduino_programmer)
+  end
+  if port ~= 0 then
+    line = line .. string.format(" (%s:%s)", port, vim.g.arduino_serial_baud)
+  end
+  return line
+end
+
 local function currentContainer()
-    return vim.g.currentContainer
+    return vim.g.currentContainer or ""
 end
 
 require('lualine').setup {
@@ -35,7 +50,7 @@ require('lualine').setup {
     lualine_c = {navic_location},
     lualine_x = {session_name},
     lualine_y = {},
-    lualine_z = {}
+    lualine_z = {arduino_status}
   },
   sections = {
     lualine_a = {'mode'},

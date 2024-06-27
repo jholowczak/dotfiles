@@ -226,6 +226,8 @@ local plugins = {
       "nvim-treesitter/nvim-treesitter"
     }
   },
+  'stevearc/vim-arduino',
+  'jpalardy/vim-slime',
 }
 
 local opts = {}

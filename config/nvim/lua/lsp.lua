@@ -144,7 +144,8 @@ local servers = {
     marksman = {},
     html = {},
     texlab = {},
-    lua_ls = {}
+    lua_ls = {},
+    arduino_language_server = {}
 }
 
 local default_c = require('cmp_nvim_lsp').default_capabilities()

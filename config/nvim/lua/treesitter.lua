@@ -6,7 +6,7 @@ require'nvim-treesitter.configs'.setup { modules = { "highlight" },
     additional_vim_regex_highlighting = {'org'}, -- Required for spellcheck, some LaTex highlights and code block highlights that do not have ts grammar
   },
   ident = { enable = true },
-  rainbow = { 
+  rainbow = {
       enable = true,
       extended_mode = true,
       max_file_lines = nil,
@@ -18,5 +18,5 @@ require'nvim-treesitter.configs'.setup { modules = { "highlight" },
     'toml', 'lua', 'json', 'jsonnet', 'jsonc', 'v', 'yaml', 'r', 'regex', 'sql', 'zig',
     'javascript', 'make', 'hcl', 'haskell', 'diff', 'cpp', 'css',
     'bash', 'fish', 'dockerfile', 'nix', 'gitignore', 'markdown',
-    'ocaml'}, -- Or run :TSUpdate org
+    'ocaml', 'arduino'}, -- Or run :TSUpdate org
 }

@@ -157,6 +157,31 @@ local fileTypeBindings = {
               buf = true },
           }
     },
+    {   pattern = { "arduino" },
+        binds = {
+            { keys = "<l>aa",
+              cmd = "<cmd>ArduinoAttach<CR>",
+              buf = true },
+            { keys = "<l>av",
+              cmd = "<cmd>ArduinoVerify<CR>",
+              buf = true },
+            { keys = "<l>au",
+              cmd = "<cmd>ArduinoUpload<CR>",
+              buf = true },
+            { keys = "<l>aus",
+              cmd = "<cmd>ArduinoUploadAndSerial<CR>",
+              buf = true },
+            { keys = "<l>as",
+              cmd = "<cmd>ArduinoSerial<CR>",
+              buf = true },
+            { keys = "<l>ab",
+              cmd = "<cmd>ArduinoChooseBoard<CR>",
+              buf = true },
+            { keys = "<l>ap",
+              cmd = "<cmd>ArduinoChooseProgrammer<CR>",
+              buf = true },
+        }
+    },
 }
 
 for _, lang in pairs(fileTypeBindings) do
