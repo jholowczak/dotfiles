@@ -16,6 +16,7 @@ config/nvim/lua/.luarc.json
 config/nvim/.luarc.json
 config/eww/scripts
 config/fish/extra.fish
+config/fish/extra_functions
 config/gtk-*.0/**.svg
 w3m/cookie
 config/nvim/lazy-lock.json

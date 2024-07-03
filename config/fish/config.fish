@@ -5,6 +5,8 @@ set -gx _JAVA_AWT_WM_NONREPARENTING 1
 set -gx CONDA_AUTO_ACTIVATE_BASE false
 set -gx XCURSOR_SIZE 16
 set -gx PWNDBG_VENV_PATH PWNDBG_PLEASE_SKIP_VENV
+set -gx fish_function_path ~/.config/fish/extra_functions/ $fish_function_path
+set -gx EDITOR nvim
 # set -gx PATH "/opt/anaconda/bin" $PATH
 
 #eval (python -m virtualfish compat_aliases auto_activation global_requirements projects)
