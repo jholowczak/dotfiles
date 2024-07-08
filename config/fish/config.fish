@@ -5,8 +5,8 @@ set -gx _JAVA_AWT_WM_NONREPARENTING 1
 set -gx CONDA_AUTO_ACTIVATE_BASE false
 set -gx XCURSOR_SIZE 16
 set -gx PWNDBG_VENV_PATH PWNDBG_PLEASE_SKIP_VENV
-fish_add_path -a ~/.config/fish/extra_functions
 set -gx EDITOR nvim
+set -g fish_function_path $fish_function_path ~/.config/fish/extra_functions
 # set -gx PATH "/opt/anaconda/bin" $PATH
 
 #eval (python -m virtualfish compat_aliases auto_activation global_requirements projects)
@@ -68,5 +68,3 @@ end
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '~/google-cloud-sdk/path.fish.inc' ]; . '~/google-cloud-sdk/path.fish.inc'; end
-
-source ~/.config/fish/extra.fish
