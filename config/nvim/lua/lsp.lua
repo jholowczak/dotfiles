@@ -25,14 +25,18 @@ local pop = function(close)
     end
 end
 
+--require('luasnip.loaders.from_snipmate').lazy_load()
+require('luasnip.loaders.from_vscode').lazy_load()
+
 -- Completion Plugin Setup
 local cmp = require'cmp'
 cmp.setup({
   -- Enable LSP snippets
   snippet = {
     expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body)
-        vim.snippet.expand(args.body)
+        require('luasnip').lsp_expand(args.body)
+        --vim.fn["vsnip#anonymous"](args.body)
+        --vim.snippet.expand(args.body)
     end,
   },
   mapping = {
@@ -44,7 +48,7 @@ cmp.setup({
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.close(),
     ['<CR>'] = cmp.mapping.confirm({
-      behavior = cmp.ConfirmBehavior.Insert,
+      behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     })
   },
@@ -55,7 +59,9 @@ cmp.setup({
     { name = 'nvim_lsp_signature_help'},            -- display function signatures with current parameter emphasized
     { name = 'nvim_lua', keyword_length = 2},       -- complete neovim's Lua runtime API such vim.lsp.*
     { name = 'buffer', keyword_length = 2 },        -- source current buffer
-    { name = 'vsnip', keyword_length = 2 },         -- nvim-cmp source for vim-vsnip 
+    --{ name = 'vsnip', keyword_length = 2 },         -- nvim-cmp source for vim-vsnip 
+    --{ name = 'luasnip', keyword_length = 2 },         -- nvim-cmp source for luasnip
+    { name = 'luasnip' },         -- nvim-cmp source for luasnip
     { name = 'calc'},                               -- source for math calculation
   }),
   window = {
@@ -145,17 +151,33 @@ local servers = {
     html = {},
     texlab = {},
     lua_ls = {},
-    arduino_language_server = {}
+    arduino_language_server = {},
+    eslint = {
+        on_attach = function(_,b)
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                buffer = b,
+                command = "EslintFixAll"
+            })
+        end
+    },
+    tsserver = {},
+    --gopls = {}
 }
 
 local default_c = require('cmp_nvim_lsp').default_capabilities()
-for lsp, _ in pairs(servers) do
+for lsp, extra in pairs(servers) do
   lspconfig[lsp].setup{
-    on_attach = my_on_attach,
+    on_attach = function(c,b)
+        if extra["on_attach"] ~= nil then
+            extra["on_attach"](c,b)
+        end
+        my_on_attach(c,b)
+    end,
     capabilities = default_c,
   }
 end
 
+-- go
 require('go').setup({
     lsp_cfg = {
         on_attach = function(c, b)
@@ -163,6 +185,14 @@ require('go').setup({
         end,
         capabilities = default_c
     }
+})
+local format_sync_grp = vim.api.nvim_create_augroup("goimports", {})
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+   require('go.format').goimports()
+  end,
+  group = format_sync_grp,
 })
 
 -- set up rust-analyzer

@@ -20,19 +20,30 @@ local plugins = {
   'neovim/nvim-lspconfig', -- Collection of configurations for the built-in LSP client
   'williamboman/mason.nvim',
   'williamboman/mason-lspconfig.nvim',
+
+  --snippets
+  { "L3MON4D3/LuaSnip",
+    --version = "2.*",
+    --build = "make install_jsregexp",
+    dependencies = {
+      --"honza/vim-snippets",
+      "rafamadriz/friendly-snippets",
+    }
+  },
+
   -- Completion framework:
   'hrsh7th/nvim-cmp',
-
+  'saadparwaiz1/cmp_luasnip',
   -- LSP completion source:
   'hrsh7th/cmp-nvim-lsp',
 
   -- Useful completion sources:
   'hrsh7th/cmp-nvim-lua',
   'hrsh7th/cmp-nvim-lsp-signature-help',
-  'hrsh7th/cmp-vsnip',
+  --'hrsh7th/cmp-vsnip',
   'hrsh7th/cmp-path',
   'hrsh7th/cmp-buffer',
-  'hrsh7th/vim-vsnip',
+  --'hrsh7th/vim-vsnip',
 
   "ellisonleao/gruvbox.nvim",
   'nvim-telescope/telescope.nvim',
@@ -49,9 +60,7 @@ local plugins = {
   'lambdalisue/suda.vim',
   { 'lukas-reineke/indent-blankline.nvim', main = "ibl", opts = {} },
   {'lewis6991/gitsigns.nvim',
-    config = function()
-        require 'gitsigns'.setup {}
-    end
+    opts = {}
   },
   {
     'nvim-tree/nvim-tree.lua',
@@ -90,8 +99,7 @@ local plugins = {
   },
   {
     'jedrzejboczar/possession.nvim',
-    config = function()
-        require('possession').setup {
+    opts = {
             commands = {
                 save = 'SSave',
                 load = 'SLoad',
@@ -105,8 +113,7 @@ local plugins = {
                 delete_hidden_buffers = false,
                 delete_buffers = true
             }
-        }
-    end,
+        },
     dependencies = { 'nvim-lua/plenary.nvim' },
   },
   'nvim-telescope/telescope-ui-select.nvim',
@@ -136,18 +143,13 @@ local plugins = {
       { 'nvim-treesitter/nvim-treesitter', lazy = true },
     },
     event = 'VeryLazy',
-    config = function()
-      -- Setup orgmode
-      require('orgmode').setup({
+    opts = {
         org_agenda_files = '~/orgfiles/**/*',
         org_default_notes_file = '~/orgfiles/refile.org',
-      })
-    end,
+      },
   },
   {"FabijanZulj/blame.nvim",
-    config = function()
-        require("blame").setup()
-    end
+    opts = {},
   },
   {
     "NeogitOrg/neogit",
@@ -161,9 +163,7 @@ local plugins = {
   },
   'rcarriga/nvim-notify',
   {'numToStr/Navigator.nvim',
-    config = function()
-        require('Navigator').setup({})
-    end
+    opts = {}
   },
   {
     'goolord/alpha-nvim',
@@ -208,9 +208,7 @@ local plugins = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-telescope/telescope.nvim",
     },
-    config = function()
-      require("go").setup()
-    end,
+    opts = {},
     event = {"CmdlineEnter"},
     ft = {"go", 'gomod'},
     build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
