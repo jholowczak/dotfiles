@@ -30,6 +30,7 @@ require('luasnip.loaders.from_vscode').lazy_load()
 
 -- Completion Plugin Setup
 local cmp = require'cmp'
+local luasnip = require('luasnip')
 cmp.setup({
   -- Enable LSP snippets
   snippet = {
@@ -39,19 +40,46 @@ cmp.setup({
         --vim.snippet.expand(args.body)
     end,
   },
-  mapping = {
-    -- Add tab support
-    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
-    ['<Tab>'] = cmp.mapping.select_next_item(),
-    ['<C-S-f>'] = cmp.mapping.scroll_docs(-4),
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm({
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    })
-  },
+    ['<CR>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+            if luasnip.expandable() then
+                luasnip.expand()
+            else
+                cmp.confirm({
+                  behavior = cmp.ConfirmBehavior.Replace,
+                  select = true,
+                })
+            end
+        else
+            fallback()
+        end
+    end),
+    -- Add tab support
+    ['<Tab>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+            cmp.select_next_item()
+        elseif luasnip.locally_jumpable(1) then
+            luasnip.jump(1)
+        else
+            fallback()
+        end
+    end, { "i", "s" }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+            cmp.select_prev_item()
+        elseif luasnip.locally_jumpable(-1) then
+            luasnip.jump(-1)
+        else
+            fallback()
+        end
+    end, { "i", "s" }),
+
+  }),
   -- Installed sources:
   sources = cmp.config.sources({
     { name = 'path' },                              -- file paths
