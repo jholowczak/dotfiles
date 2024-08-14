@@ -29,6 +29,9 @@ Kmap("n", "<l>vl", tmux_send_last_command)
 Kmap('n', '<l>dd', ":lua vim.diagnostic.open_float")
 Kmap({ "n", "x" }, "<l>rs", require("ssr").open)
 Kmap("n", "<l>ns", ":Telescope possession list<cr>")
+Kmap("n", "<l>T", ":TodoQuickFix<cr>")
+Kmap("n", "]t", require('todo-comments').jump_next)
+Kmap("n", "[t", require('todo-comments').jump_prev)
 
 --  GIT
 Kmap("n", "<l>ms", function()
@@ -109,6 +112,8 @@ local fileTypeBindings = {
         binds = {
             { keys = "<l>gr",
               cmd  = ":GoRun<cr>" },
+            { keys = "<l>gR",
+              cmd  = ":GoRename<cr>" },
             { keys = "<l>gT",
               cmd  = ":GoTest<cr>" },
             { keys = "<l>gt",
@@ -119,6 +124,8 @@ local fileTypeBindings = {
               cmd  = ":GoTest -v<cr>" },
             { keys = "<l>gb",
               cmd  = ":GoBuild<cr>" },
+            { keys = "<l>gS",
+              cmd  = ":GoFillStruct<cr>" },
             { keys = "<l>gf",
               cmd  = ":!cd %:p:h && go test && cd -<cr>" },
             { keys = "<l>gj",

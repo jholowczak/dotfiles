@@ -208,10 +208,22 @@ end
 -- go
 require('go').setup({
     lsp_cfg = {
-        on_attach = function(c, b)
-            my_on_attach(c, b)
-        end,
-        capabilities = default_c
+        cmd = {'gopls'},
+        on_attach = my_on_attach,
+        capabilities = default_c,
+        settings = {
+            gopls = {
+                experimentalPostfixCompletions = true,
+                analyses = {
+                    unusedparams = true,
+                    shadow = true,
+                },
+                staticcheck = true,
+            },
+            init_options = {
+                usePlaceholders = true
+            }
+        },
     }
 })
 local format_sync_grp = vim.api.nvim_create_augroup("goimports", {})

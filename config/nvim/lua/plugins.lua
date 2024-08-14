@@ -226,6 +226,12 @@ local plugins = {
   },
   'stevearc/vim-arduino',
   'jpalardy/vim-slime',
+  {
+  "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+  }
+}
 }
 
 local opts = {}
