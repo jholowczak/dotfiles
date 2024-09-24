@@ -91,6 +91,7 @@ cmp.setup({
     --{ name = 'luasnip', keyword_length = 2 },         -- nvim-cmp source for luasnip
     { name = 'luasnip' },         -- nvim-cmp source for luasnip
     { name = 'calc'},                               -- source for math calculation
+    { name = 'orgmode'},
   }),
   window = {
       completion = cmp.config.window.bordered(),
@@ -166,6 +167,7 @@ local my_on_attach = function(client, bufnr)
 end
 
 -- ignore rust-analyzer here as it will be setup by rust-tools
+-- same with Golang
 local servers = {
     clangd = {},
     terraformls = {},
@@ -177,6 +179,12 @@ local servers = {
     jsonnet_ls = {},
     marksman = {},
     html = {},
+    sqlls = {
+        filetypes = { 'sql', 'mysql', 'psql' },
+        root_dir = function(_)
+            return vim.loop.cwd()
+        end
+    },
     texlab = {},
     lua_ls = {},
     arduino_language_server = {},
@@ -188,13 +196,15 @@ local servers = {
             })
         end
     },
-    tsserver = {},
+    ts_ls = {},
     --gopls = {}
 }
 
+vim.g.sql_type_default = 'pgsql'
+
 local default_c = require('cmp_nvim_lsp').default_capabilities()
 for lsp, extra in pairs(servers) do
-  lspconfig[lsp].setup{
+  local t = {
     on_attach = function(c,b)
         if extra["on_attach"] ~= nil then
             extra["on_attach"](c,b)
@@ -202,7 +212,10 @@ for lsp, extra in pairs(servers) do
         my_on_attach(c,b)
     end,
     capabilities = default_c,
+    filetypes = extra["filetypes"],
+    root_dir = extra["root_dir"]
   }
+  lspconfig[lsp].setup(t)
 end
 
 -- go
@@ -265,5 +278,8 @@ vim.g.rustaceanvim = {
 vim.filetype.add({
     filename = {
         ['devcontainer.json'] = 'jsonc',
+    },
+    extension = {
+        psql = "sql"
     },
 })

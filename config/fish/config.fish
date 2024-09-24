@@ -60,11 +60,11 @@ end
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-if test -e ~/miniconda3/bin/conda; and not set -q NIX_PATH
-    eval ~/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+if test -f $HOME'/miniconda3/bin/conda'
+    eval $HOME'/miniconda3/bin/conda' "shell.fish" "hook" $argv | source
 end
 # <<< conda initialize <<<
 
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '~/google-cloud-sdk/path.fish.inc' ]; . '~/google-cloud-sdk/path.fish.inc'; end
+if [ -f $HOME'/google-cloud-sdk/path.fish.inc' ]; . $HOME'/google-cloud-sdk/path.fish.inc'; end
