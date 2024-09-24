@@ -26,6 +26,8 @@ M.keys = {
     { key = 'j', mods = 'CTRL',         action = act.EmitEvent('ActivatePaneDirection-down') },
     { key = 'k', mods = 'CTRL',         action = act.EmitEvent('ActivatePaneDirection-up') },
     { key = 'l', mods = 'CTRL',         action = act.EmitEvent('ActivatePaneDirection-right') },
+    { key = 's', mods = 'LEADER',       action = act.PaneSelect{ alphabet='asdfghjkl;', mode='SwapWithActive'} },
+    { key = 'p', mods = 'ALT',          action = act.PasteFrom("Clipboard")},
 }
 
 -- for Navigator.nvim
