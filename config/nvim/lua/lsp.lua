@@ -1,8 +1,6 @@
 -- lsp configuration
 
 require 'utils.keys'
--- for lsp support of configs
-require('neodev').setup()
 
 local lspconfig = require('lspconfig')
 local navic = require('nvim-navic')

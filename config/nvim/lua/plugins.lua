@@ -15,7 +15,14 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
-  { "folke/neodev.nvim", opts = {} },
+  { "folke/lazydev.nvim",
+        ft = "lua",
+        opts = {
+            library = {
+                "~/.config/nvim/plugins/nvim-remote-containers"
+            },
+        },
+  },
   {'nvim-treesitter/nvim-treesitter'},
   'neovim/nvim-lspconfig', -- Collection of configurations for the built-in LSP client
   'williamboman/mason.nvim',
@@ -127,10 +134,9 @@ local plugins = {
     opts = { keys = 'etovxqpdygfblzhckisuran' }
   },
   -- this is more up to date than the default rust.vim that comes with neovim
-  'rust-lang/rust.vim',
   {
     'mrcjkb/rustaceanvim',
-    version = '^4', -- Recommended
+    version = '^5', -- Recommended
     ft = { 'rust' },
     dependencies = {
       'mfussenegger/nvim-dap'
@@ -148,6 +154,11 @@ local plugins = {
         org_default_notes_file = '~/orgfiles/refile.org',
       },
     ft = { 'org' },
+  },
+  { 'nvim-neorg/neorg',
+    lazy = false,
+    version = "*",
+    config = true,
   },
   {"FabijanZulj/blame.nvim",
     opts = {},
@@ -214,7 +225,7 @@ local plugins = {
     ft = {"go", 'gomod'},
     build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
   },
-  'jamestthompson3/nvim-remote-containers',
+  --'jamestthompson3/nvim-remote-containers',
   'puremourning/vimspector',
   'Vigemus/iron.nvim',
   {"nvim-neotest/neotest",
