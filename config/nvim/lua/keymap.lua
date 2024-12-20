@@ -3,6 +3,8 @@ require 'utils.keys'
 
 vim.mapleader = " "
 vim.g.mapleader = " "
+vim.maplocalleader = ","
+vim.g.maplocalleader = ","
 
 Kmap("n", "<l>nm", ":bprevious<cr>")
 Kmap("n", "<l>nn", ":bnext<cr>")
@@ -194,6 +196,16 @@ local fileTypeBindings = {
               buf = true },
             { keys = "<l>ap",
               cmd = "<cmd>ArduinoChooseProgrammer<CR>",
+              buf = true },
+        }
+    },
+    {   patterhn = { "neorg" },
+        binds = {
+            { keys = "<localleader>r",
+              cmd = "<cmd>MdEval<CR>",
+              buf = true },
+            { keys = "<localleader>nt",
+              cmd = "<cmd>Neorg toc<CR>",
               buf = true },
         }
     },

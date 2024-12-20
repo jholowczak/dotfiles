@@ -156,9 +156,51 @@ local plugins = {
     ft = { 'org' },
   },
   { 'nvim-neorg/neorg',
-    lazy = false,
+    lazy = true,
+    ft = "norg",
     version = "*",
-    config = true,
+    opts = {
+        load = {
+            ["core.defaults"] = {},
+            ["core.concealer"] = {},
+            ["core.integrations.image"] = {},
+            ["core.latex.renderer"] = {},
+            ["core.export"] = {},
+            ["core.qol.toc"] = {},
+            ["core.completion"] = {
+                config = {
+                    engine = "nvim-cmp",
+                },
+            },
+            ["core.integrations.telescope"] = {},
+            ["core.integrations.treesitter"] = {
+                config = {
+                    configure_parsers = true,
+                    install_parsers = true,
+                }
+            },
+        }
+    },
+    dependencies = { { "nvim-lua/plenary.nvim" }, { "nvim-neorg/neorg-telescope" } },
+  },
+  {"3rd/image.nvim"},
+  {"3rd/diagram.nvim",
+    dependencies = {
+        "3rd/image.nvim",
+    },
+  },
+  {"jubnzv/mdeval.nvim",
+    opts = {
+        require_confirmation = false,
+        eval_options = {
+            python = {
+                command = {"python"},
+                language_code = "python",
+                exec_type = "interpreted",
+                extension = "py",
+            }
+        }
+    }
   },
   {"FabijanZulj/blame.nvim",
     opts = {},

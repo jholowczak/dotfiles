@@ -90,6 +90,7 @@ cmp.setup({
     { name = 'luasnip' },         -- nvim-cmp source for luasnip
     { name = 'calc'},                               -- source for math calculation
     { name = 'orgmode'},
+    { name = 'neorg'},
   }),
   window = {
       completion = cmp.config.window.bordered(),

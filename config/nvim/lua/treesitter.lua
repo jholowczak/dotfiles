@@ -18,5 +18,5 @@ require'nvim-treesitter.configs'.setup { modules = { "highlight" },
     'toml', 'lua', 'json', 'jsonnet', 'jsonc', 'v', 'yaml', 'r', 'regex', 'sql', 'zig',
     'javascript', 'make', 'hcl', 'haskell', 'diff', 'cpp', 'css',
     'bash', 'fish', 'dockerfile', 'nix', 'gitignore', 'markdown',
-    'ocaml', 'arduino'}, -- Or run :TSUpdate org
+    'ocaml', 'arduino', 'norg'}, -- Or run :TSUpdate org
 }
