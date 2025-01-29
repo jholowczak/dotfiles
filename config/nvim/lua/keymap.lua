@@ -212,13 +212,13 @@ local fileTypeBindings = {
     {   pattern = { "r" },
         binds = {
             { keys = "<l>rr",
-              cmd = tmux_send_buf,
+              cmd = TmuxSendBuf,
               buf = true },
             { keys = "<l>vp",
-              cmd = tmux_send_command,
+              cmd = TmuxSendCommand,
               buf = true },
             { keys = "<l>vl",
-              cmd = tmux_send_last_command,
+              cmd = TmuxSendLastCommand,
               buf = true },
         }
     },
