@@ -24,9 +24,9 @@ Kmap("n", "<l>sn", "]s")
 Kmap("n", "<l>sp", "[s")
 Kmap("n", "<l>sr", "z=")
 Kmap("n", "<l>sa", "zg")
-Kmap("n", "<l>rr", tmux_send_buf)
-Kmap("n", "<l>vp", tmux_send_command)
-Kmap("n", "<l>vl", tmux_send_last_command)
+--Kmap("n", "<l>rr", tmux_send_buf)
+--Kmap("n", "<l>vp", tmux_send_command)
+--Kmap("n", "<l>vl", tmux_send_last_command)
 --Kmap("n", "<l>mb", ":lua tmux_send_command('git blame -L ' .. vim.fn.line('.') .. ',' .. vim.fn.line('.') .. ' ' .. vim.fn.expand('%:p'))<cr>", opts)
 Kmap('n', '<l>dd', ":lua vim.diagnostic.open_float")
 Kmap({ "n", "x" }, "<l>rs", require("ssr").open)
@@ -199,13 +199,26 @@ local fileTypeBindings = {
               buf = true },
         }
     },
-    {   patterhn = { "neorg" },
+    {   pattern = { "neorg" },
         binds = {
             { keys = "<localleader>r",
               cmd = "<cmd>MdEval<CR>",
               buf = true },
             { keys = "<localleader>nt",
               cmd = "<cmd>Neorg toc<CR>",
+              buf = true },
+        }
+    },
+    {   pattern = { "r" },
+        binds = {
+            { keys = "<l>rr",
+              cmd = tmux_send_buf,
+              buf = true },
+            { keys = "<l>vp",
+              cmd = tmux_send_command,
+              buf = true },
+            { keys = "<l>vl",
+              cmd = tmux_send_last_command,
               buf = true },
         }
     },

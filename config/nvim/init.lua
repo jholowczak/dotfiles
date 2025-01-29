@@ -7,6 +7,7 @@ require 'keymap'
 require 'layout'
 require 'ts'
 require 'test'
+require 'tmux'
 
 -- required for project.nvim to work with nvim-tree
 require("nvim-tree").setup({
