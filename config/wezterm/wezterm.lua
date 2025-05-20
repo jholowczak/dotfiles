@@ -106,5 +106,9 @@ c.keys = keymap.keys
 
 c.warn_about_missing_glyphs = false
 
+c.window_background_opacity = 0.9
+local sessions = wt.plugin.require("https://github.com/abidibo/wezterm-sessions")
+sessions.apply_to_config(c)
+
 -- merge tabs config
 return c

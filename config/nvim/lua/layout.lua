@@ -42,7 +42,12 @@ require('lualine').setup {
   options = {
     theme = 'onedark',
     ignore_focus = {'NvimTree'},
-    disabled_filetypes = {'NvimTree'}
+    disabled_filetypes = {
+        'NvimTree',
+        "dapui_watches", "dapui_breakpoints",
+        "dapui_scopes", "dapui_console",
+        "dapui_stacks", "dap-repl"
+    }
   },
   winbar = {
     lualine_a = {},

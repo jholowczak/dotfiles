@@ -26,8 +26,8 @@ require("nvim-tree").setup({
 })
 
 -- rust specific configs
-vim.g.rust_recommended_style = 1
-vim.g.rustfmt_autosave = 1
+--vim.g.rust_recommended_style = 1
+--vim.g.rustfmt_autosave = 1
 
 -- clipboard workaround 
 --if os.getenv "SSH_CLIENT" ~= nil or os.getenv "SSH_TTY" ~= nil then

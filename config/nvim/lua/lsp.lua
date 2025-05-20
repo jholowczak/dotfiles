@@ -2,7 +2,6 @@
 
 require 'utils.keys'
 
-local lspconfig = require('lspconfig')
 local navic = require('nvim-navic')
 
 require("mason").setup({
@@ -14,7 +13,9 @@ require("mason").setup({
         },
     }
 })
-require("mason-lspconfig").setup()
+require("mason-lspconfig").setup({
+    automatic_enable = false
+})
 
 local pop = function(close)
     local tagstack = vim.fn.gettagstack()
@@ -25,6 +26,61 @@ end
 
 --require('luasnip.loaders.from_snipmate').lazy_load()
 require('luasnip.loaders.from_vscode').lazy_load()
+
+--setup dap
+local dap, dapui = require("dap"), require("dapui")
+dap.adapters.lldb = {
+    type = 'executable',
+    command = '/usr/bin/lldb-dap',
+    name = 'lldb',
+}
+dap.adapters.cppdbg = {
+    id = 'cppdbg',
+    type = 'executable',
+    command = vim.fn.stdpath("data") .. "/mason/bin/OpenDebugAD7"
+}
+
+dap.adapters.codelldb = {
+    type = "executable",
+    command = vim.fn.stdpath("data") .. "/mason/bin/codelldb"
+}
+--dap.configurations.rust = dap.configurations.cpp
+dap.configurations.rust = {
+    {
+        name = 'Launch',
+        type = 'lldb',
+        request = 'launch',
+        initCommands = function()
+          -- Find out where to look for the pretty printer Python module.
+          local rustc_sysroot = vim.fn.trim(vim.fn.system 'rustc --print sysroot')
+          assert(
+            vim.v.shell_error == 0,
+            'failed to get rust sysroot using `rustc --print sysroot`: '
+              .. rustc_sysroot
+          )
+          local script_file = rustc_sysroot .. '/lib/rustlib/etc/lldb_lookup.py'
+          local commands_file = rustc_sysroot .. '/lib/rustlib/etc/lldb_commands'
+          return {
+            ([[!command script import '%s']]):format(script_file),
+            ([[command source '%s']]):format(commands_file),
+          }
+        end
+    }
+}
+dap.listeners.before.attach.dapui_config = function()
+  dapui.open()
+end
+dap.listeners.before.launch.dapui_config = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated.dapui_config = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited.dapui_config = function()
+  dapui.close()
+end
+require("nvim-dap-virtual-text").setup { virt_text_pos = 'inline' }
+dapui.setup()
 
 -- Completion Plugin Setup
 local cmp = require'cmp'
@@ -153,15 +209,18 @@ local my_on_attach = function(client, bufnr)
       vim.lsp.inlay_hint.enable(true, {bufnr = bufnr})
   end
   -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  --vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  vim.api.nvim_set_option_value('omnifunc', 'v:lua.vim.lsp.omnifunc', { buf = bufnr })
 
   Kmap('n', '<l><tab>', vim.lsp.buf.hover, { buffer = bufnr})
+  Kmap("n", "<S-tab>", vim.lsp.buf.hover, { buffer = bufnr })
   Kmap('n', '<l>fj', vim.lsp.buf.definition, { buffer = bufnr})
   Kmap('n', '<l>fk', ':pop<cr>', { buffer = bufnr})
   Kmap('n', '<l>fl', vim.lsp.buf.references, { buffer = bufnr})
   Kmap('n', '<l>fr', vim.lsp.buf.rename, { buffer = bufnr})
   Kmap('n', '<l>fi', vim.lsp.buf.implementation, { buffer = bufnr})
   Kmap('n', '<l>fh', vim.lsp.buf.signature_help, { buffer = bufnr})
+  Kmap('n', '<l>fa', vim.lsp.buf.code_action, { buffer = bufnr})
   Kmap('n', '<l>HH', function() vim.g.inlay_hints_visible = not vim.g.inlay_hints_visible end, { buffer = bufnr})
 end
 
@@ -214,7 +273,8 @@ for lsp, extra in pairs(servers) do
     filetypes = extra["filetypes"],
     root_dir = extra["root_dir"]
   }
-  lspconfig[lsp].setup(t)
+  vim.lsp.config(lsp, t)
+  vim.lsp.enable(lsp)
 end
 
 -- go
@@ -249,25 +309,32 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 -- set up rust-analyzer
 vim.g.rustaceanvim = {
+  --tools = {
+  --    hover_actions = {
+  --        auto_focus = true
+  --    }
+  --},
   server = {
     capabilities = default_c,
     on_attach = function(client, bufnr)
-      -- Hover actions
-      --vim.keymap.set("n", "<S-tab>", vim.lsp.buf.hover())
-      local ha = function()
-        vim.cmd.RustLsp({'hover', 'actions'})
+      local rf = function(act)
+          return function()
+              vim.cmd.RustLsp(act)
+          end
       end
-      Kmap("n", "<S-tab>", ha, { buffer = bufnr })
       -- Code action groups
       --vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
-      local ca = function()
-          vim.cmd.RustLsp('codeAction')
-      end
-      Kmap("n", "<l>a", ca, { buffer = bufnr })
+      -- grouped actions, different from the built-in
+      Kmap("n", "<l>fA", rf('codeAction'), { buffer = bufnr })
+      Kmap("n", "<l>fe", rf('explainError'), { buffer = bufnr })
       my_on_attach(client, bufnr)
     end,
     default_settings = {
-        ["rust-analyzer"] = {}
+        ["rust-analyzer"] = {
+            cargo = {
+                allFeatures = true
+            }
+        }
     },
   }
 }

@@ -1,5 +1,5 @@
 -- tmux operations
-vim.g.Tmuxlast_command = ""
+vim.g.tmux_last_command = ""
 
 function TmuxWindowExists()
     local output = vim.fn.system("tmux list-panes |grep 1:")
@@ -12,13 +12,13 @@ end
 
 function TmuxToggle()
     if not TmuxWindowExists() then
-        vim.g.Tmuxsession = vim.fn.system("tmux split-window -h")
+        vim.g.tmux_session = vim.fn.system("tmux split-window -h")
         vim.fn.system("tmux select-pane -L")
     end
 end
 
 function TmuxSendCommand(txt)
-    vim.g.Tmuxlast_command = txt
+    vim.g.tmux_last_command = txt
 
     if txt==nil or txt == "" then
         local input = vim.fn.input("tmux input: ")
@@ -26,12 +26,10 @@ function TmuxSendCommand(txt)
             TmuxSendCommand(input)
         end
     else
-        if TmuxWindowExists() then
-            vim.fn.system("tmux send-keys -t 1 " .. "'" .. txt .. "\n'")
-        else
+        if not TmuxWindowExists() then
             TmuxToggle()
-            vim.fn.system("tmux send-keys -t 1 " .. "'" .. txt .. "\n'")
         end
+        vim.fn.system("tmux send-keys -t 1 " .. "'" .. txt .. "' Enter")
     end
 end
 

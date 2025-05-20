@@ -42,6 +42,17 @@ end)
 Kmap("n", "<l>mb", ":BlameToggle<cr>")
 Kmap("n", "<l>mB", ":BlameToggle virtual<cr>")
 
+-- DAP
+Kmap("n", "<l>Db", ":DapToggleBreakpoint<cr>")
+Kmap("n", "<l>DD", ":DapNew<cr>")
+Kmap("n", "<l>De", ":DapStop<cr>")
+Kmap("n", "<l>DE", ":DapTerminate<cr>")
+Kmap("n", "<l>DU", ":DapUiToggle<cr>")
+Kmap("n", "<l>DR", ":DapRerun<cr>")
+Kmap("n", "<l>Dr", ":DapRestartFrame<cr>")
+Kmap("n", "<l>Dp", ":DapPause<cr>")
+Kmap("n", "<l>Dc", require("dap").continue)
+
 
 Kmap("n", "<l><l>b", "<cmd>HopWordBC<CR>")
 Kmap("n", "<l><l>w", "<cmd>HopWordAC<CR>")
@@ -213,7 +224,9 @@ local fileTypeBindings = {
         binds = {
             { keys = "<l>rr",
               cmd = TmuxSendBuf,
-              buf = true },
+              buf = true,
+              mode = {'n', 'v'},
+            },
             { keys = "<l>vp",
               cmd = TmuxSendCommand,
               buf = true },
@@ -229,10 +242,14 @@ for _, lang in pairs(fileTypeBindings) do
         vim.api.nvim_create_autocmd("FileType", {
             pattern = lang.pattern,
             callback = function()
+                local mode = 'n'
+                if block.mode ~= nil then
+                    mode = block.mode
+                end
                 if block.buf then
-                    Kmap('n', block.keys, block.cmd, {buffer = block.buf})
+                    Kmap(mode, block.keys, block.cmd, {buffer = block.buf})
                 else
-                    Kmap('n', block.keys, block.cmd)
+                    Kmap(mode, block.keys, block.cmd)
                 end
             end
         })
