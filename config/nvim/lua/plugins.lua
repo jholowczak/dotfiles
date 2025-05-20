@@ -286,6 +286,24 @@ local plugins = {
   "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {
+  },
+  {
+    "oskarrrrrrr/symbols.nvim",
+    config = function()
+        local r = require("symbols.recipes")
+        require("symbols").setup(
+            r.DefaultFilters,
+            r.AsciiSymbols,
+            {
+                sidebar = {
+                    open_direction = "try-right",
+                    show_inline_details = true
+                }
+            }
+        )
+        vim.keymap.set("n", ",s", "<cmd>Symbols<CR>")
+        vim.keymap.set("n", ",S", "<cmd>SymbolsClose<CR>")
+    end
   }
 }
 }

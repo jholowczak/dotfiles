@@ -3,6 +3,7 @@
 require 'utils.keys'
 
 local navic = require('nvim-navic')
+local neotest = require('neotest')
 
 require("mason").setup({
     ui = {
@@ -327,6 +328,7 @@ vim.g.rustaceanvim = {
       -- grouped actions, different from the built-in
       Kmap("n", "<l>fA", rf('codeAction'), { buffer = bufnr })
       Kmap("n", "<l>fe", rf('explainError'), { buffer = bufnr })
+      Kmap("n", "<l>fR", neotest.run.run, { buffer = bufnr })
       my_on_attach(client, bufnr)
     end,
     default_settings = {
