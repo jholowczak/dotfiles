@@ -136,13 +136,15 @@ local plugins = {
   -- this is more up to date than the default rust.vim that comes with neovim
   {
     'mrcjkb/rustaceanvim',
-    version = '^5', -- Recommended
+    version = '^6', -- Recommended
     ft = { 'rust' },
+    lazy = false,
     dependencies = {
       'mfussenegger/nvim-dap'
     }
   },
   { 'rcarriga/nvim-dap-ui', dependencies = {'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio'} },
+  { 'theHamsta/nvim-dap-virtual-text' },
   {
     'nvim-orgmode/orgmode',
     dependencies = {
