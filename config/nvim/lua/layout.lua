@@ -54,13 +54,13 @@ require('lualine').setup {
     lualine_b = {},
     lualine_c = {navic_location},
     lualine_x = {session_name},
-    lualine_y = {},
+    lualine_y = {{'filename', path=1}},
     lualine_z = {arduino_status}
   },
   sections = {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff', 'diagnostics'},
-    lualine_c = {'filename', "lsp_progress"},
+    lualine_c = {'lsp_progress'},
     lualine_x = {currentContainer, 'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
