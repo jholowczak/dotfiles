@@ -222,6 +222,7 @@ local my_on_attach = function(client, bufnr)
   Kmap('n', '<l>fi', vim.lsp.buf.implementation, { buffer = bufnr})
   Kmap('n', '<l>fh', vim.lsp.buf.signature_help, { buffer = bufnr})
   Kmap('n', '<l>fa', vim.lsp.buf.code_action, { buffer = bufnr})
+  Kmap('n', "<l>fe", vim.diagnostic.goto_next, { buffer = bufnr })
   Kmap('n', '<l>HH', function() vim.g.inlay_hints_visible = not vim.g.inlay_hints_visible end, { buffer = bufnr})
 end
 
@@ -248,12 +249,28 @@ local servers = {
     lua_ls = {},
     arduino_language_server = {},
     eslint = {
-        on_attach = function(_,b)
-            vim.api.nvim_create_autocmd("BufWritePre", {
-                buffer = b,
-                command = "EslintFixAll"
-            })
-        end
+        --on_attach = function(_,b)
+        --    vim.api.nvim_create_autocmd("BufWritePre", {
+        --        buffer = b,
+        --        command = "LspEslintFixAll"
+        --    })
+        --end
+        on_attach = function(client, buffer)
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            buffer = buffer,
+            callback = function(event)
+              local namespace = vim.lsp.diagnostic.get_namespace(client.id, true)
+              local diagnostics = vim.diagnostic.get(event.buf, { namespace = namespace })
+              local eslint = function(formatter) return formatter.name == 'eslint' end
+              if #diagnostics > 0 then vim.lsp.buf.format({ async = false, filter = eslint }) end
+            end,
+          })
+        end,
+        settings = {
+          format = { enable = true },
+          workingDirectory = { mode = 'auto' },
+          codeActionOnSave = { enable = true, mode = 'problems' },
+        },
     },
     ts_ls = {},
     --gopls = {}
@@ -327,7 +344,7 @@ vim.g.rustaceanvim = {
       --vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
       -- grouped actions, different from the built-in
       Kmap("n", "<l>fA", rf('codeAction'), { buffer = bufnr })
-      Kmap("n", "<l>fe", rf('explainError'), { buffer = bufnr })
+      Kmap("n", "<l>fE", rf('explainError'), { buffer = bufnr })
       Kmap("n", "<l>fR", neotest.run.run, { buffer = bufnr })
       my_on_attach(client, bufnr)
     end,
