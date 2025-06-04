@@ -58,10 +58,3 @@ end
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f $HOME'/google-cloud-sdk/path.fish.inc' ]; . $HOME'/google-cloud-sdk/path.fish.inc'; end
-
-# >>> mamba initialize >>>
-# !! Contents within this block are managed by 'micromamba shell init' !!
-set -gx MAMBA_EXE "$HOME/.local/bin/micromamba"
-set -gx MAMBA_ROOT_PREFIX "$HOME/micromamba"
-$MAMBA_EXE shell hook --shell fish --root-prefix $MAMBA_ROOT_PREFIX | source
-# <<< mamba initialize <<<
