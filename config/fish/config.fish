@@ -12,8 +12,6 @@ set -g fish_function_path $fish_function_path ~/.config/fish/extra_functions
 #eval (python -m virtualfish compat_aliases auto_activation global_requirements projects)
 #deprecated: now do "vf install compat_aliases auto_activation global_requirements projects environment"
 alias vim="nvim"
-alias anacondatime="source (/opt/anaconda/bin/conda info --root)/etc/fish/conf.d/conda.fish"
-alias ghostscript="gs"
 alias tmux="tmux -2"
 # Base16 Shell
 #if status --is-interactive
@@ -24,7 +22,7 @@ alias tmux="tmux -2"
 #end
 
 # SSH tmux login
-if test -n "$SSH_CONNECTION"; and test (env | grep NO_SSH_TMUX | wc -l) -eq 0; and test (env | grep WEZTERM | wc -l) -eq 0
+if test -n "$SSH_CONNECTION"; and test (env | grep NO_SSH_TMUX | wc -l) -eq 0; and test $TERM_PROGRAM -neq "WezTerm"
     if test -z "$TMUX"
         tmux attach-session -t (hostname) || tmux new-session -s (hostname)
     end
@@ -58,13 +56,12 @@ end
 #python issues with latest version, removing as not used for now
 #thefuck --alias | source
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-if test -f $HOME'/miniconda3/bin/conda'
-    eval $HOME'/miniconda3/bin/conda' "shell.fish" "hook" $argv | source
-end
-# <<< conda initialize <<<
-
-
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f $HOME'/google-cloud-sdk/path.fish.inc' ]; . $HOME'/google-cloud-sdk/path.fish.inc'; end
+
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'micromamba shell init' !!
+set -gx MAMBA_EXE "$HOME/.local/bin/micromamba"
+set -gx MAMBA_ROOT_PREFIX "$HOME/micromamba"
+$MAMBA_EXE shell hook --shell fish --root-prefix $MAMBA_ROOT_PREFIX | source
+# <<< mamba initialize <<<

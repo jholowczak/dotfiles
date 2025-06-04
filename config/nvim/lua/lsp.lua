@@ -222,7 +222,7 @@ local my_on_attach = function(client, bufnr)
   Kmap('n', '<l>fi', vim.lsp.buf.implementation, { buffer = bufnr})
   Kmap('n', '<l>fh', vim.lsp.buf.signature_help, { buffer = bufnr})
   Kmap('n', '<l>fa', vim.lsp.buf.code_action, { buffer = bufnr})
-  Kmap('n', "<l>fe", vim.diagnostic.goto_next, { buffer = bufnr })
+  Kmap('n', "<l>fe", function() vim.diagnostic.jump({count=1, float=true}) end, { buffer = bufnr })
   Kmap('n', '<l>HH', function() vim.g.inlay_hints_visible = not vim.g.inlay_hints_visible end, { buffer = bufnr})
 end
 
