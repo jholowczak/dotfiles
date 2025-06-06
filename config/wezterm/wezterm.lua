@@ -13,7 +13,7 @@ local gb = wt.color.get_builtin_schemes()[color_scheme]
 -- font and color scheme
 c.font = wt.font_with_fallback({
     {
-        family = "Iosevka Nerd Font",
+        family = "IosevkaTerm Nerd Font",
     },
     "Noto Color Emoji",
     "JetBrains Mono",
