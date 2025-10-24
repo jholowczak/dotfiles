@@ -66,6 +66,7 @@ local plugins = {
   },
   'lambdalisue/suda.vim',
   { 'lukas-reineke/indent-blankline.nvim', main = "ibl", opts = {} },
+  { 'HiPhish/rainbow-delimiters.nvim' },
   {'lewis6991/gitsigns.nvim',
     opts = {}
   },
@@ -93,10 +94,15 @@ local plugins = {
       },
     }
   },
-  {'ahmedkhalf/project.nvim',
-    config = function()
-        require('project_nvim').setup {}
-    end
+  {
+    'DrKJeff16/project.nvim',
+    version = false, -- Get the latest release
+    dependencies = { -- OPTIONAL
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      'ibhagwan/fzf-lua',
+    },
+    opts = {},
   },
   'lervag/vimtex',
   'ctrlpvim/ctrlp.vim',

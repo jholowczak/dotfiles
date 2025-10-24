@@ -19,6 +19,7 @@ c.font = wt.font_with_fallback({
     "JetBrains Mono",
 })
 c.font_size = 10
+c.audible_bell = "Disabled"
 
 --tab bar set up
 c.tab_bar_at_bottom = true
